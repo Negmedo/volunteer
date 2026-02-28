@@ -1,0 +1,54 @@
+Project_V3/
+├── docker-compose.yml
+├── .env
+├── README.md                     (пустой)
+├── æΓαπ¬Γπαá.txt                  (имя сломано кодировкой)
+└── backend/
+    ├── Dockerfile
+    ├── requirements.txt
+    ├── manage.py
+    ├── config/
+    │   ├── __init__.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   ├── wsgi.py
+    │   └── asgi.py
+    ├── apps/
+    │   ├── accounts/
+    │   │   ├── __init__.py
+    │   │   ├── admin.py
+    │   │   ├── apps.py
+    │   │   ├── forms.py
+    │   │   ├── models.py
+    │   │   ├── signals.py
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   ├── landing/
+    │   │   ├── apps.py
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   ├── events/
+    │   │   ├── admin.py
+    │   │   ├── models.py
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   ├── matching/
+    │   │   ├── urls.py
+    │   │   └── views.py
+    │   └── core/
+    │       └── apps.py            (пустой)
+    ├── templates/
+    │   ├── base.html
+    │   ├── accounts/
+    │   │   ├── login.html
+    │   │   └── signup.html
+    │   ├── landing/
+    │   │   └── index.html
+    │   ├── events/
+    │   │   ├── public_list.html
+    │   │   ├── volunteer_dashboard.html
+    │   │   └── org_dashboard.html
+    │   └── matching/
+    │       └── index.html
+    ├── static/
+    └── media/
