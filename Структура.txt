@@ -1,4 +1,4 @@
-Project_V3/
+Project_V3/ wefwef
 ├── docker-compose.yml
 ├── .env
 ├── README.md                     (пустой)
