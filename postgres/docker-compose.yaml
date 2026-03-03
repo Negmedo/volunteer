@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: volunteer-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: volunteer_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
