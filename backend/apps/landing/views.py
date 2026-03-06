@@ -12,9 +12,13 @@ def landing_view(request):
 
     public_events = Event.objects.filter(is_public=True).order_by("-created_at")[:10]
 
-    return render(request, "landing/index.html", {
+    return render(request, "landing/main.html", {
         "users_count": users_count,
         "events_count": events_count,
         "hours_total": hours_total,
         "public_events": public_events,
     })
+
+def auth_view(request):
+    # ИСПРАВЛЕНИЕ ЗДЕСЬ: мы добавили "accounts/" перед названием файла
+    return render(request, 'accounts/auth.html')
