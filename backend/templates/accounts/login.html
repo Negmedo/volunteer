@@ -1,11 +1,47 @@
-{% extends "base.html" %}
-{% block title %}Вход{% endblock %}
-{% block content %}
-<div class="p-4 bg-white rounded border">
-  <h1 class="h5">Вход</h1>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary">Войти</button>
-  </form>
-</div>
+{% extends "accounts/auth_base.html" %}
+
+{% block auth_form %}
+<form method="post" class="auth-form active-form">
+  {% csrf_token %}
+  <h2 class="auth-title">С возвращением!</h2>
+
+  {% if form.non_field_errors %}
+    <div class="input-group">
+      <div class="auth-error">
+        {{ form.non_field_errors }}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="input-group">
+    <label for="id_username">Логин</label>
+    <input
+      type="text"
+      name="username"
+      id="id_username"
+      placeholder="Введите логин"
+      required
+      value="{{ form.username.value|default:'' }}"
+    >
+    {% if form.username.errors %}
+      <div class="auth-error-small">{{ form.username.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="id_password">Пароль</label>
+    <input
+      type="password"
+      name="password"
+      id="id_password"
+      placeholder="Введите пароль"
+      required
+    >
+    {% if form.password.errors %}
+      <div class="auth-error-small">{{ form.password.errors }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="auth-submit-btn">Войти</button>
+</form>
 {% endblock %}

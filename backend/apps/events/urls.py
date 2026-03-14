@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import public_events, volunteer_dashboard, org_dashboard
+from .views import org_dashboard, public_events, volunteer_dashboard
+
+app_name = "events"
 
 urlpatterns = [
     path("public/", public_events, name="public_events"),

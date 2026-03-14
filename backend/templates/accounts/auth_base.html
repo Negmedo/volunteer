@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'auth/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="auth-main">
+  <div class="auth-container">
+    <div class="auth-card">
+
+      <div class="auth-tabs">
+        <a
+          href="{% url 'accounts:login' %}"
+          class="auth-tab {% if auth_mode == 'login' %}active{% endif %}"
+        >
+          Вход
+        </a>
+
+        <a
+          href="{% url 'accounts:signup' %}"
+          class="auth-tab {% if auth_mode == 'signup' %}active{% endif %}"
+        >
+          Регистрация
+        </a>
+      </div>
+
+      {% block auth_form %}{% endblock %}
+
+    </div>
+  </div>
+</main>
+{% endblock %}

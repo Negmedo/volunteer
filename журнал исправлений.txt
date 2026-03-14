@@ -1,0 +1,101 @@
+1) (10:29 13.03.2026)
+Тема: исправление удаления пользователей и профилей (Django Admin)
+
+Проблема:
+При удалении Profile через Django Admin удалялась только запись из таблицы account_profile.
+Запись пользователя оставалась в auth_user.
+
+Последствия:
+- пользователь мог снова войти в систему
+- профиль автоматически создавался снова через сигнал get_or_create
+- логин оставался занятым
+- появлялись "зомби-пользователи" без профиля
+
+Причина:
+Profile является дочерней моделью (OneToOneField к User).
+Удаление Profile не удаляет User.
+Сигнал post_save(User) создавал профиль заново.
+
+------------------------------------------------
+
+Файлы, которые были изменены:
+
+apps/accounts/admin.py
+apps/accounts/signals.py
+
+------------------------------------------------
+
+apps/accounts/admin.py
+
+Было:
+
+ProfileAdmin удалял только профиль.
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "role", "city", "phone")
+
+Стало:
+
+Удаление Profile удаляет связанного User.
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "role", "city", "phone")
+
+    def delete_model(self, request, obj):
+        user = obj.user
+        user.delete()
+
+    def delete_queryset(self, request, queryset):
+        user_ids = list(queryset.values_list("user_id", flat=True))
+        User.objects.filter(id__in=user_ids).delete()
+
+Теперь:
+- удаление Profile удаляет User
+- массовое удаление Profile удаляет User
+
+------------------------------------------------
+
+apps/accounts/signals.py
+
+Было:
+
+Profile создавался только при создании User.
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance, role=Role.VOLUNTEER)
+
+Стало:
+
+Profile гарантированно существует у каждого User.
+
+@receiver(post_save, sender=User)
+def create_or_update_profile(sender, instance, created, **kwargs):
+    Profile.objects.get_or_create(
+        user=instance,
+        defaults={"role": Role.VOLUNTEER}
+    )
+
+------------------------------------------------
+
+Дополнительная очистка базы:
+
+Удаление пользователей без профилей:
+
+from django.contrib.auth.models import User
+User.objects.filter(profile__isnull=True).delete()
+
+------------------------------------------------
+
+Результат:
+
+Удаление пользователя работает корректно.
+
+Удаление через:
+- Users (auth_user)
+- Profiles (account_profile)
+
+приводит к полному удалению пользователя и профиля без остатка.
+
+Проблема "воскрешения" профилей устранена.

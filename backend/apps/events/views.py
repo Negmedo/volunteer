@@ -17,7 +17,7 @@ def volunteer_dashboard(request):
 def org_dashboard(request):
     role = getattr(getattr(request.user, "profile", None), "role", None)
     if role != Role.ORG:
-        return redirect("/accounts/dashboard/")
+        return redirect("accounts:dashboard")
 
     my_events = Event.objects.filter(created_by=request.user).order_by("-created_at")
     return render(request, "events/org_dashboard.html", {"events": my_events})

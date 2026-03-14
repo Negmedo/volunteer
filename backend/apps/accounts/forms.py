@@ -1,29 +1,26 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-class SignupForm(forms.ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput, label="Пароль")
-    password2 = forms.CharField(widget=forms.PasswordInput, label="Повтор пароля")
+
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(required=False, label="Email")
+    first_name = forms.CharField(required=False, label="Имя")
+    last_name = forms.CharField(required=False, label="Фамилия")
 
     class Meta:
         model = User
-        fields = ["username", "email"]
-
-    def clean(self):
-        cleaned = super().clean()
-        p1 = cleaned.get("password1")
-        p2 = cleaned.get("password2")
-        if p1 and p2 and p1 != p2:
-            raise forms.ValidationError("Пароли не совпадают")
-        return cleaned
+        fields = ["first_name", "last_name", "username", "email", "password1", "password2"]
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data["password1"])  # безопасное хэширование
+        user.email = self.cleaned_data.get("email", "")
+        user.first_name = self.cleaned_data.get("first_name", "")
+        user.last_name = self.cleaned_data.get("last_name", "")
         if commit:
             user.save()
         return user
+
 
 class LoginForm(AuthenticationForm):
     pass

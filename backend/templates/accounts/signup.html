@@ -1,11 +1,105 @@
-{% extends "base.html" %}
-{% block title %}Регистрация{% endblock %}
-{% block content %}
-<div class="p-4 bg-white rounded border">
-  <h1 class="h5">Регистрация</h1>
-  <form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary">Создать аккаунт</button>
-  </form>
-</div>
+{% extends "accounts/auth_base.html" %}
+
+{% block auth_form %}
+<form method="post" class="auth-form active-form">
+  {% csrf_token %}
+  <h2 class="auth-title">Присоединиться к нам</h2>
+
+  {% if form.non_field_errors %}
+    <div class="input-group">
+      <div class="auth-error">
+        {{ form.non_field_errors }}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="input-row">
+    <div class="input-group">
+      <label for="id_first_name">Имя</label>
+      <input
+        type="text"
+        name="first_name"
+        id="id_first_name"
+        placeholder="Имя"
+        value="{{ form.first_name.value|default:'' }}"
+      >
+      {% if form.first_name.errors %}
+        <div class="auth-error-small">{{ form.first_name.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="input-group">
+      <label for="id_last_name">Фамилия</label>
+      <input
+        type="text"
+        name="last_name"
+        id="id_last_name"
+        placeholder="Фамилия"
+        value="{{ form.last_name.value|default:'' }}"
+      >
+      {% if form.last_name.errors %}
+        <div class="auth-error-small">{{ form.last_name.errors }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label for="id_username">Логин</label>
+    <input
+      type="text"
+      name="username"
+      id="id_username"
+      placeholder="Придумайте логин"
+      required
+      value="{{ form.username.value|default:'' }}"
+    >
+    {% if form.username.errors %}
+      <div class="auth-error-small">{{ form.username.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="id_email">Email</label>
+    <input
+      type="email"
+      name="email"
+      id="id_email"
+      placeholder="example@mail.com"
+      value="{{ form.email.value|default:'' }}"
+    >
+    {% if form.email.errors %}
+      <div class="auth-error-small">{{ form.email.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="id_password1">Создание пароля</label>
+    <input
+      type="password"
+      name="password1"
+      id="id_password1"
+      placeholder="Придумайте пароль"
+      required
+    >
+    {% if form.password1.errors %}
+      <div class="auth-error-small">{{ form.password1.errors }}</div>
+    {% endif %}
+  </div>
+
+  <div class="input-group">
+    <label for="id_password2">Повтор пароля</label>
+    <input
+      type="password"
+      name="password2"
+      id="id_password2"
+      placeholder="Повторите пароль"
+      required
+    >
+    {% if form.password2.errors %}
+      <div class="auth-error-small">{{ form.password2.errors }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="auth-submit-btn">Зарегистрироваться</button>
+</form>
 {% endblock %}

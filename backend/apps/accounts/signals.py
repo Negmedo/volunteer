@@ -5,7 +5,14 @@ from .models import Profile, Role
 
 User = get_user_model()
 
+
 @receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance, role=Role.VOLUNTEER)
+def create_or_update_profile(sender, instance, created, **kwargs):
+    profile, was_created = Profile.objects.get_or_create(
+        user=instance,
+        defaults={"role": Role.VOLUNTEER}
+    )
+
+    if not created and not profile.role:
+        profile.role = Role.VOLUNTEER
+        profile.save()
