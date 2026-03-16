@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Результаты подбора{% endblock %}
+
+{% block content %}
+<div class="p-4 bg-white rounded border mb-3">
+  <div class="d-flex justify-content-between align-items-start">
+    <div>
+      <h1 class="h5 mb-1">Результаты подбора</h1>
+      <p class="text-muted mb-0">
+        Мероприятие: <strong>{{ event.title }}</strong>
+      </p>
+      {% if event.city %}
+        <p class="text-muted mb-0">Город: {{ event.city }}</p>
+      {% endif %}
+      {% if event.district %}
+        <p class="text-muted mb-0">Район: {{ event.district }}</p>
+      {% endif %}
+    </div>
+    <a href="/events/org/" class="btn btn-outline-secondary btn-sm">Назад</a>
+  </div>
+</div>
+
+{% if warning %}
+  <div class="alert alert-warning">
+    {{ warning }}
+  </div>
+{% endif %}
+
+<div class="p-4 bg-white rounded border">
+  <h2 class="h6">Подходящие волонтёры</h2>
+
+  {% if results %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Волонтёр</th>
+            <th>Итоговый score</th>
+            <th>Пояснение</th>
+            <th>Детали</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in results %}
+            <tr>
+              <td>
+                <strong>{{ item.volunteer.user.username }}</strong><br>
+                <span class="text-muted small">
+                  Заполненность анкеты: {{ item.volunteer.profile_completion_percent }}%
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-primary">{{ item.score }}</span>
+              </td>
+              <td>
+                <ul class="mb-0">
+                  {% for reason in item.reasons %}
+                    <li>{{ reason }}</li>
+                  {% endfor %}
+                </ul>
+              </td>
+              <td>
+                <details>
+                  <summary>Показать признаки</summary>
+                  <ul class="small mt-2 mb-0">
+                    <li>Обязательные навыки: {{ item.features.required_skill_match }}</li>
+                    <li>Желательные навыки: {{ item.features.optional_skill_match }}</li>
+                    <li>Языки: {{ item.features.language_match }}</li>
+                    <li>Доступность: {{ item.features.availability_match }}</li>
+                    <li>Направление: {{ item.features.direction_match }}</li>
+                    <li>Тип задачи: {{ item.features.task_type_match }}</li>
+                    <li>Опыт: {{ item.features.experience_score }}</li>
+                    <li>Локация: {{ item.features.location_score }}</li>
+                    <li>Надёжность: {{ item.features.reliability_score }}</li>
+                  </ul>
+                </details>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-muted">
+      Подходящих кандидатов пока не найдено.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

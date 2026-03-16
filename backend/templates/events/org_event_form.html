@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 bg-white rounded border">
+  <h1 class="h5 mb-3">{{ page_title }}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <h2 class="h6">Основная информация о мероприятии</h2>
+
+    <div class="mb-3">
+      <label class="form-label">Название</label>
+      {{ event_form.title }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Описание</label>
+      {{ event_form.description }}
+    </div>
+
+    <div class="form-check mb-3">
+      {{ event_form.is_public }}
+      <label class="form-check-label">Показывать гостям</label>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Город</label>
+      {{ event_form.city }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Район</label>
+      {{ event_form.district }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Дата начала</label>
+      {{ event_form.start_date }}
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label">Дата окончания</label>
+      {{ event_form.end_date }}
+    </div>
+
+    <h2 class="h6">Требования к волонтёрам</h2>
+
+    <div class="mb-3">
+      <label class="form-label">Направление</label>
+      {{ requirement_form.direction }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Тип задачи</label>
+      {{ requirement_form.task_type }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Обязательные навыки</label>
+      {{ requirement_form.required_skills }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Желательные навыки</label>
+      {{ requirement_form.optional_skills }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Обязательные языки</label>
+      {{ requirement_form.required_languages }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Предпочтительные слоты доступности</label>
+      {{ requirement_form.preferred_availability_slots }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Минимальный уровень опыта</label>
+      {{ requirement_form.min_experience_level }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Сколько волонтёров нужно</label>
+      {{ requirement_form.volunteers_needed }}
+    </div>
+
+    <div class="form-check mb-2">
+      {{ requirement_form.requires_car }}
+      <label class="form-check-label">Обязательно наличие автомобиля</label>
+    </div>
+
+    <div class="form-check mb-2">
+      {{ requirement_form.requires_night_shift }}
+      <label class="form-check-label">Нужна готовность к ночным сменам</label>
+    </div>
+
+    <div class="form-check mb-4">
+      {{ requirement_form.allows_other_districts }}
+      <label class="form-check-label">Можно привлекать волонтёров из других районов</label>
+    </div>
+
+    <button class="btn btn-primary">{{ submit_text }}</button>
+    <a href="/events/org/" class="btn btn-outline-secondary">Назад</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Анкета волонтёра{% endblock %}
+
+{% block content %}
+<div class="p-4 bg-white rounded border">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 class="h5 mb-1">Анкета волонтёра</h1>
+      <p class="text-muted mb-0">
+        Анкета не обязана быть заполнена на 100%, но чем больше данных, тем точнее будет подбор.
+      </p>
+    </div>
+    <div class="text-end">
+      <div class="small text-muted">Заполнено</div>
+      <div class="fw-bold">{{ volunteer_profile.profile_completion_percent }}%</div>
+    </div>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Город</label>
+      {{ form.city }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Район</label>
+      {{ form.district }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Уровень опыта</label>
+      {{ form.experience_level }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Языки</label>
+      {{ form.languages }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Навыки</label>
+      {{ form.skills }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Предпочтительные направления</label>
+      {{ form.preferred_directions }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Предпочтительные типы задач</label>
+      {{ form.preferred_task_types }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Слоты доступности</label>
+      {{ form.availability_slots }}
+    </div>
+
+    <div class="form-check mb-2">
+      {{ form.has_car }}
+      <label class="form-check-label">Есть автомобиль</label>
+    </div>
+
+    <div class="form-check mb-2">
+      {{ form.ready_for_night_shifts }}
+      <label class="form-check-label">Готов к ночным сменам</label>
+    </div>
+
+    <div class="form-check mb-3">
+      {{ form.can_travel_to_other_districts }}
+      <label class="form-check-label">Готов выезжать в другие районы</label>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Краткая информация о себе</label>
+      {{ form.short_bio }}
+      <div class="form-text">Это поле не участвует в matching, только для интерфейса.</div>
+    </div>
+
+    <button class="btn btn-primary">Сохранить анкету</button>
+    <a href="/events/volunteer/" class="btn btn-outline-secondary">Назад</a>
+  </form>
+</div>
+{% endblock %}

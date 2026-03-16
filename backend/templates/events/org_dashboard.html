@@ -1,20 +1,66 @@
 {% extends "base.html" %}
 {% block title %}Кабинет организации{% endblock %}
+
 {% block content %}
-<div class="p-4 bg-white rounded border">
-  <h1 class="h5">Кабинет организации</h1>
-  <p class="text-muted">Здесь будут создание мероприятий, отклики и запуск автоподбора.</p>
-  <a class="btn btn-outline-primary btn-sm" href="/matching/">Автоподбор (заглушка)</a>
+<div class="p-4 bg-white rounded border mb-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="h5 mb-1">Кабинет организации</h1>
+      <p class="text-muted mb-0">
+        Здесь создаются мероприятия, требования и запускается подбор волонтёров.
+      </p>
+    </div>
+    <a href="/events/org/create/" class="btn btn-primary btn-sm">
+      Создать мероприятие
+    </a>
+  </div>
 </div>
 
-<div class="mt-3 p-4 bg-white rounded border">
+<div class="p-4 bg-white rounded border">
   <h2 class="h6">Мои мероприятия</h2>
-  <ul class="mb-0">
-    {% for e in events %}
-      <li>{{ e.title }}</li>
-    {% empty %}
-      <li class="text-muted">Пока нет созданных мероприятий.</li>
-    {% endfor %}
-  </ul>
+
+  {% if events %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Город</th>
+            <th>Дата начала</th>
+            <th>Публичное</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in events %}
+            <tr>
+              <td>{{ event.title }}</td>
+              <td>{% if event.city %}{{ event.city }}{% else %}—{% endif %}</td>
+              <td>{% if event.start_date %}{{ event.start_date }}{% else %}—{% endif %}</td>
+              <td>{% if event.is_public %}Да{% else %}Нет{% endif %}</td>
+              <td class="d-flex flex-wrap gap-2">
+                <a href="/events/org/{{ event.id }}/edit/" class="btn btn-outline-primary btn-sm">
+                  Редактировать
+                </a>
+
+                <a href="/matching/event/{{ event.id }}/" class="btn btn-outline-success btn-sm">
+                  Запустить подбор
+                </a>
+
+                <form method="post" action="/events/org/{{ event.id }}/delete/">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-danger btn-sm">
+                    Удалить
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-muted">Пока нет созданных мероприятий.</div>
+  {% endif %}
 </div>
 {% endblock %}
