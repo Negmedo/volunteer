@@ -8,6 +8,8 @@ from .views import (
     volunteer_profile_edit,
 )
 
+app_name = "accounts"
+
 urlpatterns = [
     path("signup/", signup_view, name="signup"),
     path("login/", UserLoginView.as_view(), name="login"),

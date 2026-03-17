@@ -6,6 +6,16 @@ from .models import VolunteerProfile
 
 
 class SignupForm(forms.ModelForm):
+    first_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="Имя"
+    )
+    last_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+        label="Фамилия"
+    )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
         label="Пароль"
@@ -17,7 +27,7 @@ class SignupForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["username", "email"]
+        fields = ["first_name", "last_name", "username", "email"]
         widgets = {
             "username": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
@@ -35,6 +45,8 @@ class SignupForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.first_name = self.cleaned_data.get("first_name", "")
+        user.last_name = self.cleaned_data.get("last_name", "")
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()

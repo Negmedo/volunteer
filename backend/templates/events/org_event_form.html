@@ -103,7 +103,7 @@
     </div>
 
     <button class="btn btn-primary">{{ submit_text }}</button>
-    <a href="/events/org/" class="btn btn-outline-secondary">Назад</a>
+    <a href="{% url 'events:org_dashboard' %}" class="btn btn-outline-secondary">Назад</a>
   </form>
 </div>
 {% endblock %}

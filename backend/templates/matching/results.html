@@ -16,7 +16,7 @@
         <p class="text-muted mb-0">Район: {{ event.district }}</p>
       {% endif %}
     </div>
-    <a href="/events/org/" class="btn btn-outline-secondary btn-sm">Назад</a>
+    <a href="{% url 'events:org_dashboard' %}" class="btn btn-outline-secondary btn-sm">Назад</a>
   </div>
 </div>
 

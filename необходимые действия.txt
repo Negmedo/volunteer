@@ -1,12 +1,18 @@
-для запуска проекта
+для обнуления базы данных проекта:
+docker compose down -v
 docker compose up -d --build
 docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser #нужно выполнить один раз создает профиль админа
 
-выход:
-docker compose down -v
+
+
 
 для git:
 git add .
 git commit -m "sdfgjdfbvhdscuzvjd короче тут комментарии зачем я ввел изменение" 
 git push origin master
+
+Протокол общение с GPT:
+необходим чтобы не гонять одни и те же ошибки по кругу
+необходимо использовать единый namespaced-стиль (urls.py всегда app_name = "...", все переходы <a href=""> через {% url %})
+

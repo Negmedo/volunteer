@@ -8,7 +8,7 @@ from .views import (
     event_update,
     event_delete,
 )
-
+app_name = "events"
 urlpatterns = [
     path("public/", public_events, name="public_events"),
     path("volunteer/", volunteer_dashboard, name="volunteer_dashboard"),

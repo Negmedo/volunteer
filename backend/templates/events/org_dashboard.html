@@ -10,7 +10,7 @@
         Здесь создаются мероприятия, требования и запускается подбор волонтёров.
       </p>
     </div>
-    <a href="/events/org/create/" class="btn btn-primary btn-sm">
+    <a href="{% url 'events:event_create' %}" class="btn btn-primary btn-sm">
       Создать мероприятие
     </a>
   </div>
@@ -39,15 +39,15 @@
               <td>{% if event.start_date %}{{ event.start_date }}{% else %}—{% endif %}</td>
               <td>{% if event.is_public %}Да{% else %}Нет{% endif %}</td>
               <td class="d-flex flex-wrap gap-2">
-                <a href="/events/org/{{ event.id }}/edit/" class="btn btn-outline-primary btn-sm">
+                <a href="{% url 'events:event_update' event.id %}" class="btn btn-outline-primary btn-sm">
                   Редактировать
                 </a>
 
-                <a href="/matching/event/{{ event.id }}/" class="btn btn-outline-success btn-sm">
+                <a href="{% url 'matching:event_matching_results' event.id %}" class="btn btn-outline-success btn-sm">
                   Запустить подбор
                 </a>
 
-                <form method="post" action="/events/org/{{ event.id }}/delete/">
+                <form method="post" action="{% url 'events:event_delete' event.id %}">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-outline-danger btn-sm">
                     Удалить

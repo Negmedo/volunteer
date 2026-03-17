@@ -16,7 +16,7 @@ def event_matching_results(request, event_id):
     role = getattr(getattr(request.user, "profile", None), "role", None)
 
     if role != Role.ORG:
-        return redirect("/accounts/dashboard/")
+        return redirect("accounts:dashboard")
 
     event = get_object_or_404(
         Event.objects.select_related(
