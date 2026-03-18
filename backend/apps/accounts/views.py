@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 
 from .forms import SignupForm, LoginForm, VolunteerProfileForm
-from .models import Role
+from .models import Role, VolunteerProfile
 
 
 def signup_view(request):
@@ -53,7 +53,7 @@ def volunteer_profile_edit(request):
     if role == Role.ADMIN:
         return redirect("admin:index")
 
-    volunteer_profile = request.user.volunteer_profile
+    volunteer_profile, _ = VolunteerProfile.objects.get_or_create(user=request.user)
     form = VolunteerProfileForm(request.POST or None, instance=volunteer_profile)
 
     if request.method == "POST" and form.is_valid():

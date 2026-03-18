@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="p-4 bg-white rounded border mb-3">
+  <div class="d-flex justify-content-between align-items-start gap-3">
+    <div>
+      <h1 class="h4 mb-2">{{ event.title }}</h1>
+      <p class="text-muted mb-2">{{ event.description|default:"Описание пока не заполнено." }}</p>
+
+      <div class="small text-muted">
+        {% if event.city %}<div>Город: {{ event.city }}</div>{% endif %}
+        {% if event.district %}<div>Район: {{ event.district }}</div>{% endif %}
+        {% if event.start_date %}<div>Начало: {{ event.start_date }}</div>{% endif %}
+        {% if event.end_date %}<div>Окончание: {{ event.end_date }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <a href="{% url 'events:public_events' %}" class="btn btn-outline-secondary btn-sm">Назад</a>
+
+      {% if user.is_authenticated and volunteer_profile and can_apply_to_event %}
+        <form method="post" action="{% url 'events:apply_to_event' event.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary btn-sm">Откликнуться на мероприятие</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="p-4 bg-white rounded border">
+  <h2 class="h6">Роли / позиции</h2>
+
+  {% if positions %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Позиция</th>
+            <th>Требования</th>
+            <th>Мест</th>
+            <th>Статус</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for position in positions %}
+            <tr>
+              <td>
+                <strong>{{ position.title }}</strong>
+                {% if position.description %}
+                  <div class="small text-muted mt-1">{{ position.description }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="small">
+                  <div>Опыт: {{ position.get_min_experience_level_display }}</div>
+
+                  <div class="mt-1">
+                    <strong>Навыки:</strong>
+                    {% for skill in position.required_skills.all %}
+                      <span class="badge bg-light text-dark border">{{ skill.name }}</span>
+                    {% empty %}
+                      <span class="text-muted">—</span>
+                    {% endfor %}
+                  </div>
+
+                  <div class="mt-1">
+                    <strong>Языки:</strong>
+                    {% for language in position.required_languages.all %}
+                      <span class="badge bg-light text-dark border">{{ language.name }}</span>
+                    {% empty %}
+                      <span class="text-muted">—</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </td>
+              <td>{{ position.open_slots }} / {{ position.slots_total }}</td>
+              <td>{{ position.get_status_display }}</td>
+              <td>
+                {% if not user.is_authenticated %}
+                  <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-sm">Войти для отклика</a>
+                {% elif volunteer_profile %}
+                  {% if position.id in my_assignments %}
+                    <span class="badge bg-success">Уже есть назначение</span>
+                  {% elif position.id in my_applications %}
+                    <span class="badge bg-primary">Отклик уже отправлен</span>
+                  {% elif position.status == 'OPEN' and position.open_slots > 0 %}
+                    <form method="post" action="{% url 'events:apply_to_position' position.id %}">
+                      {% csrf_token %}
+                      <div class="mb-2">
+                        {{ application_form.motivation_text }}
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-sm">Откликнуться на роль</button>
+                    </form>
+                  {% else %}
+                    <span class="text-muted small">Недоступно</span>
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted small">Отклик доступен только волонтёру</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-muted">Позиции пока не настроены.</div>
+  {% endif %}
+</div>
+{% endblock %}

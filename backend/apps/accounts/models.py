@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import (
@@ -110,6 +111,42 @@ class VolunteerProfile(models.Model):
         default="",
         help_text="Не используется в matching, только для интерфейса"
     )
+
+    # Геоданные волонтёра
+    home_latitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(-90), MaxValueValidator(90)],
+        help_text="Широта домашней/базовой точки волонтёра"
+    )
+    home_longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(-180), MaxValueValidator(180)],
+        help_text="Долгота домашней/базовой точки волонтёра"
+    )
+
+    # Reliability / workflow-поля
+    is_available_for_matching = models.BooleanField(
+        default=True,
+        help_text="Временный флаг участия в подборе"
+    )
+    reliability_score = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=50.00,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="Агрегированный показатель надёжности 0..100"
+    )
+    completed_assignments_count = models.PositiveIntegerField(default=0)
+    cancelled_assignments_count = models.PositiveIntegerField(default=0)
+    no_show_count = models.PositiveIntegerField(default=0)
+    last_assignment_at = models.DateTimeField(null=True, blank=True)
+    last_completed_assignment_at = models.DateTimeField(null=True, blank=True)
 
     is_profile_completed = models.BooleanField(default=False)
     profile_completion_percent = models.PositiveSmallIntegerField(default=0)

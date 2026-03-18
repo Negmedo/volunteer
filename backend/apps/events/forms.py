@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Event, EventRequirement
+from .models import Event, EventRequirement, Application
 
 
 class EventForm(forms.ModelForm):
@@ -54,4 +54,22 @@ class EventRequirementForm(forms.ModelForm):
             "requires_night_shift": forms.CheckboxInput(attrs={"class": "form-check-input"}),
             "allows_other_districts": forms.CheckboxInput(attrs={"class": "form-check-input"}),
             "volunteers_needed": forms.NumberInput(attrs={"class": "form-control", "min": 1}),
+        }
+
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ["motivation_text"]
+        widgets = {
+            "motivation_text": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 3,
+                    "placeholder": "Коротко напишите, почему хотите участвовать (необязательно).",
+                }
+            ),
+        }
+        labels = {
+            "motivation_text": "Комментарий к отклику",
         }

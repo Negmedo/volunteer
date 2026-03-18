@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from apps.accounts.models import VolunteerProfile
+from apps.accounts.models import VolunteerProfile, Role
 from apps.events.models import Event
 
 
@@ -18,6 +18,12 @@ def hard_filter_volunteers(event: Event):
     """
     Этап 1. Жёсткая фильтрация.
     Отсекаем тех, кто точно не подходит.
+
+    ВАЖНО:
+    matching работает только по реальным волонтёрам:
+    - user.profile.role == VOLUNTEER
+    - анкета заполнена
+    - профиль доступен для matching
     """
 
     if not hasattr(event, "requirement"):
@@ -27,6 +33,7 @@ def hard_filter_volunteers(event: Event):
 
     volunteers = VolunteerProfile.objects.select_related(
         "user",
+        "user__profile",
         "city",
         "district",
     ).prefetch_related(
@@ -35,6 +42,10 @@ def hard_filter_volunteers(event: Event):
         "preferred_directions",
         "preferred_task_types",
         "availability_slots",
+    ).filter(
+        user__profile__role=Role.VOLUNTEER,
+        is_available_for_matching=True,
+        is_profile_completed=True,
     )
 
     filtered = []
@@ -44,38 +55,30 @@ def hard_filter_volunteers(event: Event):
     preferred_slot_ids = _get_ids(requirement.preferred_availability_slots.all())
 
     for volunteer in volunteers:
-        # 1. город
         if event.city and volunteer.city and volunteer.city_id != event.city_id:
             continue
 
-        # 2. район
         if event.district and volunteer.district:
             if volunteer.district_id != event.district_id and not requirement.allows_other_districts:
                 continue
 
-        # 3. обязательные навыки
         volunteer_skill_ids = _get_ids(volunteer.skills.all())
         if required_skill_ids and not required_skill_ids.issubset(volunteer_skill_ids):
             continue
 
-        # 4. обязательные языки
         volunteer_language_ids = _get_ids(volunteer.languages.all())
         if required_language_ids and not required_language_ids.issubset(volunteer_language_ids):
             continue
 
-        # 5. минимальный опыт
         if volunteer.experience_level < requirement.min_experience_level:
             continue
 
-        # 6. авто
         if requirement.requires_car and not volunteer.has_car:
             continue
 
-        # 7. ночные смены
         if requirement.requires_night_shift and not volunteer.ready_for_night_shifts:
             continue
 
-        # 8. доступность
         volunteer_slot_ids = _get_ids(volunteer.availability_slots.all())
         if preferred_slot_ids and not volunteer_slot_ids.intersection(preferred_slot_ids):
             continue
@@ -103,49 +106,41 @@ def build_feature_scores(volunteer: VolunteerProfile, event: Event):
     required_language_ids = _get_ids(requirement.required_languages.all())
     preferred_slot_ids = _get_ids(requirement.preferred_availability_slots.all())
 
-    # обязательные навыки
     if required_skill_ids:
         required_skill_match = len(volunteer_skill_ids.intersection(required_skill_ids)) / len(required_skill_ids)
     else:
         required_skill_match = 1.0
 
-    # желательные навыки
     if optional_skill_ids:
         optional_skill_match = len(volunteer_skill_ids.intersection(optional_skill_ids)) / len(optional_skill_ids)
     else:
         optional_skill_match = 1.0
 
-    # языки
     if required_language_ids:
         language_match = len(volunteer_language_ids.intersection(required_language_ids)) / len(required_language_ids)
     else:
         language_match = 1.0
 
-    # доступность
     if preferred_slot_ids:
         availability_match = len(volunteer_slot_ids.intersection(preferred_slot_ids)) / len(preferred_slot_ids)
     else:
         availability_match = 1.0
 
-    # направление
     if requirement.direction_id:
         direction_match = 1.0 if requirement.direction_id in volunteer_direction_ids else 0.0
     else:
         direction_match = 1.0
 
-    # тип задачи
     if requirement.task_type_id:
         task_type_match = 1.0 if requirement.task_type_id in volunteer_task_type_ids else 0.0
     else:
         task_type_match = 1.0
 
-    # опыт
     if requirement.min_experience_level > 0:
         experience_score = min(volunteer.experience_level / requirement.min_experience_level, 1.0)
     else:
         experience_score = 1.0
 
-    # район / локация
     if event.district and volunteer.district:
         location_score = 1.0 if volunteer.district_id == event.district_id else 0.6
     elif event.city and volunteer.city:
@@ -153,7 +148,6 @@ def build_feature_scores(volunteer: VolunteerProfile, event: Event):
     else:
         location_score = 0.7
 
-    # надёжность пока привязываем к заполненности профиля
     reliability_score = min(volunteer.profile_completion_percent / 100, 1.0)
 
     return {
@@ -174,7 +168,6 @@ def calculate_hybrid_score(feature_scores: dict):
     Этап 3-4. Гибридный итоговый score.
     Пока без ML, но структура уже готова.
     """
-
     score = (
         0.30 * feature_scores["required_skill_match"] +
         0.15 * feature_scores["optional_skill_match"] +

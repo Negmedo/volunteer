@@ -28,6 +28,7 @@
             <th>Город</th>
             <th>Дата начала</th>
             <th>Публичное</th>
+            <th>Позиции</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -38,6 +39,7 @@
               <td>{% if event.city %}{{ event.city }}{% else %}—{% endif %}</td>
               <td>{% if event.start_date %}{{ event.start_date }}{% else %}—{% endif %}</td>
               <td>{% if event.is_public %}Да{% else %}Нет{% endif %}</td>
+              <td>{{ event.positions.count }}</td>
               <td class="d-flex flex-wrap gap-2">
                 <a href="{% url 'events:event_update' event.id %}" class="btn btn-outline-primary btn-sm">
                   Редактировать
@@ -45,6 +47,10 @@
 
                 <a href="{% url 'matching:event_matching_results' event.id %}" class="btn btn-outline-success btn-sm">
                   Запустить подбор
+                </a>
+
+                <a href="{% url 'events:org_event_workflow' event.id %}" class="btn btn-outline-dark btn-sm">
+                  Отклики и назначения
                 </a>
 
                 <form method="post" action="{% url 'events:event_delete' event.id %}">

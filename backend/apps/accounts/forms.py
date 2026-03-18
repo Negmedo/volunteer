@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 from .models import VolunteerProfile
 
@@ -18,7 +20,8 @@ class SignupForm(forms.ModelForm):
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
-        label="Пароль"
+        label="Пароль",
+        help_text="Минимум 8 символов, пароль не должен быть слишком простым или только числовым."
     )
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
@@ -32,6 +35,22 @@ class SignupForm(forms.ModelForm):
             "username": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
         }
+
+    def clean_password1(self):
+        password = self.cleaned_data.get("password1")
+        user = User(
+            username=self.cleaned_data.get("username", ""),
+            email=self.cleaned_data.get("email", ""),
+            first_name=self.cleaned_data.get("first_name", ""),
+            last_name=self.cleaned_data.get("last_name", ""),
+        )
+
+        try:
+            validate_password(password, user=user)
+        except DjangoValidationError as exc:
+            raise forms.ValidationError(exc.messages)
+
+        return password
 
     def clean(self):
         cleaned = super().clean()
@@ -48,8 +67,10 @@ class SignupForm(forms.ModelForm):
         user.first_name = self.cleaned_data.get("first_name", "")
         user.last_name = self.cleaned_data.get("last_name", "")
         user.set_password(self.cleaned_data["password1"])
+
         if commit:
             user.save()
+
         return user
 
 

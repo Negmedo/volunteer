@@ -1,14 +1,42 @@
 {% extends "base.html" %}
 {% block title %}Публичные мероприятия{% endblock %}
+
 {% block content %}
 <div class="p-4 bg-white rounded border">
-  <h1 class="h5">Публичные мероприятия</h1>
-  <ul class="mb-0">
-    {% for e in events %}
-      <li><strong>{{ e.title }}</strong> {% if e.city %}({{ e.city }}){% endif %}</li>
-    {% empty %}
-      <li class="text-muted">Пока нет мероприятий.</li>
-    {% endfor %}
-  </ul>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h5 mb-0">Публичные мероприятия</h1>
+    <a href="{% url 'landing:landing' %}" class="btn btn-outline-secondary btn-sm">На главную</a>
+  </div>
+
+  {% if events %}
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Город</th>
+            <th>Дата начала</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in events %}
+            <tr>
+              <td>{{ e.title }}</td>
+              <td>{% if e.city %}{{ e.city }}{% else %}—{% endif %}</td>
+              <td>{% if e.start_date %}{{ e.start_date }}{% else %}—{% endif %}</td>
+              <td>
+                <a href="{% url 'events:event_detail' e.id %}" class="btn btn-outline-primary btn-sm">
+                  Подробнее
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="text-muted">Пока нет мероприятий.</div>
+  {% endif %}
 </div>
 {% endblock %}
