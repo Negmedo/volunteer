@@ -56,8 +56,7 @@ a {
   backdrop-filter: blur(18px);
 }
 
-.site-header-solid,
-.site-header:hover {
+.site-header-solid {
   backdrop-filter: blur(18px);
   background: rgba(255, 255, 255, 0.9);
   border-bottom: 1px solid rgba(221, 230, 240, 0.9);
@@ -76,13 +75,25 @@ a {
   gap: 10px;
   color: #fff;
   font-weight: 700;
+  text-decoration: none; /* Убираем стандартное подчеркивание ссылок */
 }
 
-.site-header-solid .brand,
-.site-header:hover .brand {
+/* Цвет логотипа на белой шапке (при скролле) */
+.site-header-solid .brand {
   color: var(--text);
 }
 
+/* Запрещаем Bootstrap менять цвет логотипа на синий при наведении на прозрачной шапке */
+.brand:hover {
+  color: #fff;
+}
+
+/* Цвет логотипа при наведении, когда шапка стала белой (сделал фиолетовым, как ссылки) */
+.site-header-solid .brand:hover {
+  color: var(--brand);
+}
+
+/* Твой класс для иконки "V" — оставляем без изменений, он супер */
 .brand-mark {
   width: 40px;
   height: 40px;
@@ -98,6 +109,7 @@ a {
 .brand-text {
   font-size: 1.05rem;
   letter-spacing: 0.02em;
+  transition: color 0.25s ease; /* Добавляем плавную смену цвета */
 }
 
 .site-nav {
@@ -107,14 +119,52 @@ a {
   flex-wrap: wrap;
 }
 
+/* Базовый вид ссылок (когда мы на самом верху, фон прозрачный) */
 .site-nav__link {
+  position: relative;
   color: rgba(255, 255, 255, 0.92);
   font-weight: 500;
+  padding: 4px 0;
+  text-decoration: none;
+  transition: color 0.25s ease;
+  margin-right: 28px;
 }
 
-.site-header-solid .site-nav__link,
-.site-header:hover .site-nav__link {
+/* Линия подчеркивания под ссылками (изначально спрятана) */
+.site-nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--brand);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* При наведении: линия плавно выезжает на 100% ширины */
+.site-nav__link:hover::after {
+  width: 100%;
+}
+
+/* При наведении: текст меняет цвет на фиолетовый */
+.site-nav__link:hover {
+  color: var(--brand);
+}
+
+/* =========================================
+   СОСТОЯНИЕ ШАПКИ ПРИ СКРОЛЛЕ (БЕЛАЯ)
+   ========================================= */
+
+/* Когда шапка стала белой, делаем текст ссылок темным, чтобы он не сливался с фоном */
+.site-header-solid .site-nav__link {
   color: var(--text);
+}
+
+/* При наведении на ссылку в белой шапке — снова делаем её фиолетовой */
+.site-header-solid .site-nav__link:hover {
+  color: var(--brand);
 }
 
 .btn-brand,
