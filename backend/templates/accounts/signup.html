@@ -3,14 +3,11 @@
 {% block auth_form %}
 <form method="post" class="auth-form active-form">
   {% csrf_token %}
-  <h2 class="auth-title">Присоединиться к нам</h2>
+  <h2 class="auth-title">Создать аккаунт</h2>
+  <p class="auth-subtitle">После регистрации ты сможешь заполнить анкету и откликаться на мероприятия.</p>
 
   {% if form.non_field_errors %}
-    <div class="input-group">
-      <div class="auth-error">
-        {{ form.non_field_errors }}
-      </div>
-    </div>
+    <div class="auth-error">{{ form.non_field_errors }}</div>
   {% endif %}
 
   <div class="input-row">
@@ -72,32 +69,34 @@
     {% endif %}
   </div>
 
-  <div class="input-group">
-    <label for="id_password1">Создание пароля</label>
-    <input
-      type="password"
-      name="password1"
-      id="id_password1"
-      placeholder="Придумайте пароль"
-      required
-    >
-    {% if form.password1.errors %}
-      <div class="auth-error-small">{{ form.password1.errors }}</div>
-    {% endif %}
-  </div>
+  <div class="input-row">
+    <div class="input-group">
+      <label for="id_password1">Пароль</label>
+      <input
+        type="password"
+        name="password1"
+        id="id_password1"
+        placeholder="Пароль"
+        required
+      >
+      {% if form.password1.errors %}
+        <div class="auth-error-small">{{ form.password1.errors }}</div>
+      {% endif %}
+    </div>
 
-  <div class="input-group">
-    <label for="id_password2">Повтор пароля</label>
-    <input
-      type="password"
-      name="password2"
-      id="id_password2"
-      placeholder="Повторите пароль"
-      required
-    >
-    {% if form.password2.errors %}
-      <div class="auth-error-small">{{ form.password2.errors }}</div>
-    {% endif %}
+    <div class="input-group">
+      <label for="id_password2">Повтор пароля</label>
+      <input
+        type="password"
+        name="password2"
+        id="id_password2"
+        placeholder="Повторите пароль"
+        required
+      >
+      {% if form.password2.errors %}
+        <div class="auth-error-small">{{ form.password2.errors }}</div>
+      {% endif %}
+    </div>
   </div>
 
   <button type="submit" class="auth-submit-btn">Зарегистрироваться</button>

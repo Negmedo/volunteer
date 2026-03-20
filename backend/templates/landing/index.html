@@ -1,151 +1,188 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Лендинг{% endblock %}
+{% block title %}VolunteerSKO | Главная{% endblock %}
+
 {% block content %}
+<section class="hero">
+  <div class="hero__backdrop"></div>
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <span class="eyebrow">Платформа волонтёрской координации</span>
+      <h1 class="hero__title">Стань волонтёром и помоги там, где это действительно нужно</h1>
+      <p class="hero__text">
+        VolunteerSKO помогает организациям быстрее находить надёжных волонтёров, а людям
+        находить мероприятия, где их помощь будет по-настоящему полезной.
+      </p>
 
+      <div class="hero__actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dashboard' %}" class="btn btn-brand btn-lg">Перейти в кабинет</a>
+        {% else %}
+          <a href="{% url 'accounts:signup' %}" class="btn btn-brand btn-lg">Стать волонтёром</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-brand-outline btn-lg">У меня уже есть аккаунт</a>
+        {% endif %}
+      </div>
+    </div>
 
-<main>
-        <section class="hero-image-block">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1>Стань волонтёром и не помоги тем, кому это нужно</h1>
-                {% if user.is_authenticated %}
-                {% else %}
-                <a href="{% url 'accounts:login' %}" class="btn-hero-outline">Присоединиться</a>
-                {% endif %}
-            </div>
-        </section>
-
-        <section class="events-section">
-            
-            <div class="events-header">
-                <h2 class="events-section-title">Ивенты</h2>
-                <div class="events-nav">
-                    <button class="nav-arrow left-arrow" id="btn-left">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    </button>
-                    <button class="nav-arrow right-arrow" id="btn-right">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="events-container" id="events-carousel">
-                
-                <div class="event-card-unified">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">Выездная гуманитарная миссия</h2>
-                        <p class="event-desc">
-                            Требуются водители с личным автомобилем и крепкие ребята для погрузочно-разгрузочных 
-                            работ. Задача — доставка вещей первой необходимости пожилым людям в отдаленные районы. Нужна готовность к 
-                            выездам за пределы города.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-                <div class="event-card-unified event-card-it">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">IT-конференция СКО: Технологии и Данные</h2>
-                        <p class="event-desc">
-                            Ищем волонтёров в зону регистрации и технической поддержки образовательного форума. 
-                            Если вы разбираетесь в настройке оборудования, звука или работаете с базами данных вроде MySQL, 
-                            ваша помощь на площадке будет неоценима.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-                <div class="event-card-unified event-card-festival">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">Фестиваль восточной культуры</h2>
-                        <p class="event-desc">
-                            Требуются кураторы площадок, SMM-специалисты и переводчики. В программе фестиваля — лекции по истории Японии 
-                            и выставки традиционного искусства. Отличная возможность попрактиковать языковые навыки 
-                            и помочь с организацией культурного события.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-                <div class="event-card-unified event-card-desserts">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">Благотворительная ярмарка десертов</h2>
-                        <p class="event-desc">
-                            Ищем аниматоров для работы с детьми и помощников на фуд-корте со сладкой выпечкой. 
-                            Обязательное условие для участия в этом ивенте — наличие загруженной и действующей медицинской книжки.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-                <div class="event-card-unified event-card-quest">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">Костюмированный городской квест</h2>
-                        <p class="event-desc">
-                            Нужны креативные ребята для отыгрыша сюжетных ролей (NPC) на точках маршрута. Если вам нравится вживаться 
-                            в роль и перевоплощаться в других персонажей — например, сыграть загадочного духа Рюдзина или 
-                            городского стражника — этот творческий формат точно для вас.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-                <div class="event-card-unified event-card-marathon">
-                    <div class="event-content-overlay">
-                        <h2 class="event-title">Освещение областного марафона</h2>
-                        <p class="event-desc">
-                            Приглашаем фотографов и видеографов для создания контента на масштабном спортивном забеге. 
-                            Мероприятие проходит ранним утром, поэтому ищем «жаворонков» со своей техникой для съемки 
-                            и монтажа динамичных роликов.
-                        </p>
-                        <button class="event-btn">Записаться на ивент</button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-    </main>
-
-    <script src="{% static 'landing/js/main.js' %}"></script>
-
-<div class="row mt-3 g-3">
-  <div class="col-md-6">
-    <div class="p-3 bg-white rounded border">
-      <div class="text-muted">Зарегистрировано</div>
-      <div class="h4">{{ users_count }}</div>
+    <div class="hero__stats">
+      <div class="stat-card">
+        <div class="stat-card__label">Зарегистрировано пользователей</div>
+        <div class="stat-card__value">{{ users_count }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Мероприятий в системе</div>
+        <div class="stat-card__value">{{ events_count }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__label">Публичных мероприятий сейчас</div>
+        <div class="stat-card__value">{{ public_events|length }}</div>
+      </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="p-3 bg-white rounded border">
-      <div class="text-muted">Мероприятий проведено</div>
-      <div class="h4">{{ events_count }}</div>
+</section>
+
+<section class="section-block section-block--light">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Кому ты поможешь</span>
+        <h2 class="section-title">Реальные сценарии, где важна каждая пара рук</h2>
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <article class="feature-card">
+        <div class="feature-card__icon">🏥</div>
+        <h3>Поддержка при ЧС</h3>
+        <p>Выдача гуманитарной помощи, маршрутизация людей, помощь на пунктах временного размещения и логистика.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-card__icon">🧓</div>
+        <h3>Социальная помощь</h3>
+        <p>Поддержка пожилых людей, помощь семьям в трудной ситуации, участие в благотворительных инициативах.</p>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-card__icon">🎓</div>
+        <h3>Образовательные и городские события</h3>
+        <p>Регистрация участников, сопровождение площадок, координация потоков гостей и помощь организаторам.</p>
+      </article>
     </div>
   </div>
-</div>
+</section>
 
+<section class="section-block">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Истории и атмосфера</span>
+        <h2 class="section-title">Примеры мероприятий и ролей волонтёров</h2>
+      </div>
 
-<div class="mt-4 p-4 bg-white rounded border">
-  <h2 class="h5">Кому ты поможешь</h2>
-  <ul class="mb-0">
-    <li>Помощь при ЧС (пункты выдачи, эвакуация, логистика)</li>
-    <li>Социальная поддержка (сбор/раздача гуманитарной помощи)</li>
-    <li>Медицинская и психологическая поддержка (при наличии навыков)</li>
-  </ul>
-</div>
+      <div class="events-nav">
+        <button class="nav-arrow" id="btn-left" type="button" aria-label="Назад">←</button>
+        <button class="nav-arrow" id="btn-right" type="button" aria-label="Вперёд">→</button>
+      </div>
+    </div>
 
-<div class="mt-4 p-4 bg-white rounded border">
-  <h2 class="h5">Публичные мероприятия</h2>
-  {% if public_events %}
-    <ul>
-      {% for e in public_events %}
-        <li><strong>{{ e.title }}</strong> {% if e.city %}({{ e.city }}){% endif %}</li>
-      {% endfor %}
-    </ul>
-    <a class="btn btn-outline-primary btn-sm" href="{% url 'events:public_events' %}">Все публичные мероприятия</a>
-  {% else %}
-    <div class="text-muted">Пока нет мероприятий.</div>
-  {% endif %}
-</div>
+    <div class="events-container" id="events-carousel">
+      <article class="event-card-unified">
+        <div class="event-content-overlay">
+          <h3 class="event-title">Выездная гуманитарная миссия</h3>
+          <p class="event-desc">
+            Доставка вещей первой необходимости пожилым людям и семьям в отдалённых районах.
+            Особенно ценны водители, координаторы и помощники по разгрузке.
+          </p>
+          <span class="event-pill">Логистика · помощь на выезде</span>
+        </div>
+      </article>
 
+      <article class="event-card-unified event-card-it">
+        <div class="event-content-overlay">
+          <h3 class="event-title">IT-конференция СКО</h3>
+          <p class="event-desc">
+            Волонтёры помогают на регистрации, навигации гостей, технической поддержке площадок и сопровождении программы.
+          </p>
+          <span class="event-pill">Регистрация · техподдержка</span>
+        </div>
+      </article>
+
+      <article class="event-card-unified event-card-festival">
+        <div class="event-content-overlay">
+          <h3 class="event-title">Фестиваль восточной культуры</h3>
+          <p class="event-desc">
+            Нужны кураторы площадок, переводчики и SMM-помощники для работы с аудиторией и контентом.
+          </p>
+          <span class="event-pill">Координация · медиа</span>
+        </div>
+      </article>
+
+      <article class="event-card-unified event-card-desserts">
+        <div class="event-content-overlay">
+          <h3 class="event-title">Благотворительная ярмарка</h3>
+          <p class="event-desc">
+            Помощь на стойках, работа с гостями, координация зон и поддержка организаторов в течение всего дня.
+          </p>
+          <span class="event-pill">Гости · организация</span>
+        </div>
+      </article>
+
+      <article class="event-card-unified event-card-quest">
+        <div class="event-content-overlay">
+          <h3 class="event-title">Городской квест</h3>
+          <p class="event-desc">
+            Креативные роли, взаимодействие с участниками, сопровождение маршрута и помощь в игровой механике.
+          </p>
+          <span class="event-pill">Анимация · сопровождение</span>
+        </div>
+      </article>
+
+      <article class="event-card-unified event-card-marathon">
+        <div class="event-content-overlay">
+          <h3 class="event-title">Освещение марафона</h3>
+          <p class="event-desc">
+            Фото, видео, контент, работа на контрольных точках и помощь в навигации участников.
+          </p>
+          <span class="event-pill">Медиа · маршрут</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section-block section-block--light">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Публичные мероприятия</span>
+        <h2 class="section-title">Что можно посмотреть уже сейчас</h2>
+      </div>
+      <a href="{% url 'events:public_events' %}" class="btn btn-brand-outline">Смотреть все</a>
+    </div>
+
+    {% if public_events %}
+      <div class="public-events-list">
+        {% for e in public_events %}
+          <a class="public-event-item" href="{% url 'events:event_detail' e.id %}">
+            <div>
+              <h3>{{ e.title }}</h3>
+              <p>
+                {% if e.city %}{{ e.city }}{% else %}Город не указан{% endif %}
+                {% if e.start_date %} · {{ e.start_date }}{% endif %}
+              </p>
+            </div>
+            <span class="public-event-item__action">Подробнее →</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        Публичных мероприятий пока нет.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{% static 'landing/js/main.js' %}"></script>
 {% endblock %}

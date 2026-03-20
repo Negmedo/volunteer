@@ -6,29 +6,35 @@
 {% endblock %}
 
 {% block content %}
-<main class="auth-main">
-  <div class="auth-container">
-    <div class="auth-card">
+<section class="auth-shell">
+  <div class="auth-layout">
+    <div class="auth-side">
+      <span class="eyebrow">VolunteerSKO</span>
+      <h1 class="auth-side__title">Платформа, где помощь превращается в систему</h1>
+      <p class="auth-side__text">
+        Зарегистрируйся как волонтёр, откликайся на мероприятия, получай назначения
+        и участвуй в проектах, где твои навыки действительно нужны.
+      </p>
 
+      <div class="auth-side__bullets">
+        <div>• Личный кабинет волонтёра</div>
+        <div>• Отклики и назначения</div>
+        <div>• Подбор кандидатов для организаций</div>
+      </div>
+    </div>
+
+    <div class="auth-card">
       <div class="auth-tabs">
-        <a
-          href="{% url 'accounts:login' %}"
-          class="auth-tab {% if auth_mode == 'login' %}active{% endif %}"
-        >
+        <a href="{% url 'accounts:login' %}" class="auth-tab {% if auth_mode == 'login' %}active{% endif %}">
           Вход
         </a>
-
-        <a
-          href="{% url 'accounts:signup' %}"
-          class="auth-tab {% if auth_mode == 'signup' %}active{% endif %}"
-        >
+        <a href="{% url 'accounts:signup' %}" class="auth-tab {% if auth_mode == 'signup' %}active{% endif %}">
           Регистрация
         </a>
       </div>
 
       {% block auth_form %}{% endblock %}
-
     </div>
   </div>
-</main>
+</section>
 {% endblock %}

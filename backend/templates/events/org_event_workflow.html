@@ -2,157 +2,153 @@
 {% block title %}Отклики и назначения{% endblock %}
 
 {% block content %}
-<div class="p-4 bg-white rounded border mb-3">
-  <div class="d-flex justify-content-between align-items-start">
-    <div>
-      <h1 class="h5 mb-1">Отклики и назначения</h1>
-      <p class="text-muted mb-0">
-        Мероприятие: <strong>{{ event.title }}</strong>
-      </p>
-      {% if event.city %}
-        <p class="text-muted mb-0">Город: {{ event.city }}</p>
-      {% endif %}
-      {% if event.district %}
-        <p class="text-muted mb-0">Район: {{ event.district }}</p>
-      {% endif %}
-    </div>
-    <a href="{% url 'events:org_dashboard' %}" class="btn btn-outline-secondary btn-sm">Назад</a>
+<section class="page-hero-card">
+  <div>
+    <span class="eyebrow">Workflow мероприятия</span>
+    <h1 class="page-title mb-1">Отклики и назначения</h1>
+    <p class="page-subtitle mb-0">
+      Мероприятие: <strong>{{ event.title }}</strong>
+      {% if event.city %} · {{ event.city }}{% endif %}
+      {% if event.district %} · {{ event.district }}{% endif %}
+    </p>
   </div>
-</div>
+  <a href="{% url 'events:org_dashboard' %}" class="btn btn-brand-outline">Назад</a>
+</section>
 
 {% for position in event.positions.all %}
-  <div class="p-4 bg-white rounded border mb-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+  <section class="panel-card mb-4">
+    <div class="section-head section-head--tight">
       <div>
-        <h2 class="h6 mb-1">{{ position.title }}</h2>
-        <div class="small text-muted">
-          Статус позиции: {{ position.get_status_display }} |
-          Свободно мест: {{ position.open_slots }} / {{ position.slots_total }}
+        <h2 class="section-title section-title--sm">{{ position.title }}</h2>
+        <p class="section-subtitle">
+          Статус позиции: {{ position.get_status_display }} · Свободно мест: {{ position.open_slots }} / {{ position.slots_total }}
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="subpanel-card">
+          <h3 class="subpanel-title">Отклики</h3>
+
+          {% if position.applications.all %}
+            <div class="table-wrap">
+              <table class="table app-table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Волонтёр</th>
+                    <th>Статус</th>
+                    <th>Комментарий</th>
+                    <th>Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for application in position.applications.all %}
+                    <tr>
+                      <td>
+                        <div class="fw-semibold">{{ application.volunteer_profile.user.username }}</div>
+                        <div class="text-muted small">Надёжность: {{ application.volunteer_profile.reliability_score }}</div>
+                      </td>
+                      <td><span class="status-pill">{{ application.get_status_display }}</span></td>
+                      <td>
+                        {% if application.motivation_text %}
+                          <div class="small">{{ application.motivation_text }}</div>
+                        {% else %}
+                          <span class="text-muted small">—</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <div class="stacked-actions">
+                          {% if application.status == 'new' or application.status == 'applied' %}
+                            <form method="post" action="{% url 'events:application_review' application.id %}">
+                              {% csrf_token %}
+                              <input type="text" name="review_comment" class="form-control form-control-sm mb-2" placeholder="Комментарий">
+                              <button type="submit" class="btn btn-sm btn-brand-outline w-100">Отметить как рассмотренный</button>
+                            </form>
+                          {% endif %}
+
+                          {% if application.status != 'assigned' and application.status != 'confirmed' and application.status != 'completed' %}
+                            <form method="post" action="{% url 'events:application_assign' application.id %}">
+                              {% csrf_token %}
+                              <input type="text" name="notes" class="form-control form-control-sm mb-2" placeholder="Заметка к назначению">
+                              <button type="submit" class="btn btn-sm btn-brand w-100">Назначить</button>
+                            </form>
+
+                            <form method="post" action="{% url 'events:application_decline' application.id %}">
+                              {% csrf_token %}
+                              <input type="text" name="review_comment" class="form-control form-control-sm mb-2" placeholder="Причина отклонения">
+                              <button type="submit" class="btn btn-sm btn-brand-ghost w-100">Отклонить</button>
+                            </form>
+                          {% else %}
+                            <span class="text-muted small">Действия недоступны</span>
+                          {% endif %}
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="empty-state empty-state--small">Откликов пока нет.</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="subpanel-card">
+          <h3 class="subpanel-title">Назначения</h3>
+
+          {% if position.assignments.all %}
+            <div class="table-wrap">
+              <table class="table app-table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Волонтёр</th>
+                    <th>Статус</th>
+                    <th>Назначен</th>
+                    <th>Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for assignment in position.assignments.all %}
+                    <tr>
+                      <td>
+                        <div class="fw-semibold">{{ assignment.volunteer_profile.user.username }}</div>
+                        {% if assignment.notes %}
+                          <div class="text-muted small">{{ assignment.notes }}</div>
+                        {% endif %}
+                      </td>
+                      <td><span class="status-pill">{{ assignment.get_status_display }}</span></td>
+                      <td>{{ assignment.assigned_at|date:"d.m.Y H:i" }}</td>
+                      <td>
+                        {% if assignment.status == 'assigned' or assignment.status == 'confirmed' %}
+                          <div class="stacked-actions">
+                            <form method="post" action="{% url 'events:assignment_complete' assignment.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-sm btn-brand-outline w-100">Отметить как completed</button>
+                            </form>
+
+                            <form method="post" action="{% url 'events:assignment_failed' assignment.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-sm btn-brand-ghost w-100">Отметить как failed</button>
+                            </form>
+                          </div>
+                        {% else %}
+                          <span class="text-muted small">Нет доступных действий</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="empty-state empty-state--small">Назначений пока нет.</div>
+          {% endif %}
         </div>
       </div>
     </div>
-
-    <div class="row g-3">
-      <div class="col-lg-6">
-        <h3 class="h6">Отклики</h3>
-
-        {% if position.applications.all %}
-          <div class="table-responsive">
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th>Волонтёр</th>
-                  <th>Статус</th>
-                  <th>Комментарий</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for application in position.applications.all %}
-                  <tr>
-                    <td>
-                      <strong>{{ application.volunteer_profile.user.username }}</strong>
-                      <div class="small text-muted">
-                        Надёжность: {{ application.volunteer_profile.reliability_score }}
-                      </div>
-                    </td>
-                    <td>{{ application.get_status_display }}</td>
-                    <td>
-                      {% if application.motivation_text %}
-                        <div class="small">{{ application.motivation_text }}</div>
-                      {% else %}
-                        <span class="text-muted small">—</span>
-                      {% endif %}
-                    </td>
-                    <td>
-                      <div class="d-flex flex-column gap-2">
-                        {% if application.status == 'new' or application.status == 'applied' %}
-                          <form method="post" action="{% url 'events:application_review' application.id %}">
-                            {% csrf_token %}
-                            <input type="text" name="review_comment" class="form-control form-control-sm mb-1" placeholder="Комментарий">
-                            <button type="submit" class="btn btn-outline-primary btn-sm w-100">reviewed</button>
-                          </form>
-                        {% endif %}
-
-                        {% if application.status != 'assigned' and application.status != 'confirmed' and application.status != 'completed' %}
-                          <form method="post" action="{% url 'events:application_assign' application.id %}">
-                            {% csrf_token %}
-                            <input type="text" name="notes" class="form-control form-control-sm mb-1" placeholder="Заметка к назначению">
-                            <button type="submit" class="btn btn-success btn-sm w-100">assigned</button>
-                          </form>
-
-                          <form method="post" action="{% url 'events:application_decline' application.id %}">
-                            {% csrf_token %}
-                            <input type="text" name="review_comment" class="form-control form-control-sm mb-1" placeholder="Причина отклонения">
-                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">declined</button>
-                          </form>
-                        {% else %}
-                          <span class="text-muted small">Действия недоступны</span>
-                        {% endif %}
-                      </div>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <div class="text-muted">Откликов пока нет.</div>
-        {% endif %}
-      </div>
-
-      <div class="col-lg-6">
-        <h3 class="h6">Назначения</h3>
-
-        {% if position.assignments.all %}
-          <div class="table-responsive">
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th>Волонтёр</th>
-                  <th>Статус</th>
-                  <th>Назначен</th>
-                  <th>Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for assignment in position.assignments.all %}
-                  <tr>
-                    <td>
-                      <strong>{{ assignment.volunteer_profile.user.username }}</strong>
-                      {% if assignment.notes %}
-                        <div class="small text-muted">{{ assignment.notes }}</div>
-                      {% endif %}
-                    </td>
-                    <td>{{ assignment.get_status_display }}</td>
-                    <td>{{ assignment.assigned_at|date:"d.m.Y H:i" }}</td>
-                    <td>
-                      {% if assignment.status == 'assigned' or assignment.status == 'confirmed' %}
-                        <div class="d-flex flex-column gap-2">
-                          <form method="post" action="{% url 'events:assignment_complete' assignment.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-success btn-sm w-100">completed</button>
-                          </form>
-
-                          <form method="post" action="{% url 'events:assignment_failed' assignment.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">failed</button>
-                          </form>
-                        </div>
-                      {% else %}
-                        <span class="text-muted small">Нет доступных действий</span>
-                      {% endif %}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% else %}
-          <div class="text-muted">Назначений пока нет.</div>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+  </section>
 {% endfor %}
 {% endblock %}

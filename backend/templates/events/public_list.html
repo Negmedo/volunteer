@@ -2,31 +2,40 @@
 {% block title %}Публичные мероприятия{% endblock %}
 
 {% block content %}
-<div class="p-4 bg-white rounded border">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h5 mb-0">Публичные мероприятия</h1>
-    <a href="{% url 'landing:landing' %}" class="btn btn-outline-secondary btn-sm">На главную</a>
+<section class="page-hero-card">
+  <div>
+    <span class="eyebrow">Открытый каталог</span>
+    <h1 class="page-title mb-1">Публичные мероприятия</h1>
+    <p class="page-subtitle mb-0">
+      Гость может просматривать открытые мероприятия и знакомиться с доступными ролями.
+    </p>
   </div>
+  <a href="{% url 'landing:landing' %}" class="btn btn-brand-outline">На главную</a>
+</section>
 
+<section class="panel-card">
   {% if events %}
-    <div class="table-responsive">
-      <table class="table align-middle">
+    <div class="table-wrap">
+      <table class="table app-table align-middle mb-0">
         <thead>
           <tr>
             <th>Название</th>
             <th>Город</th>
             <th>Дата начала</th>
-            <th></th>
+            <th class="text-end">Действие</th>
           </tr>
         </thead>
         <tbody>
           {% for e in events %}
             <tr>
-              <td>{{ e.title }}</td>
+              <td>
+                <div class="fw-semibold">{{ e.title }}</div>
+                <div class="text-muted small">{{ e.description|default:"Описание пока не заполнено."|truncatechars:90 }}</div>
+              </td>
               <td>{% if e.city %}{{ e.city }}{% else %}—{% endif %}</td>
               <td>{% if e.start_date %}{{ e.start_date }}{% else %}—{% endif %}</td>
-              <td>
-                <a href="{% url 'events:event_detail' e.id %}" class="btn btn-outline-primary btn-sm">
+              <td class="text-end">
+                <a href="{% url 'events:event_detail' e.id %}" class="btn btn-sm btn-brand-outline">
                   Подробнее
                 </a>
               </td>
@@ -36,7 +45,7 @@
       </table>
     </div>
   {% else %}
-    <div class="text-muted">Пока нет мероприятий.</div>
+    <div class="empty-state">Пока нет публичных мероприятий.</div>
   {% endif %}
-</div>
+</section>
 {% endblock %}

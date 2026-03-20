@@ -15,13 +15,4 @@
                 carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             });
             const header = document.querySelector('.header');
-
-            window.addEventListener('scroll', () => {
-                // Если мы прокрутили страницу больше чем на 150 пикселей вниз
-                if (window.scrollY > 150) {
-                    header.classList.add('scrolled'); // Добавляем цвет и закругления
-                } else {
-                    header.classList.remove('scrolled'); // Делаем снова прозрачной
-                }
-            });
         });

@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Prefetch
+from django.db.models import Prefetch, F
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 
 from apps.accounts.models import Role, VolunteerProfile
@@ -27,6 +28,20 @@ def _get_or_create_volunteer_profile_for_user(user):
     Используем только в волонтёрских сценариях.
     """
     return VolunteerProfile.objects.get_or_create(user=user)[0]
+
+
+def _resolve_event_source(request):
+    source = request.GET.get("from") or request.POST.get("from")
+    if source in {"volunteer_dashboard", "org_dashboard", "public_events"}:
+        return source
+    return None
+
+
+def _build_event_detail_url(event_id, source=None):
+    url = reverse("events:event_detail", args=[event_id])
+    if source:
+        url += f"?from={source}"
+    return url
 
 
 def _recalculate_position_state(position: EventPosition):
@@ -73,8 +88,10 @@ def _sync_legacy_default_position(event: Event):
     position.requires_night_shift = requirement.requires_night_shift
     position.allows_other_districts = requirement.allows_other_districts
     position.slots_total = max(requirement.volunteers_needed, 1)
+
     if position.status not in {PositionStatus.CANCELLED, PositionStatus.CLOSED}:
         position.status = PositionStatus.OPEN
+
     position.save()
 
     position.required_skills.set(requirement.required_skills.all())
@@ -87,7 +104,11 @@ def _sync_legacy_default_position(event: Event):
 
 
 def public_events(request):
-    events = Event.objects.filter(is_public=True).select_related("city", "district").order_by("-created_at")
+    events = (
+        Event.objects.filter(is_public=True)
+        .select_related("city", "district")
+        .order_by("-created_at")
+    )
     return render(request, "events/public_list.html", {"events": events})
 
 
@@ -139,6 +160,20 @@ def event_detail(request, event_id):
     ]
     can_apply_to_event = len(open_positions) == 1
 
+    source = _resolve_event_source(request)
+    back_url = reverse("events:public_events")
+    back_label = "К списку мероприятий"
+
+    if source == "volunteer_dashboard" and request.user.is_authenticated and _get_role(request.user) == Role.VOLUNTEER:
+        back_url = reverse("events:volunteer_dashboard")
+        back_label = "В кабинет волонтёра"
+    elif source == "org_dashboard" and request.user.is_authenticated and _get_role(request.user) == Role.ORG:
+        back_url = reverse("events:org_dashboard")
+        back_label = "В кабинет организации"
+    elif source == "public_events":
+        back_url = reverse("events:public_events")
+        back_label = "К списку мероприятий"
+
     return render(request, "events/event_detail.html", {
         "event": event,
         "positions": positions,
@@ -147,6 +182,9 @@ def event_detail(request, event_id):
         "my_assignments": my_assignments,
         "can_apply_to_event": can_apply_to_event,
         "application_form": ApplicationForm(),
+        "back_url": back_url,
+        "back_label": back_label,
+        "back_source": source or "public_events",
     })
 
 
@@ -161,27 +199,53 @@ def volunteer_dashboard(request):
 
     volunteer_profile = _get_or_create_volunteer_profile_for_user(request.user)
 
-    public_events_qs = Event.objects.filter(is_public=True).select_related(
-        "city", "district"
-    ).order_by("-created_at")[:20]
-
     applications = volunteer_profile.applications.select_related(
         "position",
         "position__event",
         "position__event__city",
+        "position__event__district",
     ).order_by("-applied_at")
 
     assignments = volunteer_profile.assignments.select_related(
         "position",
         "position__event",
         "position__event__city",
+        "position__event__district",
     ).order_by("-assigned_at")
 
+    applied_position_ids = applications.values_list("position_id", flat=True)
+    assigned_position_ids = assignments.filter(
+        status__in=[
+            WorkflowStatus.ASSIGNED,
+            WorkflowStatus.CONFIRMED,
+            WorkflowStatus.COMPLETED,
+        ]
+    ).values_list("position_id", flat=True)
+
+    available_positions = (
+        EventPosition.objects.select_related(
+            "event",
+            "event__city",
+            "event__district",
+            "direction",
+            "task_type",
+        )
+        .prefetch_related("required_skills", "required_languages")
+        .filter(
+            event__is_public=True,
+            status=PositionStatus.OPEN,
+            slots_total__gt=F("slots_filled"),
+        )
+        .exclude(id__in=applied_position_ids)
+        .exclude(id__in=assigned_position_ids)
+        .order_by("event__start_date", "event__title", "sort_order", "id")
+    )
+
     return render(request, "events/volunteer_dashboard.html", {
-        "events": public_events_qs,
         "volunteer_profile": volunteer_profile,
         "applications": applications,
         "assignments": assignments,
+        "available_positions": available_positions,
     })
 
 
@@ -193,9 +257,10 @@ def org_dashboard(request):
         return redirect("accounts:dashboard")
 
     my_events = list(
-        Event.objects.filter(created_by=request.user).select_related(
-            "city", "district"
-        ).prefetch_related("positions").order_by("-created_at")
+        Event.objects.filter(created_by=request.user)
+        .select_related("city", "district")
+        .prefetch_related("positions")
+        .order_by("-created_at")
     )
 
     for event in my_events:
@@ -293,6 +358,8 @@ def apply_to_event(request, event_id):
     if role != Role.VOLUNTEER:
         return redirect("accounts:dashboard")
 
+    source = _resolve_event_source(request)
+
     event = get_object_or_404(Event, id=event_id, is_public=True)
     _sync_legacy_default_position(event)
 
@@ -303,13 +370,13 @@ def apply_to_event(request, event_id):
 
     if not open_positions:
         messages.error(request, "У этого мероприятия сейчас нет открытых позиций для отклика.")
-        return redirect("events:event_detail", event_id=event.id)
+        return redirect(_build_event_detail_url(event.id, source))
 
     if len(open_positions) > 1:
         messages.info(request, "У мероприятия несколько ролей. Выберите конкретную позицию.")
-        return redirect("events:event_detail", event_id=event.id)
+        return redirect(_build_event_detail_url(event.id, source))
 
-    return _apply_to_position_impl(request, open_positions[0])
+    return _apply_to_position_impl(request, open_positions[0], source=source)
 
 
 @login_required
@@ -317,6 +384,8 @@ def apply_to_position(request, position_id):
     role = _get_role(request.user)
     if role != Role.VOLUNTEER:
         return redirect("accounts:dashboard")
+
+    source = _resolve_event_source(request)
 
     position = get_object_or_404(
         EventPosition.objects.select_related("event"),
@@ -327,18 +396,18 @@ def apply_to_position(request, position_id):
         messages.error(request, "Нельзя откликнуться на скрытое мероприятие.")
         return redirect("events:volunteer_dashboard")
 
-    return _apply_to_position_impl(request, position)
+    return _apply_to_position_impl(request, position, source=source)
 
 
-def _apply_to_position_impl(request, position: EventPosition):
+def _apply_to_position_impl(request, position: EventPosition, source=None):
     if request.method != "POST":
-        return redirect("events:event_detail", event_id=position.event_id)
+        return redirect(_build_event_detail_url(position.event_id, source))
 
     volunteer_profile = _get_or_create_volunteer_profile_for_user(request.user)
 
     if position.status != PositionStatus.OPEN or position.open_slots <= 0:
         messages.error(request, "Позиция уже закрыта или мест больше нет.")
-        return redirect("events:event_detail", event_id=position.event_id)
+        return redirect(_build_event_detail_url(position.event_id, source))
 
     existing_application = Application.objects.filter(
         position=position,
@@ -346,7 +415,7 @@ def _apply_to_position_impl(request, position: EventPosition):
     ).first()
     if existing_application:
         messages.info(request, "Вы уже откликались на эту позицию.")
-        return redirect("events:event_detail", event_id=position.event_id)
+        return redirect(_build_event_detail_url(position.event_id, source))
 
     existing_assignment = Assignment.objects.filter(
         position=position,
@@ -355,12 +424,12 @@ def _apply_to_position_impl(request, position: EventPosition):
     ).exists()
     if existing_assignment:
         messages.info(request, "У вас уже есть назначение на эту позицию.")
-        return redirect("events:event_detail", event_id=position.event_id)
+        return redirect(_build_event_detail_url(position.event_id, source))
 
     form = ApplicationForm(request.POST or None)
     if not form.is_valid():
         messages.error(request, "Не удалось отправить отклик.")
-        return redirect("events:event_detail", event_id=position.event_id)
+        return redirect(_build_event_detail_url(position.event_id, source))
 
     application = form.save(commit=False)
     application.position = position

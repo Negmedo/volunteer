@@ -2,49 +2,47 @@
 {% block title %}Кабинет волонтёра{% endblock %}
 
 {% block content %}
-<div class="p-4 bg-white rounded border mb-3">
-  <div class="d-flex justify-content-between align-items-center">
+<section class="page-hero-card">
+  <div>
+    <span class="eyebrow">Личный кабинет</span>
+    <h1 class="page-title mb-1">Кабинет волонтёра</h1>
+    <p class="page-subtitle mb-0">
+      Анкета, отклики, назначения и доступные для вас позиции.
+    </p>
+  </div>
+  <a href="{% url 'accounts:volunteer_profile_edit' %}" class="btn btn-brand">
+    Заполнить / редактировать анкету
+  </a>
+</section>
+
+<section class="dashboard-stats">
+  <div class="stat-card stat-card--compact">
+    <div class="stat-card__label">Заполненность анкеты</div>
+    <div class="stat-card__value">{{ volunteer_profile.profile_completion_percent }}%</div>
+  </div>
+  <div class="stat-card stat-card--compact">
+    <div class="stat-card__label">Город</div>
+    <div class="stat-card__value stat-card__value--sm">
+      {% if volunteer_profile.city %}{{ volunteer_profile.city }}{% else %}Не указан{% endif %}
+    </div>
+  </div>
+  <div class="stat-card stat-card--compact">
+    <div class="stat-card__label">Уровень опыта</div>
+    <div class="stat-card__value stat-card__value--sm">{{ volunteer_profile.get_experience_level_display }}</div>
+  </div>
+</section>
+
+<section class="panel-card mb-4">
+  <div class="section-head section-head--tight">
     <div>
-      <h1 class="h5 mb-1">Кабинет волонтёра</h1>
-      <p class="text-muted mb-0">
-        Здесь анкета, мои отклики, назначения и доступные мероприятия.
-      </p>
-    </div>
-    <a href="{% url 'accounts:volunteer_profile_edit' %}" class="btn btn-primary btn-sm">
-      Заполнить / редактировать анкету
-    </a>
-  </div>
-</div>
-
-<div class="row g-3 mb-3">
-  <div class="col-md-4">
-    <div class="p-3 bg-white rounded border">
-      <div class="text-muted small">Заполненность анкеты</div>
-      <div class="h4 mb-0">{{ volunteer_profile.profile_completion_percent }}%</div>
+      <h2 class="section-title section-title--sm">Мои отклики</h2>
+      <p class="section-subtitle">Все заявки, отправленные на позиции мероприятий.</p>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="p-3 bg-white rounded border">
-      <div class="text-muted small">Город</div>
-      <div class="h6 mb-0">
-        {% if volunteer_profile.city %}{{ volunteer_profile.city }}{% else %}Не указан{% endif %}
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="p-3 bg-white rounded border">
-      <div class="text-muted small">Уровень опыта</div>
-      <div class="h6 mb-0">{{ volunteer_profile.get_experience_level_display }}</div>
-    </div>
-  </div>
-</div>
-
-<div class="p-4 bg-white rounded border mb-3">
-  <h2 class="h6">Мои отклики</h2>
 
   {% if applications %}
-    <div class="table-responsive">
-      <table class="table align-middle">
+    <div class="table-wrap">
+      <table class="table app-table align-middle mb-0">
         <thead>
           <tr>
             <th>Мероприятие</th>
@@ -57,12 +55,12 @@
           {% for application in applications %}
             <tr>
               <td>
-                <a href="{% url 'events:event_detail' application.position.event.id %}">
+                <a class="table-link" href="{% url 'events:event_detail' application.position.event.id %}?from=volunteer_dashboard">
                   {{ application.position.event.title }}
                 </a>
               </td>
               <td>{{ application.position.title }}</td>
-              <td>{{ application.get_status_display }}</td>
+              <td><span class="status-pill">{{ application.get_status_display }}</span></td>
               <td>{{ application.applied_at|date:"d.m.Y H:i" }}</td>
             </tr>
           {% endfor %}
@@ -70,16 +68,21 @@
       </table>
     </div>
   {% else %}
-    <div class="text-muted">Вы ещё не отправляли отклики.</div>
+    <div class="empty-state">Вы ещё не отправляли отклики.</div>
   {% endif %}
-</div>
+</section>
 
-<div class="p-4 bg-white rounded border mb-3">
-  <h2 class="h6">Мои назначения</h2>
+<section class="panel-card mb-4">
+  <div class="section-head section-head--tight">
+    <div>
+      <h2 class="section-title section-title--sm">Мои назначения</h2>
+      <p class="section-subtitle">Назначенные вам роли и действия по подтверждению.</p>
+    </div>
+  </div>
 
   {% if assignments %}
-    <div class="table-responsive">
-      <table class="table align-middle">
+    <div class="table-wrap">
+      <table class="table app-table align-middle mb-0">
         <thead>
           <tr>
             <th>Мероприятие</th>
@@ -93,23 +96,23 @@
           {% for assignment in assignments %}
             <tr>
               <td>
-                <a href="{% url 'events:event_detail' assignment.position.event.id %}">
+                <a class="table-link" href="{% url 'events:event_detail' assignment.position.event.id %}?from=volunteer_dashboard">
                   {{ assignment.position.event.title }}
                 </a>
               </td>
               <td>{{ assignment.position.title }}</td>
-              <td>{{ assignment.get_status_display }}</td>
+              <td><span class="status-pill">{{ assignment.get_status_display }}</span></td>
               <td>{{ assignment.assigned_at|date:"d.m.Y H:i" }}</td>
               <td>
                 {% if assignment.status == 'assigned' %}
-                  <div class="d-flex gap-2">
+                  <div class="action-row">
                     <form method="post" action="{% url 'events:assignment_confirm' assignment.id %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-success btn-sm">Подтвердить</button>
+                      <button type="submit" class="btn btn-sm btn-brand">Подтвердить</button>
                     </form>
                     <form method="post" action="{% url 'events:assignment_decline' assignment.id %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-outline-danger btn-sm">Отклонить</button>
+                      <button type="submit" class="btn btn-sm btn-brand-ghost">Отклонить</button>
                     </form>
                   </div>
                 {% else %}
@@ -122,32 +125,43 @@
       </table>
     </div>
   {% else %}
-    <div class="text-muted">У вас пока нет назначений.</div>
+    <div class="empty-state">У вас пока нет назначений.</div>
   {% endif %}
-</div>
+</section>
 
-<div class="p-4 bg-white rounded border">
-  <h2 class="h6">Публичные мероприятия</h2>
+<section class="panel-card">
+  <div class="section-head section-head--tight">
+    <div>
+      <h2 class="section-title section-title--sm">Доступные позиции для отклика</h2>
+      <p class="section-subtitle">
+        Здесь показываются именно открытые позиции мероприятий, на которые вы ещё не откликались и не назначены.
+      </p>
+    </div>
+  </div>
 
-  {% if events %}
-    <div class="table-responsive">
-      <table class="table align-middle">
+  {% if available_positions %}
+    <div class="table-wrap">
+      <table class="table app-table align-middle mb-0">
         <thead>
           <tr>
-            <th>Название</th>
+            <th>Мероприятие</th>
+            <th>Роль</th>
             <th>Город</th>
             <th>Дата начала</th>
-            <th></th>
+            <th>Свободно мест</th>
+            <th class="text-end">Действие</th>
           </tr>
         </thead>
         <tbody>
-          {% for e in events %}
+          {% for position in available_positions %}
             <tr>
-              <td>{{ e.title }}</td>
-              <td>{% if e.city %}{{ e.city }}{% else %}—{% endif %}</td>
-              <td>{% if e.start_date %}{{ e.start_date }}{% else %}—{% endif %}</td>
-              <td>
-                <a href="{% url 'events:event_detail' e.id %}" class="btn btn-outline-primary btn-sm">
+              <td>{{ position.event.title }}</td>
+              <td>{{ position.title }}</td>
+              <td>{% if position.event.city %}{{ position.event.city }}{% else %}—{% endif %}</td>
+              <td>{% if position.event.start_date %}{{ position.event.start_date }}{% else %}—{% endif %}</td>
+              <td>{{ position.open_slots }} / {{ position.slots_total }}</td>
+              <td class="text-end">
+                <a href="{% url 'events:event_detail' position.event.id %}?from=volunteer_dashboard" class="btn btn-sm btn-brand-outline">
                   Подробнее
                 </a>
               </td>
@@ -157,7 +171,9 @@
       </table>
     </div>
   {% else %}
-    <div class="text-muted">Пока нет мероприятий.</div>
+    <div class="empty-state">
+      Сейчас нет открытых позиций, подходящих для отклика.
+    </div>
   {% endif %}
-</div>
+</section>
 {% endblock %}
