@@ -88,3 +88,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "accounts:dashboard"
 LOGOUT_REDIRECT_URL = "landing:home"
+
+# ── ML-сервис ─────────────────────────────────────────────────
+# URL Flask-endpoint для интеллектуального подбора.
+# В Docker: http://ml:8765/predict
+# Локально: http://localhost:8765/predict
+ML_SERVICE_URL = os.getenv("ML_SERVICE_URL", "http://ml:8765/predict")
+ 
+# Таймаут запроса к ML-сервису (секунды).
+# При превышении Django использует fallback — локальный скоринг.
+ML_SERVICE_TIMEOUT = int(os.getenv("ML_SERVICE_TIMEOUT", "3"))
+ 
