@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+<section class="page-shell mb-4">
+  <div class="page-head">
+    <div><span class="eyebrow">Роль / позиция</span><h1 class="page-title">{{ page_title }}</h1><p class="page-subtitle">Мероприятие: {{ event.title }}</p></div>
+    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' event.id %}">Назад к мероприятию</a>
+  </div>
+</section>
+<form method="post" class="vstack gap-4">{% csrf_token %}
+  {% if required_formset.non_form_errors or optional_formset.non_form_errors or language_formset.non_form_errors or form.errors %}<div class="alert alert-danger form-error-summary" id="position-errors"><strong>Проверьте форму роли.</strong><ul class="mb-0 mt-2">{% for err in required_formset.non_form_errors %}<li>{{ err }}</li>{% endfor %}{% for err in optional_formset.non_form_errors %}<li>{{ err }}</li>{% endfor %}{% for err in language_formset.non_form_errors %}<li>{{ err }}</li>{% endfor %}{% for field, errors in form.errors.items %}{% for err in errors %}<li>{{ field }}: {{ err }}</li>{% endfor %}{% endfor %}</ul></div>{% endif %}
+  {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="split-layout">
+    <section class="panel-card">
+      <div class="section-head"><div><h2 class="section-title">Основные данные роли</h2></div></div>
+      <div class="form-grid">
+        <div class="field-block"><label class="field-label">{{ form.title.label }}</label>{{ form.title }}</div>
+        <div class="field-block"><label class="field-label">{{ form.description.label }}</label>{{ form.description }}</div>
+        <div class="field-block"><label class="field-label">{{ form.direction.label }}</label>{{ form.direction }}</div>
+        <div class="field-block"><label class="field-label">{{ form.task_type.label }}</label>{{ form.task_type }}</div>
+        <div class="field-block"><label class="field-label">{{ form.slots_total.label }}</label>{{ form.slots_total }}</div>
+      </div>
+      <div class="toggle-grid mt-3">
+        <label class="toggle-card">{{ form.requires_car }}<span>{{ form.requires_car.label }}</span></label>
+        <label class="toggle-card">{{ form.requires_night_shift }}<span>{{ form.requires_night_shift.label }}</span></label>
+        <label class="toggle-card">{{ form.requires_physical_work }}<span>{{ form.requires_physical_work.label }}</span></label>
+        <label class="toggle-card">{{ form.requires_heavy_lifting }}<span>{{ form.requires_heavy_lifting.label }}</span></label>
+        <label class="toggle-card">{{ form.avoid_large_crowds_sensitive }}<span>{{ form.avoid_large_crowds_sensitive.label }}</span></label>
+      </div>
+      <div class="availability-header mt-4">
+        <div class="field-label">Требования по доступности</div>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="toggle-all-position-availability">Выбрать / снять все</button>
+      </div>
+      <div class="availability-grid">
+        {% for value, label in form.availability_matrix.field.choices %}
+          <label class="availability-cell">
+            <input type="checkbox" name="{{ form.availability_matrix.html_name }}" value="{{ value }}" {% if value in form.availability_matrix.value %}checked{% endif %}>
+            <span>{{ label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="stack-layout">
+      <section class="panel-card">
+        <div class="section-head section-head--split"><div><h2 class="section-title">Обязательные навыки</h2></div><button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="required">+ Добавить</button></div>
+        {{ required_formset.management_form }}
+        <div class="inline-form-list" id="required-forms">
+          {% for f in required_formset %}
+            <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="required">{{ f.id }}<div class="field-block"><label class="field-label">{{ f.skill.label }}</label>{{ f.skill }}</div><div class="field-block"><label class="field-label">{{ f.min_level.label }}</label>{{ f.min_level }}</div><div class="field-actions">{% if f.DELETE %}<div class="checkbox-shell d-none">{{ f.DELETE }}</div>{% endif %}<button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div>
+          {% endfor %}
+        </div>
+        <template id="required-empty-form"><div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="required">__ID__<div class="field-block"><label class="field-label">Навык</label>__SKILL__</div><div class="field-block"><label class="field-label">Минимальный уровень</label>__LEVEL__</div><div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div></template>
+      </section>
+
+      <section class="panel-card">
+        <div class="section-head section-head--split"><div><h2 class="section-title">Желательные навыки</h2></div><button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="optional">+ Добавить</button></div>
+        {{ optional_formset.management_form }}
+        <div class="inline-form-list" id="optional-forms">
+          {% for f in optional_formset %}
+            <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="optional">{{ f.id }}<div class="field-block"><label class="field-label">{{ f.skill.label }}</label>{{ f.skill }}</div><div class="field-block"><label class="field-label">{{ f.min_level.label }}</label>{{ f.min_level }}</div><div class="field-actions">{% if f.DELETE %}<div class="checkbox-shell d-none">{{ f.DELETE }}</div>{% endif %}<button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div>
+          {% endfor %}
+        </div>
+        <template id="optional-empty-form"><div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="optional">__ID__<div class="field-block"><label class="field-label">Навык</label>__SKILL__</div><div class="field-block"><label class="field-label">Минимальный уровень</label>__LEVEL__</div><div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div></template>
+      </section>
+
+      <section class="panel-card">
+        <div class="section-head section-head--split"><div><h2 class="section-title">Языки</h2></div><button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="langs">+ Добавить</button></div>
+        {{ language_formset.management_form }}
+        <div class="inline-form-list" id="langs-forms">
+          {% for f in language_formset %}
+            <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">{{ f.id }}<div class="field-block"><label class="field-label">{{ f.language.label }}</label>{{ f.language }}</div><div class="field-block"><label class="field-label">{{ f.min_level.label }}</label>{{ f.min_level }}</div><div class="field-actions">{% if f.DELETE %}<div class="checkbox-shell d-none">{{ f.DELETE }}</div>{% endif %}<button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div>
+          {% endfor %}
+        </div>
+        <template id="langs-empty-form"><div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">__ID__<div class="field-block"><label class="field-label">Язык</label>__LANGUAGE__</div><div class="field-block"><label class="field-label">Минимальный уровень</label>__LEVEL__</div><div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div></div></template>
+      </section>
+    </section>
+  </div>
+  <div class="action-row"><button class="btn btn-primary btn-lg">Сохранить роль</button></div>
+</form>
+{% endblock %}
+{% block extra_js %}
+<script>
+(function(){
+  function visibleRows(prefix){ return Array.from(document.querySelectorAll(`.js-form-row[data-prefix="${prefix}"]`)).filter(r => r.style.display !== 'none'); }
+  function refreshGroup(group){
+    const selects = Array.from(document.querySelectorAll(`.js-unique-select[data-group="${group}"]`)).filter(s => s.closest('.js-form-row')?.style.display !== 'none');
+    const chosen = selects.map(s => s.value).filter(Boolean);
+    selects.forEach(select => Array.from(select.options).forEach(opt => {
+      if (!opt.value) return;
+      opt.disabled = chosen.includes(opt.value) && opt.value !== select.value;
+    }));
+  }
+  function updateAddButtons(){
+    const configs = [
+      {prefix:'required', group:'required-skill', label:'+ Добавить навык'},
+      {prefix:'optional', group:'optional-skill', label:'+ Добавить желательный навык'},
+      {prefix:'langs', group:'required-language', label:'+ Добавить язык'},
+    ];
+    configs.forEach(cfg => {
+      const btn = document.querySelector(`.js-add-form[data-prefix="${cfg.prefix}"]`);
+      const anySelect = document.querySelector(`.js-unique-select[data-group="${cfg.group}"]`);
+      if (!btn || !anySelect) return;
+      const total = Array.from(anySelect.options).filter(o => o.value).length;
+      const chosen = new Set(Array.from(document.querySelectorAll(`.js-unique-select[data-group="${cfg.group}"]`)).filter(s => s.closest('.js-form-row')?.style.display !== 'none').map(s => s.value).filter(Boolean)).size;
+      const hasBlank = visibleRows(cfg.prefix).some(r => { const s = r.querySelector(`.js-unique-select[data-group="${cfg.group}"]`); return s && !s.value; });
+      btn.disabled = chosen >= total || hasBlank;
+      btn.textContent = cfg.label;
+    });
+  }
+  function initUniqueSelects(){
+    document.querySelectorAll('.js-unique-select').forEach(select => {
+      if (select.dataset.bound) return;
+      select.dataset.bound='1';
+      select.addEventListener('change', () => { refreshGroup(select.dataset.group); updateAddButtons(); });
+    });
+    ['required-skill','optional-skill','required-language'].forEach(refreshGroup);
+    updateAddButtons();
+  }
+  function bindRemoveButtons(scope){scope.querySelectorAll('.js-remove-form').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',()=>{const row=btn.closest('.js-form-row');const del=row.querySelector('input[type="checkbox"][name$="-DELETE"]'); if(del){del.checked=true; row.style.display='none';} else {row.remove();} ['required-skill','optional-skill','required-language'].forEach(refreshGroup); updateAddButtons();})})}
+  function setup(prefix, map){const container=document.getElementById(`${prefix}-forms`);const total=document.getElementById(`id_${prefix}-TOTAL_FORMS`);const tmpl=document.getElementById(`${prefix}-empty-form`);document.querySelectorAll(`.js-add-form[data-prefix="${prefix}"]`).forEach(btn=>btn.addEventListener('click',()=>{if(btn.disabled) return; let html=tmpl.innerHTML;const i=parseInt(total.value,10);Object.entries(map).forEach(([token,val])=>{html=html.replace(token,val.replaceAll('__prefix__', i));});html=html.replace('__ID__','');container.insertAdjacentHTML('beforeend',html);total.value=i+1;bindRemoveButtons(container);initUniqueSelects(); updateAddButtons();}));bindRemoveButtons(container)}
+  setup('required', {'__SKILL__': `{{ required_formset.empty_form.skill }}`, '__LEVEL__': `{{ required_formset.empty_form.min_level }}`});
+  setup('optional', {'__SKILL__': `{{ optional_formset.empty_form.skill }}`, '__LEVEL__': `{{ optional_formset.empty_form.min_level }}`});
+  setup('langs', {'__LANGUAGE__': `{{ language_formset.empty_form.language }}`, '__LEVEL__': `{{ language_formset.empty_form.min_level }}`});
+  initUniqueSelects();
+  const toggle=document.getElementById('toggle-all-position-availability'); if(toggle){toggle.addEventListener('click', ()=>{const boxes=Array.from(document.querySelectorAll('.availability-grid input[type="checkbox"]')); const all=boxes.every(b=>b.checked); boxes.forEach(b=>b.checked=!all);});}
+  const errorBlock=document.getElementById('position-errors'); if(errorBlock){errorBlock.scrollIntoView({behavior:'smooth',block:'start'});}  
+})();
+</script>
+{% endblock %}

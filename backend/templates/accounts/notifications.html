@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Уведомления{% endblock %}
+
+{% block content %}
+<section class="page-shell mb-4">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Кабинет</span>
+      <h1 class="page-title">Уведомления</h1>
+      <p class="page-subtitle">Назначения, отклики и системные сообщения</p>
+    </div>
+    <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'notifications:mark_all_read' %}">
+        Отметить все прочитанными
+      </a>
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:dashboard' %}">Назад</a>
+    </div>
+  </div>
+</section>
+
+<section class="panel-card">
+  {% if notifications %}
+    <div class="stack-layout">
+      {% for item in notifications %}
+        <div class="notif-item {% if not item.is_read %}notif-item--unread{% else %}notif-item--read{% endif %}">
+          <div class="notif-item__dot"></div>
+          <div style="flex:1;min-width:0;">
+            <div class="notif-item__title">{{ item.title }}</div>
+            {% if item.body %}
+              <div class="notif-item__body">{{ item.body }}</div>
+            {% endif %}
+            <div class="notif-item__time">{{ item.created_at|date:"d.m.Y H:i" }}</div>
+          </div>
+          {% if not item.is_read %}
+            <span class="status-badge status-badge--applied" style="flex-shrink:0;">Новое</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
+      <div style="font-size:2.5rem;margin-bottom:.75rem;">🔔</div>
+      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">Уведомлений пока нет</div>
+      <div style="font-size:.88rem;margin-top:.4rem;">Здесь появятся уведомления о назначениях и откликах</div>
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

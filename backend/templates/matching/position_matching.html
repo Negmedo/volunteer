@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Подбор: {{ position.title }}{% endblock %}
+
+{% block content %}
+<section class="page-shell mb-4">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">СППР · подбор кандидатов</span>
+      <h1 class="page-title">{{ position.title }}</h1>
+      <p class="page-subtitle">Мероприятие: {{ position.event.title }}</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' position.event_id %}">
+      ← Назад к мероприятию
+    </a>
+  </div>
+</section>
+
+{% if recommendations %}
+  <section class="panel-card mb-4">
+    <div class="section-head">
+      <span class="eyebrow">Рекомендации</span>
+      <h2 class="section-title">Советы координатору</h2>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;display:grid;gap:.4rem;">
+      {% for item in recommendations %}
+        <li style="color:var(--text-2);font-size:.92rem;">{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}
+
+{# Строгий подбор #}
+<section class="panel-card mb-4">
+  <div class="section-head section-head--split">
+    <div>
+      <span class="eyebrow">Строгий режим</span>
+      <h2 class="section-title">Точное соответствие</h2>
+      <p class="page-subtitle mb-0">Только кандидаты, прошедшие все жёсткие фильтры</p>
+    </div>
+    {% if strict_results %}
+      <span class="status-badge status-badge--assigned">{{ strict_results|length }} кандидат{{ strict_results|length|pluralize:",,ов" }}</span>
+    {% endif %}
+  </div>
+
+  {% if strict_results %}
+    <div class="matching-table">
+      <div class="matching-head">
+        <div>Score</div>
+        <div>Навыки</div>
+        <div>Надёжность</div>
+        <div>Волонтёр</div>
+        <div>Пояснение</div>
+        <div></div>
+      </div>
+      {% for item in strict_results %}
+        <div class="matching-row">
+          <div class="matching-score">{{ item.score }}</div>
+          <div style="font-size:.86rem;color:var(--text-2);">{{ item.skill_score }}</div>
+          <div style="font-size:.86rem;color:var(--text-2);">{{ item.reliability }}</div>
+          <div>
+            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-2);">{{ item.reasons|join:", " }}</div>
+          <div>
+            <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-primary">Назначить</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="padding:1.5rem 0;text-align:center;color:var(--muted);">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">🔎</div>
+      Подходящих кандидатов по строгим критериям не найдено.
+    </div>
+  {% endif %}
+</section>
+
+{# Расширенный подбор #}
+<section class="panel-card">
+  <div class="section-head section-head--split">
+    <div>
+      <span class="eyebrow">Расширенный режим</span>
+      <h2 class="section-title">Частичное соответствие</h2>
+      <p class="page-subtitle mb-0">Кандидаты с ослабленными требованиями — используйте вручную</p>
+    </div>
+    {% if relaxed_results %}
+      <span class="status-badge status-badge--reviewed">{{ relaxed_results|length }} кандидат{{ relaxed_results|length|pluralize:",,ов" }}</span>
+    {% endif %}
+  </div>
+
+  {% if relaxed_results %}
+    <div class="matching-table">
+      <div class="matching-head">
+        <div>Score</div>
+        <div>Навыки</div>
+        <div>Надёжность</div>
+        <div>Волонтёр</div>
+        <div>Пояснение</div>
+        <div></div>
+      </div>
+      {% for item in relaxed_results %}
+        <div class="matching-row matching-row--relaxed">
+          <div class="matching-score" style="color:var(--warning);">{{ item.score }}</div>
+          <div style="font-size:.86rem;color:var(--text-2);">{{ item.skill_score }}</div>
+          <div style="font-size:.86rem;color:var(--text-2);">{{ item.reliability }}</div>
+          <div>
+            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-2);">{{ item.reasons|join:", " }}</div>
+          <div>
+            <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-outline-primary">Назначить вручную</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="padding:1.5rem 0;text-align:center;color:var(--muted);">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">😔</div>
+      Даже после ослабления критериев кандидаты не найдены.
+    </div>
+  {% endif %}
+</section>
+{% endblock %}

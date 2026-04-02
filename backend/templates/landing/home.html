@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<section class="hero-shell mb-4">
+  <div class="hero-grid">
+    <div class="hero-card hero-card--main">
+      <span class="eyebrow">СППР для подбора волонтёров</span>
+      <h1 class="hero-title">Подбирайте людей под роли, а не роли под случайных людей</h1>
+      <p class="hero-subtitle">Анкеты, мероприятия, роли, отклики, назначения и прозрачная логика подбора без старого хаоса.</p>
+      <div class="hero-actions">
+        {% if user.is_authenticated %}
+          <a class="btn btn-light btn-lg" href="{% url 'accounts:dashboard' %}">Открыть кабинет</a>
+        {% else %}
+          <a class="btn btn-light btn-lg" href="{% url 'accounts:signup' %}">Начать</a>
+          <a class="btn btn-outline-light btn-lg" href="{% url 'accounts:login' %}">Войти</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="hero-card hero-card--stats">
+      <div class="stat-tile"><div class="stat-label">Пользователей</div><div class="stat-value">{{ stats.users_count }}</div></div>
+      <div class="stat-tile"><div class="stat-label">Мероприятий</div><div class="stat-value">{{ stats.events_count }}</div></div>
+      <div class="stat-tile"><div class="stat-label">Часов волонтёрства</div><div class="stat-value">{{ stats.hours_count }}</div></div>
+    </div>
+  </div>
+</section>
+<div class="row g-4">
+  <div class="col-lg-6"><section class="panel-card h-100"><span class="eyebrow">Кому ты поможешь</span><h2 class="section-title">Реальные кейсы, а не абстрактные карточки</h2><div class="story-list mt-3"><div class="story-item"><strong>Экология</strong><span>Субботники, сортировка, городские акции.</span></div><div class="story-item"><strong>Помощь детям</strong><span>Регистрация, сопровождение, мастер-классы.</span></div><div class="story-item"><strong>Помощь пожилым</strong><span>Доставка, сопровождение, внимание и поддержка.</span></div><div class="story-item"><strong>ЧС</strong><span>Логистика, гуманитарная помощь, координация.</span></div></div></section></div>
+  <div class="col-lg-6"><section class="panel-card h-100"><span class="eyebrow">Истории успеха</span><h2 class="section-title">Контентный блок под живые истории и фотографии</h2><p class="muted-paragraph">Показывай реальные кейсы, фотографии с мероприятий, отзывы координаторов и короткие истории волонтёров. Это не заглушка, а место для реального контента.</p><div class="success-grid mt-3"><div class="success-chip">Регистрация участников</div><div class="success-chip">Логистика</div><div class="success-chip">Медпомощь</div><div class="success-chip">SMM / Фото / Видео</div></div></section></div>
+</div>
+{% endblock %}

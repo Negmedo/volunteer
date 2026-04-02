@@ -1,44 +1,49 @@
-{% extends "accounts/auth_base.html" %}
+{% extends "base.html" %}
+{% block title %}Вход — СППР волонтёров{% endblock %}
 
-{% block auth_form %}
-<form method="post" class="auth-form active-form">
-  {% csrf_token %}
-  <h2 class="auth-title">С возвращением</h2>
-  <p class="auth-subtitle">Войдите в систему, чтобы продолжить работу с мероприятиями и откликами.</p>
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="auth-card__logo">
+      <span class="auth-card__logo-v">V</span>
+    </div>
 
-  {% if form.non_field_errors %}
-    <div class="auth-error">{{ form.non_field_errors }}</div>
-  {% endif %}
+    <h1 class="auth-title">Добро пожаловать</h1>
+    <p class="auth-subtitle">Войдите в кабинет волонтёра или организации</p>
 
-  <div class="input-group">
-    <label for="id_username">Логин</label>
-    <input
-      type="text"
-      name="username"
-      id="id_username"
-      placeholder="Введите логин"
-      required
-      value="{{ form.username.value|default:'' }}"
-    >
-    {% if form.username.errors %}
-      <div class="auth-error-small">{{ form.username.errors }}</div>
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger mb-3">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
     {% endif %}
-  </div>
 
-  <div class="input-group">
-    <label for="id_password">Пароль</label>
-    <input
-      type="password"
-      name="password"
-      id="id_password"
-      placeholder="Введите пароль"
-      required
-    >
-    {% if form.password.errors %}
-      <div class="auth-error-small">{{ form.password.errors }}</div>
-    {% endif %}
-  </div>
+    <form method="post" class="vstack gap-3">
+      {% csrf_token %}
 
-  <button type="submit" class="auth-submit-btn">Войти</button>
-</form>
+      <div class="field-block">
+        <label class="field-label" for="{{ form.username.id_for_label }}">Логин</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+          <div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.username.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field-block">
+        <label class="field-label" for="{{ form.password.id_for_label }}">Пароль</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+          <div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.password.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <button class="btn btn-primary w-100 py-2 mt-1" type="submit">Войти</button>
+    </form>
+
+    <div class="auth-divider mt-3"><span>нет аккаунта?</span></div>
+
+    <a href="{% url 'accounts:signup' %}" class="btn btn-outline-secondary w-100">
+      Зарегистрироваться
+    </a>
+  </div>
+</div>
 {% endblock %}
