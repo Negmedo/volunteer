@@ -2,29 +2,32 @@
 {% block title %}Кабинет организации{% endblock %}
 
 {% block content %}
-<section class="page-shell mb-4">
-  <div class="page-head">
-    <div>
-      <span class="eyebrow">Координатор</span>
-      <h1 class="page-title">Кабинет организации</h1>
-      <p class="page-subtitle">Управляйте мероприятиями, ролями и подбором волонтёров</p>
-    </div>
-    <a class="btn btn-primary" href="{% url 'events:event_create' %}">
+
+{# ── Hero-баннер организатора ── #}
+<div class="p-hero-banner" style="margin-bottom:1.75rem;">
+  <div>
+    <div class="p-hero-banner__label">Координатор</div>
+    <h1 class="p-hero-banner__title">Кабинет организации</h1>
+    <p class="p-hero-banner__sub">Управляйте мероприятиями, ролями и подбором волонтёров</p>
+  </div>
+  <div style="position:relative;z-index:1;">
+    <a class="p-btn p-btn--lg" href="{% url 'events:event_create' %}"
+       style="background:#fff;color:#2d6a4f;font-weight:800;">
       + Создать мероприятие
     </a>
   </div>
-</section>
+</div>
 
 {% if events %}
-  <div class="stack-layout">
+  <div style="display:flex;flex-direction:column;gap:1rem;">
     {% for event in events %}
-      <section class="panel-card">
+      <div class="p-card" style="margin-bottom:0;">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-          <div>
-            <h3 style="font-family:'Manrope',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:.35rem;">
+          <div style="flex:1;min-width:0;">
+            <h3 style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:#1c2b1e;margin-bottom:.35rem;">
               {{ event.title }}
             </h3>
-            <div style="font-size:.86rem;color:var(--muted);display:flex;gap:1rem;flex-wrap:wrap;">
+            <div style="font-size:.84rem;color:#6b7280;display:flex;gap:1rem;flex-wrap:wrap;">
               {% if event.start_date %}
                 <span>📅 {{ event.start_date }}{% if event.end_date %} — {{ event.end_date }}{% endif %}</span>
               {% endif %}
@@ -33,36 +36,36 @@
               {% endif %}
               <span>👥 {{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
               {% if not event.is_public %}
-                <span style="color:var(--warning);font-weight:700;">🔒 Скрыто</span>
+                <span class="p-badge p-badge--assigned">🔒 Скрыто</span>
               {% endif %}
             </div>
           </div>
-          <a class="btn btn-outline-primary btn-sm" href="{% url 'events:event_detail' event.id %}">
+          <a class="p-btn p-btn--outline p-btn--sm" href="{% url 'events:event_detail' event.id %}">
             Открыть →
           </a>
         </div>
-
         {% if event.positions.exists %}
-          <div class="tags-row mt-3">
+          <div class="p-tags-row">
             {% for pos in event.positions.all|slice:":5" %}
-              <span class="tag">{{ pos.title }} · {{ pos.slots_total }} мест</span>
+              <span class="p-tag">{{ pos.title }} · {{ pos.slots_total }} мест</span>
             {% endfor %}
             {% if event.positions.count > 5 %}
-              <span class="tag tag--soft">+{{ event.positions.count|add:"-5" }} ещё</span>
+              <span class="p-tag" style="background:#f3f4f6;color:#6b7280;">+{{ event.positions.count|add:"-5" }} ещё</span>
             {% endif %}
           </div>
         {% endif %}
-      </section>
+      </div>
     {% endfor %}
   </div>
 {% else %}
-  <section class="panel-card">
-    <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
-      <div style="font-size:2.5rem;margin-bottom:.75rem;">📋</div>
-      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">Мероприятий пока нет</div>
-      <div style="font-size:.88rem;margin:.5rem 0 1.25rem;">Создайте первое мероприятие и добавьте роли для волонтёров</div>
-      <a class="btn btn-primary" href="{% url 'events:event_create' %}">Создать мероприятие</a>
+  <div class="p-card">
+    <div class="p-empty">
+      <div class="p-empty__icon">📋</div>
+      <div class="p-empty__title">Мероприятий пока нет</div>
+      <div class="p-empty__sub" style="margin-bottom:1.25rem;">Создайте первое мероприятие и добавьте роли для волонтёров</div>
+      <a class="p-btn p-btn--primary" href="{% url 'events:event_create' %}">Создать мероприятие</a>
     </div>
-  </section>
+  </div>
 {% endif %}
+
 {% endblock %}

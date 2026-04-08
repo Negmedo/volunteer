@@ -1,47 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Вход — СППР волонтёров{% endblock %}
+{% block title %}Вход — VolunteerSKO{% endblock %}
 
 {% block content %}
-<div class="auth-shell">
-  <div class="auth-card">
-    <div class="auth-card__logo">
-      <span class="auth-card__logo-v">V</span>
-    </div>
-
-    <h1 class="auth-title">Добро пожаловать</h1>
-    <p class="auth-subtitle">Войдите в кабинет волонтёра или организации</p>
+<div class="p-auth-shell">
+  <div class="p-auth-card">
+    <div class="p-auth-logo">V</div>
+    <h1 class="p-auth-title">Добро пожаловать</h1>
+    <p class="p-auth-subtitle">Войдите в кабинет волонтёра или организации</p>
 
     {% if form.non_field_errors %}
-      <div class="alert alert-danger mb-3">
-        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-      </div>
+      <div class="p-alert p-alert--error">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
     {% endif %}
 
-    <form method="post" class="vstack gap-3">
+    <form method="post">
       {% csrf_token %}
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.username.id_for_label }}">Логин</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.username.id_for_label }}">Логин</label>
         {{ form.username }}
-        {% if form.username.errors %}
-          <div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.username.errors.0 }}</div>
-        {% endif %}
+        {% if form.username.errors %}<div class="p-form-error">{{ form.username.errors.0 }}</div>{% endif %}
       </div>
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.password.id_for_label }}">Пароль</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.password.id_for_label }}">Пароль</label>
         {{ form.password }}
-        {% if form.password.errors %}
-          <div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.password.errors.0 }}</div>
-        {% endif %}
+        {% if form.password.errors %}<div class="p-form-error">{{ form.password.errors.0 }}</div>{% endif %}
       </div>
 
-      <button class="btn btn-primary w-100 py-2 mt-1" type="submit">Войти</button>
+      <button class="p-btn p-btn--primary" style="width:100%;justify-content:center;margin-top:.5rem;" type="submit">Войти</button>
     </form>
 
-    <div class="auth-divider mt-3"><span>нет аккаунта?</span></div>
+    <div class="p-auth-divider"><span>нет аккаунта?</span></div>
 
-    <a href="{% url 'accounts:signup' %}" class="btn btn-outline-secondary w-100">
+    <a href="{% url 'accounts:signup' %}" class="p-btn p-btn--outline" style="width:100%;justify-content:center;">
       Зарегистрироваться
     </a>
   </div>

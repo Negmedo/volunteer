@@ -2,116 +2,108 @@
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
-<section class="page-shell mb-4">
-  <div class="page-head">
-    <div>
-      <span class="eyebrow">Мероприятие</span>
-      <h1 class="page-title">{{ event.title }}</h1>
-      <p class="page-subtitle">
-        {% if event.start_date %}{{ event.start_date }}{% if event.end_date %} — {{ event.end_date }}{% endif %}{% endif %}
-        {% if event.city %} · {{ event.city }}{% endif %}
-        {% if event.district %} · {{ event.district.name }}{% endif %}
-        {% if not event.is_public %} · <span style="color:var(--warning);font-weight:700;">Скрыто</span>{% endif %}
-      </p>
-    </div>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
-      <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:event_update' event.id %}">Редактировать</a>
-      <a class="btn btn-outline-danger btn-sm" href="{% url 'events:event_delete' event.id %}">Удалить</a>
-      <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
-    </div>
+
+<div class="p-page-header">
+  <div>
+    <span class="p-eyebrow">Мероприятие</span>
+    <h1 class="p-page-title">{{ event.title }}</h1>
+    <p class="p-page-subtitle">
+      {% if event.start_date %}{{ event.start_date }}{% if event.end_date %} — {{ event.end_date }}{% endif %}{% endif %}
+      {% if event.city %} · {{ event.city }}{% endif %}
+      {% if event.district %} · {{ event.district.name }}{% endif %}
+      {% if not event.is_public %} · <span style="color:#d97706;font-weight:700;">🔒 Скрыто</span>{% endif %}
+    </p>
   </div>
-</section>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'events:event_update' event.id %}">Редактировать</a>
+    <a class="p-btn p-btn--danger p-btn--sm" href="{% url 'events:event_delete' event.id %}">Удалить</a>
+    <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+  </div>
+</div>
 
 {% if event.description %}
-  <section class="panel-card mb-4">
-    <p style="margin:0;color:var(--text-2);line-height:1.7;">{{ event.description }}</p>
-  </section>
+  <div class="p-card" style="margin-bottom:1.25rem;">
+    <p style="margin:0;color:#4b5563;line-height:1.75;font-size:.9rem;">{{ event.description }}</p>
+  </div>
 {% endif %}
 
-<section class="panel-card">
-  <div class="section-head section-head--split">
-    <div>
-      <span class="eyebrow">Роли</span>
-      <h2 class="section-title">Позиции мероприятия</h2>
+<div class="p-card">
+  <div class="p-card-head">
+    <div class="p-card-head-left">
+      <span class="p-eyebrow">Роли</span>
+      <h2 class="p-card-title" style="margin-bottom:0;">Позиции мероприятия</h2>
     </div>
-    <span style="font-size:.86rem;color:var(--muted);">{{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
+    <span style="font-size:.84rem;color:#6b7280;">{{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
   </div>
 
   {% for position in event.positions.all %}
-    <div class="position-card">
-      <div class="position-card__head">
+    <div class="p-position-card">
+      <div class="p-position-card__head">
         <div>
-          <h3>{{ position.title }}</h3>
-          <div style="font-size:.84rem;color:var(--muted);margin-top:.2rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+          <h3 class="p-position-title">{{ position.title }}</h3>
+          <div style="font-size:.82rem;color:#6b7280;display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.15rem;">
             {% if position.direction %}<span>{{ position.direction }}</span>{% endif %}
             {% if position.task_type %}<span>{{ position.task_type }}</span>{% endif %}
             <span>👥 Нужно: {{ position.slots_total }}</span>
           </div>
         </div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-          <a class="btn btn-sm btn-primary" href="{% url 'matching:position_matching' position.id %}">
-            Подбор
-          </a>
-          <a class="btn btn-sm btn-outline-secondary" href="{% url 'events:position_update' position.id %}">
-            Редактировать
-          </a>
-          <a class="btn btn-sm btn-outline-danger" href="{% url 'events:position_delete' position.id %}">
-            Удалить
-          </a>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+          <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'matching:position_matching' position.id %}">Подбор</a>
+          <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'events:position_update' position.id %}">Редактировать</a>
+          <a class="p-btn p-btn--danger p-btn--sm" href="{% url 'events:position_delete' position.id %}">Удалить</a>
         </div>
       </div>
 
       {% if position.description %}
-        <p style="font-size:.9rem;color:var(--text-2);margin:.75rem 0 0;">{{ position.description }}</p>
+        <p style="font-size:.88rem;color:#4b5563;margin:.65rem 0 0;line-height:1.65;">{{ position.description }}</p>
       {% endif %}
 
-      <div class="tags-row">
+      <div class="p-tags-row">
         {% for item in position.required_skill_items.all %}
-          <span class="tag tag--required">✅ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+          <span class="p-tag p-tag--green">✅ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
         {% endfor %}
         {% for item in position.optional_skill_items.all %}
-          <span class="tag tag--optional">⭐ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+          <span class="p-tag p-tag--amber">⭐ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
         {% endfor %}
         {% for item in position.language_requirements.all %}
-          <span class="tag tag--language">🌐 {{ item.language.name }} · {{ item.get_min_level_display }}</span>
+          <span class="p-tag p-tag--blue">🌐 {{ item.language.name }} · {{ item.get_min_level_display }}</span>
         {% endfor %}
       </div>
 
-      <div class="applications-box">
-        <div class="applications-box__head">
-          Отклики: {{ position.applications.count }}
-        </div>
-
+      <div class="p-applications-box">
+        <div class="p-applications-box__head">Отклики: {{ position.applications.count }}</div>
         {% for app in position.applications.all %}
-          <div class="application-row">
+          <div class="p-application-row">
             <div>
-              <strong style="font-size:.92rem;">
+              <div style="font-size:.9rem;font-weight:700;color:#1c2b1e;">
                 {{ app.volunteer_profile.user.get_full_name|default:app.volunteer_profile.user.username }}
-              </strong>
-              <div style="font-size:.82rem;color:var(--muted);">{{ app.volunteer_profile.user.email }}</div>
+              </div>
+              <div style="font-size:.8rem;color:#6b7280;">{{ app.volunteer_profile.user.email }}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
-              <span class="status-badge status-badge--{{ app.status }}">{{ app.get_status_display }}</span>
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+              <span class="p-badge p-badge--{{ app.status }}">{{ app.get_status_display }}</span>
               {% if app.status != 'assigned' and app.status != 'confirmed' and app.status != 'completed' %}
                 <form method="post" action="{% url 'applications:assign_application' app.id %}">
                   {% csrf_token %}
-                  <button class="btn btn-sm btn-primary">Назначить</button>
+                  <button class="p-btn p-btn--primary p-btn--sm" type="submit">Назначить</button>
                 </form>
               {% endif %}
             </div>
           </div>
         {% empty %}
-          <div style="font-size:.86rem;color:var(--muted);">Откликов пока нет.</div>
+          <div style="font-size:.84rem;color:#9ca3af;">Откликов пока нет.</div>
         {% endfor %}
       </div>
     </div>
+
   {% empty %}
-    <div style="text-align:center;padding:2.5rem 1rem;color:var(--muted);">
-      <div style="font-size:2rem;margin-bottom:.6rem;">🎭</div>
-      <div style="font-weight:700;">Ролей пока нет</div>
-      <div style="font-size:.86rem;margin:.4rem 0 1rem;">Добавьте роли, чтобы волонтёры могли откликаться</div>
-      <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+    <div class="p-empty">
+      <div class="p-empty__icon">🎭</div>
+      <div class="p-empty__title">Ролей пока нет</div>
+      <div class="p-empty__sub" style="margin-bottom:1rem;">Добавьте роли, чтобы волонтёры могли откликаться</div>
+      <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
     </div>
   {% endfor %}
-</section>
+</div>
+
 {% endblock %}
