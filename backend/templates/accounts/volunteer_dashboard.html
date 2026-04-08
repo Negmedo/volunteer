@@ -3,130 +3,134 @@
 
 {% block content %}
 
-{# Герой-шапка #}
-<div class="volunteer-hero mb-4">
-  <div class="volunteer-hero__text">
-    <span class="eyebrow">Кабинет волонтёра</span>
-    <h1 class="page-title" style="color:#fff;">
-      Привет, {{ request.user.get_full_name|default:request.user.username }}
+{# ── Hero-баннер ── #}
+<div class="p-hero-banner">
+  <div>
+    <div class="p-hero-banner__label">Кабинет волонтёра</div>
+    <h1 class="p-hero-banner__title">
+      Привет, {{ request.user.get_full_name|default:request.user.username }} 👋
     </h1>
-    <p>Управляй откликами, назначениями и анкетой из одного места.</p>
+    <p class="p-hero-banner__sub">Управляй откликами, назначениями и анкетой из одного места.</p>
   </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem;">
-    <div class="completion-ring">
-      <div class="completion-label">Заполненность</div>
-      <div class="completion-value">{{ volunteer_profile.profile_completion_percent }}%</div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem;position:relative;z-index:1;">
+    <div class="p-completion-ring">
+      <div class="p-completion-ring__label">Заполненность</div>
+      <div class="p-completion-ring__value">{{ volunteer_profile.profile_completion_percent }}%</div>
+      <div class="p-completion-bar-wrap">
+        <div class="p-completion-bar" style="width:{{ volunteer_profile.profile_completion_percent }}%;"></div>
+      </div>
     </div>
-    <a class="btn btn-light btn-sm" href="{% url 'accounts:volunteer_profile' %}">
+    <a class="p-btn p-btn--outline p-btn--sm" href="{% url 'accounts:volunteer_profile' %}"
+       style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff;">
       Редактировать анкету
     </a>
   </div>
 </div>
 
 {% if volunteer_profile.profile_completion_percent < 50 %}
-<div class="alert alert-warning mb-4">
+<div class="p-alert p-alert--warning" style="margin-bottom:1.25rem;">
   <strong>Анкета заполнена менее чем на 50%</strong> — система не будет включать вас в автоматический подбор.
-  <a href="{% url 'accounts:volunteer_profile' %}" class="alert-link ms-1">Заполнить →</a>
+  <a href="{% url 'accounts:volunteer_profile' %}" style="color:#92400e;font-weight:700;margin-left:.4rem;">Заполнить →</a>
 </div>
 {% endif %}
 
-<div class="row g-4">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.75rem;">
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 1px 6px rgba(28,43,30,.05);">
+    <div style="font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Откликов</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:900;color:#1c2b1e;">{{ my_applications|length }}</div>
+  </div>
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 1px 6px rgba(28,43,30,.05);">
+    <div style="font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Назначений</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:900;color:#1c2b1e;">{{ my_assignments|length }}</div>
+  </div>
+  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 1px 6px rgba(28,43,30,.05);">
+    <div style="font-size:.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem;">Доступно ролей</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:1.8rem;font-weight:900;color:#2d6a4f;">{{ available_positions|length }}</div>
+  </div>
+</div>
 
-  {# Доступные роли #}
-  <div class="col-lg-7">
-    <div class="panel-card h-100">
-      <div class="section-head section-head--split">
-        <div>
-          <span class="eyebrow">Открытые позиции</span>
-          <h2 class="section-title">Доступные роли</h2>
-        </div>
+<div style="display:grid;grid-template-columns:1.5fr 1fr;gap:1.25rem;">
+
+  {# ── Доступные роли ── #}
+  <div class="p-card">
+    <div class="p-card-head">
+      <div class="p-card-head-left">
+        <span class="p-eyebrow">Открытые позиции</span>
+        <h2 class="p-card-title" style="margin-bottom:0;">Доступные роли</h2>
       </div>
-
-      {% if available_positions %}
-        <div class="stack-layout">
-          {% for position in available_positions %}
-            <div class="position-item">
-              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;flex-wrap:wrap;">
-                <div>
-                  <div class="position-item__title">{{ position.title }}</div>
-                  <div class="position-item__meta">
-                    {{ position.event.title }}
-                    {% if position.event.start_date %} · {{ position.event.start_date }}{% endif %}
-                    {% if position.event.city %} · {{ position.event.city }}{% endif %}
-                  </div>
-                  {% if position.description %}
-                    <p style="font-size:.85rem;color:var(--text-2);margin:.5rem 0 0;">{{ position.description|truncatechars:100 }}</p>
-                  {% endif %}
-                </div>
-                <form method="post" action="{% url 'applications:apply_to_position' position.id %}" style="flex-shrink:0;">
-                  {% csrf_token %}
-                  <button class="btn btn-primary btn-sm">Откликнуться</button>
-                </form>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div style="text-align:center;padding:2.5rem 1rem;color:var(--muted);">
-          <div style="font-size:2rem;margin-bottom:.75rem;">🔍</div>
-          <div style="font-weight:700;">Подходящих открытых ролей пока нет</div>
-          <div style="font-size:.86rem;margin-top:.4rem;">Заполните анкету, чтобы система могла вас подобрать</div>
-        </div>
-      {% endif %}
     </div>
+    {% if available_positions %}
+      {% for position in available_positions %}
+        <div class="p-item-row">
+          <div style="flex:1;min-width:0;">
+            <div class="p-item-title">{{ position.title }}</div>
+            <div class="p-item-meta">
+              {{ position.event.title }}
+              {% if position.event.start_date %} · {{ position.event.start_date }}{% endif %}
+              {% if position.event.city %} · {{ position.event.city }}{% endif %}
+            </div>
+            {% if position.description %}
+              <div class="p-item-desc">{{ position.description|truncatechars:100 }}</div>
+            {% endif %}
+          </div>
+          <form method="post" action="{% url 'applications:apply_to_position' position.id %}" style="flex-shrink:0;">
+            {% csrf_token %}
+            <button class="p-btn p-btn--primary p-btn--sm" type="submit">Откликнуться</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="p-empty">
+        <div class="p-empty__icon">🔍</div>
+        <div class="p-empty__title">Подходящих ролей пока нет</div>
+        <div class="p-empty__sub">Заполните анкету, чтобы система могла вас подобрать</div>
+      </div>
+    {% endif %}
   </div>
 
-  {# Отклики и назначения #}
-  <div class="col-lg-5">
-    <div class="panel-card mb-4">
-      <div class="section-head">
-        <span class="eyebrow">Активность</span>
-        <h2 class="section-title">Мои отклики</h2>
-      </div>
-
+  {# ── Правая колонка ── #}
+  <div>
+    {# Отклики #}
+    <div class="p-card">
+      <span class="p-eyebrow">Активность</span>
+      <h2 class="p-card-title">Мои отклики</h2>
       {% if my_applications %}
         {% for item in my_applications %}
-          <div class="app-item">
-            <div>
-              <div class="app-item__title">{{ item.position.event.title }}</div>
-              <div class="app-item__meta">{{ item.position.title }}</div>
+          <div class="p-item-row">
+            <div style="flex:1;min-width:0;">
+              <div class="p-item-title">{{ item.position.event.title }}</div>
+              <div class="p-item-meta">{{ item.position.title }}</div>
             </div>
-            <span class="status-badge status-badge--{{ item.status }}">
-              {{ item.get_status_display }}
-            </span>
+            <span class="p-badge p-badge--{{ item.status }}">{{ item.get_status_display }}</span>
           </div>
         {% endfor %}
       {% else %}
-        <p style="color:var(--muted);font-size:.9rem;margin:0;">Откликов пока нет.</p>
+        <p style="color:#9ca3af;font-size:.88rem;margin:0;">Откликов пока нет.</p>
       {% endif %}
     </div>
 
-    <div class="panel-card">
-      <div class="section-head">
-        <span class="eyebrow">Назначения</span>
-        <h2 class="section-title">Мои назначения</h2>
-      </div>
-
+    {# Назначения #}
+    <div class="p-card">
+      <span class="p-eyebrow">Назначения</span>
+      <h2 class="p-card-title">Мои назначения</h2>
       {% if my_assignments %}
         {% for item in my_assignments %}
-          <div class="app-item">
-            <div>
-              <div class="app-item__title">{{ item.position.event.title }}</div>
-              <div class="app-item__meta">{{ item.position.title }}</div>
+          <div class="p-item-row">
+            <div style="flex:1;min-width:0;">
+              <div class="p-item-title">{{ item.position.event.title }}</div>
+              <div class="p-item-meta">{{ item.position.title }}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.4rem;">
-              <span class="status-badge status-badge--{{ item.status }}">
-                {{ item.get_status_display }}
-              </span>
+              <span class="p-badge p-badge--{{ item.status }}">{{ item.get_status_display }}</span>
               {% if item.status == 'assigned' %}
                 <div style="display:flex;gap:.4rem;">
                   <form method="post" action="{% url 'applications:assignment_confirm' item.id %}">
                     {% csrf_token %}
-                    <button class="btn btn-success btn-sm">Принять</button>
+                    <button class="p-btn p-btn--primary p-btn--sm" type="submit">Принять</button>
                   </form>
                   <form method="post" action="{% url 'applications:assignment_decline' item.id %}">
                     {% csrf_token %}
-                    <button class="btn btn-outline-danger btn-sm">Отклонить</button>
+                    <button class="p-btn p-btn--danger p-btn--sm" type="submit">Отклонить</button>
                   </form>
                 </div>
               {% endif %}
@@ -134,7 +138,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <p style="color:var(--muted);font-size:.9rem;margin:0;">Назначений пока нет.</p>
+        <p style="color:#9ca3af;font-size:.88rem;margin:0;">Назначений пока нет.</p>
       {% endif %}
     </div>
   </div>

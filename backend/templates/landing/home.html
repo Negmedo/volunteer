@@ -1,30 +1,293 @@
 {% extends "base.html" %}
-{% block title %}Главная{% endblock %}
+{% block title %}Главная — VolunteerSKO{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Tailwind custom config */
+  :root { --green: #2d6a4f; --green-dk: #1b4332; --green-lt: #d8f3dc; --sand: #f5f0eb; --cream: #faf7f4; --wheat: #e9c46a; --terr: #c07a3a; --ink: #1c2b1e; }
+
+  /* Убираем Bootstrap padding от main на главной */
+  body.home-page .vsk-main { padding: 0 !important; max-width: 100% !important; }
+  body.home-page .vsk-main .container { max-width: 100% !important; padding: 0 !important; }
+
+  /* Scroll animations */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(32px); transition: opacity .65s ease, transform .65s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  /* Slider */
+  .slider-wrap { overflow: hidden; }
+  .slider-track { display: flex; gap: 1.1rem; transition: transform .42s cubic-bezier(.4,0,.2,1); }
+  .slide-card { flex: 0 0 calc(25% - .825rem); min-width: 0; }
+  .slide-img-wrap { position: relative; height: 340px; border-radius: 18px; overflow: hidden; }
+  .slide-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .slide-card:hover .slide-img-wrap img { transform: scale(1.05); }
+  .slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.05) 55%); border-radius: 18px; }
+  .slide-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2rem; }
+</style>
+{% endblock %}
+
 {% block content %}
-<section class="hero-shell mb-4">
-  <div class="hero-grid">
-    <div class="hero-card hero-card--main">
-      <span class="eyebrow">СППР для подбора волонтёров</span>
-      <h1 class="hero-title">Подбирайте людей под роли, а не роли под случайных людей</h1>
-      <p class="hero-subtitle">Анкеты, мероприятия, роли, отклики, назначения и прозрачная логика подбора без старого хаоса.</p>
-      <div class="hero-actions">
+<div x-data></div> {# placeholder, not needed #}
+
+{# ── HERO ── #}
+<section class="relative min-h-[560px] flex items-center overflow-hidden" style="background:#f5f0eb;">
+  {# Blob decorations #}
+  <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-40" style="background:#d8f3dc;"></div>
+  <div class="absolute -bottom-24 -left-16 w-72 h-72 rounded-full opacity-20" style="background:#e9c46a;"></div>
+
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="reveal">
+      <span class="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-5" style="background:#d8f3dc;color:#1b4332;">Платформа волонтёрской координации</span>
+      <h1 class="text-4xl lg:text-5xl font-black leading-tight mb-4" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">
+        Стань волонтёром<br>
+        <span style="color:#2d6a4f;">и помоги там, где это действительно нужно</span>
+      </h1>
+      <p class="text-base mb-8 leading-relaxed" style="color:#4b5563;max-width:480px;">VolunteerSKO помогает организациям быстрее находить надёжных волонтёров, а людям — находить мероприятия, где их помощь будет по-настоящему полезной.</p>
+      <div class="flex gap-3 flex-wrap">
         {% if user.is_authenticated %}
-          <a class="btn btn-light btn-lg" href="{% url 'accounts:dashboard' %}">Открыть кабинет</a>
+          <a href="{% url 'accounts:dashboard' %}" class="px-6 py-3 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-0.5" style="background:#2d6a4f;box-shadow:0 4px 14px rgba(45,106,79,.3);">Открыть кабинет</a>
         {% else %}
-          <a class="btn btn-light btn-lg" href="{% url 'accounts:signup' %}">Начать</a>
-          <a class="btn btn-outline-light btn-lg" href="{% url 'accounts:login' %}">Войти</a>
+          <a href="{% url 'accounts:signup' %}" class="px-6 py-3 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-0.5" style="background:#2d6a4f;box-shadow:0 4px 14px rgba(45,106,79,.3);">Стать волонтёром</a>
+          <a href="{% url 'accounts:login' %}" class="px-6 py-3 rounded-full font-bold text-sm border-2 transition-all hover:bg-white" style="border-color:#2d6a4f;color:#2d6a4f;">У меня уже есть аккаунт</a>
         {% endif %}
       </div>
     </div>
-    <div class="hero-card hero-card--stats">
-      <div class="stat-tile"><div class="stat-label">Пользователей</div><div class="stat-value">{{ stats.users_count }}</div></div>
-      <div class="stat-tile"><div class="stat-label">Мероприятий</div><div class="stat-value">{{ stats.events_count }}</div></div>
-      <div class="stat-tile"><div class="stat-label">Часов волонтёрства</div><div class="stat-value">{{ stats.hours_count }}</div></div>
+
+    {# Stat cards #}
+    <div class="flex flex-col gap-3 reveal" style="transition-delay:.15s;">
+      <div class="bg-white rounded-2xl px-5 py-4 border flex justify-between items-center" style="border-color:#e8e2db;box-shadow:0 2px 12px rgba(28,43,30,.06);">
+        <span class="text-sm" style="color:#6b7280;">Зарегистрировано пользователей</span>
+        <span class="text-3xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;">{{ stats.users_count }}</span>
+      </div>
+      <div class="bg-white rounded-2xl px-5 py-4 border flex justify-between items-center" style="border-color:#e8e2db;box-shadow:0 2px 12px rgba(28,43,30,.06);">
+        <span class="text-sm" style="color:#6b7280;">Мероприятий в системе</span>
+        <span class="text-3xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;">{{ stats.events_count }}</span>
+      </div>
+      <div class="bg-white rounded-2xl px-5 py-4 border flex justify-between items-center" style="border-color:#e8e2db;box-shadow:0 2px 12px rgba(28,43,30,.06);">
+        <span class="text-sm" style="color:#6b7280;">Публичных мероприятий сейчас</span>
+        <span class="text-3xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;">{{ stats.public_events_count }}</span>
+      </div>
     </div>
   </div>
 </section>
-<div class="row g-4">
-  <div class="col-lg-6"><section class="panel-card h-100"><span class="eyebrow">Кому ты поможешь</span><h2 class="section-title">Реальные кейсы, а не абстрактные карточки</h2><div class="story-list mt-3"><div class="story-item"><strong>Экология</strong><span>Субботники, сортировка, городские акции.</span></div><div class="story-item"><strong>Помощь детям</strong><span>Регистрация, сопровождение, мастер-классы.</span></div><div class="story-item"><strong>Помощь пожилым</strong><span>Доставка, сопровождение, внимание и поддержка.</span></div><div class="story-item"><strong>ЧС</strong><span>Логистика, гуманитарная помощь, координация.</span></div></div></section></div>
-  <div class="col-lg-6"><section class="panel-card h-100"><span class="eyebrow">Истории успеха</span><h2 class="section-title">Контентный блок под живые истории и фотографии</h2><p class="muted-paragraph">Показывай реальные кейсы, фотографии с мероприятий, отзывы координаторов и короткие истории волонтёров. Это не заглушка, а место для реального контента.</p><div class="success-grid mt-3"><div class="success-chip">Регистрация участников</div><div class="success-chip">Логистика</div><div class="success-chip">Медпомощь</div><div class="success-chip">SMM / Фото / Видео</div></div></section></div>
-</div>
+
+{# ── КАТЕГОРИИ (3 карточки как на скриншоте) ── #}
+<section class="py-20 px-8" style="background:#fff;">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal">
+      <span class="text-xs font-bold tracking-widest uppercase mb-2 block" style="color:#6b7280;">Кому ты поможешь</span>
+      <h2 class="text-3xl lg:text-4xl font-black mb-10" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">Реальные сценарии, где важна каждая пара рук</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="reveal reveal-delay-1 bg-white rounded-2xl p-7 border transition-all hover:-translate-y-1 hover:shadow-lg" style="border-color:#e5e7eb;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#ede9fe;">🛡️</div>
+        <h3 class="font-bold text-base mb-2" style="color:#1c2b1e;">Поддержка при ЧС</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Выдача гуманитарной помощи, маршрутизация людей, помощь на пунктах временного размещения и логистика.</p>
+      </div>
+      <div class="reveal reveal-delay-2 bg-white rounded-2xl p-7 border transition-all hover:-translate-y-1 hover:shadow-lg" style="border-color:#e5e7eb;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#fce7f3;">🤝</div>
+        <h3 class="font-bold text-base mb-2" style="color:#1c2b1e;">Социальная помощь</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Поддержка пожилых людей, помощь семьям в трудной ситуации, участие в благотворительных инициативах.</p>
+      </div>
+      <div class="reveal reveal-delay-3 bg-white rounded-2xl p-7 border transition-all hover:-translate-y-1 hover:shadow-lg" style="border-color:#e5e7eb;">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-2xl" style="background:#d8f3dc;">🎓</div>
+        <h3 class="font-bold text-base mb-2" style="color:#1c2b1e;">Образовательные и городские события</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Регистрация участников, сопровождение площадок, координация потоков гостей и помощь организаторам.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── О НАС (текст слева + фото справа) ── #}
+<section class="py-20 px-8" style="background:#f5f0eb;">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <div class="reveal-left">
+      <span class="text-xs font-bold tracking-widest uppercase mb-2 block" style="color:#6b7280;">О нас</span>
+      <h2 class="text-3xl font-black mb-4 leading-tight" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">Волонтёрское движение в Северо-Казахстанской области</h2>
+      <p class="text-sm leading-relaxed mb-6" style="color:#4b5563;">Волонтёрское движение в СКО — это мощная сила неравнодушных людей, готовых прийти на помощь в любой ситуации. Весной 2024 года, когда регион столкнулся с масштабными паводками, именно волонтёры стали надёжной опорой для спасателей и пострадавших жителей.</p>
+      <a href="{% url 'accounts:signup' %}" class="inline-block px-6 py-3 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-0.5" style="background:#2d6a4f;box-shadow:0 4px 14px rgba(45,106,79,.3);">Присоединиться к движению</a>
+    </div>
+    <div class="reveal-right">
+      <div class="rounded-2xl overflow-hidden" style="height:320px;">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&q=80" alt="Волонтёры СКО" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── ИТОГИ 2025 (6 карточек 3×2) ── #}
+<section class="py-20 px-8" style="background:#fff;">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center mb-12">
+      <span class="text-xs font-bold tracking-widest uppercase mb-2 block" style="color:#6b7280;">Итоги 2025 года</span>
+      <h2 class="text-3xl lg:text-4xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">Что мы сделали</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="reveal reveal-delay-1 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Помощь в чрезвычайных ситуациях</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">В рамках проекта Birgemiz Umit более 3450 добровольцев были задействованы в противопаводковых мероприятиях, профилактике пожаров и рейдах по пожарной безопасности.</p>
+      </div>
+      <div class="reveal reveal-delay-2 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Социальное направление</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Более 700 волонтёров помогали одиноким пенсионерам и людям с инвалидностью. Доставка продуктов, лекарств, уборка, сопровождение. Помощь получили более 1000 человек.</p>
+      </div>
+      <div class="reveal reveal-delay-3 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Экологическое волонтёрство</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">В рамках Birgemiz Taza Alem и Таза Казахстан организовано более 450 экологических мероприятий: субботники, очистка парков, посадка деревьев, акции по раздельному сбору мусора.</p>
+      </div>
+      <div class="reveal reveal-delay-1 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Историко-культурное наследие</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Около 60 мероприятий и 14 экскурсий по благоустройству памятников и мемориалов. Участие в патриотических акциях и проектах по сохранению исторической памяти.</p>
+      </div>
+      <div class="reveal reveal-delay-2 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Юридическая и психологическая помощь</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">52 юридические консультации, 19 психологических тренингов и 17 индивидуальных консультаций. Работа с молодёжью, пенсионерами и уязвимыми группами населения.</p>
+      </div>
+      <div class="reveal reveal-delay-3 rounded-2xl p-6 border hover:shadow-md transition-shadow" style="background:#fff;border-color:#e5e7eb;">
+        <h3 class="font-bold text-base mb-3" style="color:#1c2b1e;">Итоговое событие года</h3>
+        <p class="text-sm leading-relaxed" style="color:#6b7280;">Областной слёт «Волонтёр жолы 2025» объединил активистов со всего региона. Подведены итоги года и награждены самые активные добровольцы.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── СЛАЙДЕР МЕРОПРИЯТИЙ ── #}
+<section class="py-20 px-8" style="background:#f5f0eb;">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-end justify-between mb-8 reveal">
+      <div>
+        <span class="text-xs font-bold tracking-widest uppercase mb-2 block" style="color:#6b7280;">Истории и атмосфера</span>
+        <h2 class="text-3xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">Примеры мероприятий и ролей волонтёров</h2>
+      </div>
+      <div class="flex gap-2 shrink-0">
+        <button onclick="slideMove(-1)" class="w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors hover:border-green-700 hover:text-green-700" style="border-color:#d1d5db;color:#374151;">←</button>
+        <button onclick="slideMove(1)"  class="w-10 h-10 rounded-full border-2 flex items-center justify-center transition-colors hover:border-green-700 hover:text-green-700" style="border-color:#d1d5db;color:#374151;">→</button>
+      </div>
+    </div>
+    <div class="slider-wrap reveal">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide-card">
+          <div class="slide-img-wrap">
+            <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80" alt="">
+            <div class="slide-overlay"></div>
+            <div class="slide-body">
+              <div class="font-bold text-white text-base mb-1 leading-tight" style="font-family:'Nunito',sans-serif;">Выездная гуманитарная миссия</div>
+              <p class="text-white text-xs opacity-80 mb-3 leading-relaxed">Доставка вещей первой необходимости пожилым людям в отдалённых районах.</p>
+              <span class="inline-block text-white text-xs px-3 py-1 rounded-full" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);">Логистика · помощь на выезде</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-card">
+          <div class="slide-img-wrap">
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80" alt="">
+            <div class="slide-overlay"></div>
+            <div class="slide-body">
+              <div class="font-bold text-white text-base mb-1 leading-tight" style="font-family:'Nunito',sans-serif;">IT-конференция СКО</div>
+              <p class="text-white text-xs opacity-80 mb-3 leading-relaxed">Волонтёры помогают на регистрации, навигации гостей и техподдержке площадок.</p>
+              <span class="inline-block text-white text-xs px-3 py-1 rounded-full" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);">Регистрация · техподдержка</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-card">
+          <div class="slide-img-wrap">
+            <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=80" alt="">
+            <div class="slide-overlay"></div>
+            <div class="slide-body">
+              <div class="font-bold text-white text-base mb-1 leading-tight" style="font-family:'Nunito',sans-serif;">Фестиваль восточной культуры</div>
+              <p class="text-white text-xs opacity-80 mb-3 leading-relaxed">Кураторы площадок, переводчики и SMM-помощники для работы с аудиторией.</p>
+              <span class="inline-block text-white text-xs px-3 py-1 rounded-full" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);">Координация · медиа</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-card">
+          <div class="slide-img-wrap">
+            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&q=80" alt="">
+            <div class="slide-overlay"></div>
+            <div class="slide-body">
+              <div class="font-bold text-white text-base mb-1 leading-tight" style="font-family:'Nunito',sans-serif;">Благотворительная ярмарка</div>
+              <p class="text-white text-xs opacity-80 mb-3 leading-relaxed">Помощь на стойках, работа с гостями и координация зон в течение всего дня.</p>
+              <span class="inline-block text-white text-xs px-3 py-1 rounded-full" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);">Гости · организация</span>
+            </div>
+          </div>
+        </div>
+        <div class="slide-card">
+          <div class="slide-img-wrap">
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80" alt="">
+            <div class="slide-overlay"></div>
+            <div class="slide-body">
+              <div class="font-bold text-white text-base mb-1 leading-tight" style="font-family:'Nunito',sans-serif;">Городской субботник</div>
+              <p class="text-white text-xs opacity-80 mb-3 leading-relaxed">Очистка парков и набережных, посадка деревьев. Без специальных навыков.</p>
+              <span class="inline-block text-white text-xs px-3 py-1 rounded-full" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);">Экология · город</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ── ПУБЛИЧНЫЕ МЕРОПРИЯТИЯ ── #}
+<section class="py-20 px-8" style="background:#fff;">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-start justify-between mb-6 reveal">
+      <div>
+        <span class="text-xs font-bold tracking-widest uppercase mb-2 block" style="color:#6b7280;">Публичные мероприятия</span>
+        <h2 class="text-3xl font-black" style="font-family:'Nunito',sans-serif;color:#1c2b1e;letter-spacing:-.02em;">Что можно посмотреть уже сейчас</h2>
+      </div>
+      <a href="{% url 'events:org_dashboard' %}" class="shrink-0 mt-2 px-4 py-2 rounded-full text-sm font-semibold border transition-colors hover:bg-green-50" style="border-color:#e5e7eb;color:#2d6a4f;">Смотреть все</a>
+    </div>
+    <div class="flex flex-col gap-3">
+      {% for event in public_events %}
+      <div class="reveal bg-white rounded-2xl px-6 py-4 border flex items-center justify-between gap-4 transition-shadow hover:shadow-md" style="border-color:#e5e7eb;">
+        <div>
+          <div class="font-bold text-sm" style="color:#1c2b1e;">{{ event.title }}</div>
+          <div class="text-xs mt-0.5" style="color:#9ca3af;">{% if event.city %}{{ event.city }}{% else %}Город не указан{% endif %} · {{ event.start_date }}</div>
+        </div>
+        <a href="{% url 'events:event_detail' event.id %}" class="shrink-0 text-sm font-semibold" style="color:#2d6a4f;">Подробнее →</a>
+      </div>
+      {% empty %}
+      <p class="text-sm py-4" style="color:#9ca3af;">Публичных мероприятий пока нет.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Slider
+  let sliderPos = 0;
+  const track = document.getElementById('sliderTrack');
+  function slideMove(dir) {
+    if (!track) return;
+    const cards = track.children.length;
+    const visible = window.innerWidth >= 1024 ? 4 : window.innerWidth >= 640 ? 2 : 1;
+    const max = cards - visible;
+    sliderPos = Math.max(0, Math.min(sliderPos + dir, max));
+    const w = track.parentElement.offsetWidth;
+    const cardW = (w - (visible - 1) * 17.6) / visible;
+    track.style.transform = `translateX(-${sliderPos * (cardW + 17.6)}px)`;
+  }
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
 {% endblock %}

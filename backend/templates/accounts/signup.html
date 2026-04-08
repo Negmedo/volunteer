@@ -1,68 +1,63 @@
 {% extends "base.html" %}
-{% block title %}Регистрация — СППР волонтёров{% endblock %}
+{% block title %}Регистрация — VolunteerSKO{% endblock %}
 
 {% block content %}
-<div class="auth-shell">
-  <div class="auth-card" style="max-width:480px;">
-    <div class="auth-card__logo">
-      <span class="auth-card__logo-v">V</span>
-    </div>
-
-    <h1 class="auth-title">Создать аккаунт</h1>
-    <p class="auth-subtitle">Зарегистрируйтесь как волонтёр или координатор организации</p>
+<div class="p-auth-shell">
+  <div class="p-auth-card" style="max-width:480px;">
+    <div class="p-auth-logo">V</div>
+    <h1 class="p-auth-title">Создать аккаунт</h1>
+    <p class="p-auth-subtitle">Зарегистрируйтесь как волонтёр или координатор организации</p>
 
     {% if form.non_field_errors %}
-      <div class="alert alert-danger mb-3">
-        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-      </div>
+      <div class="p-alert p-alert--error">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
     {% endif %}
 
-    <form method="post" class="vstack gap-3">
+    <form method="post">
       {% csrf_token %}
 
-      <div class="form-grid form-grid--2">
-        <div class="field-block">
-          <label class="field-label" for="{{ form.first_name.id_for_label }}">Имя</label>
+      <div class="p-form-grid">
+        <div class="p-field">
+          <label class="p-label" for="{{ form.first_name.id_for_label }}">Имя</label>
           {{ form.first_name }}
-          {% if form.first_name.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.first_name.errors.0 }}</div>{% endif %}
+          {% if form.first_name.errors %}<div class="p-form-error">{{ form.first_name.errors.0 }}</div>{% endif %}
         </div>
-        <div class="field-block">
-          <label class="field-label" for="{{ form.last_name.id_for_label }}">Фамилия</label>
+        <div class="p-field">
+          <label class="p-label" for="{{ form.last_name.id_for_label }}">Фамилия</label>
           {{ form.last_name }}
-          {% if form.last_name.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.last_name.errors.0 }}</div>{% endif %}
+          {% if form.last_name.errors %}<div class="p-form-error">{{ form.last_name.errors.0 }}</div>{% endif %}
         </div>
       </div>
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.username.id_for_label }}">Логин</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.username.id_for_label }}">Логин</label>
         {{ form.username }}
-        {% if form.username.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.username.errors.0 }}</div>{% endif %}
+        {% if form.username.errors %}<div class="p-form-error">{{ form.username.errors.0 }}</div>{% endif %}
       </div>
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.email.id_for_label }}">Email</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.email.id_for_label }}">Email</label>
         {{ form.email }}
-        {% if form.email.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.email.errors.0 }}</div>{% endif %}
+        {% if form.email.errors %}<div class="p-form-error">{{ form.email.errors.0 }}</div>{% endif %}
       </div>
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.password1.id_for_label }}">Пароль</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.password1.id_for_label }}">Пароль</label>
         {{ form.password1 }}
-        {% if form.password1.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.password1.errors.0 }}</div>{% endif %}
-        {% if form.password1.help_text %}<div style="font-size:.78rem;color:var(--muted);margin-top:.3rem;">{{ form.password1.help_text }}</div>{% endif %}
+        {% if form.password1.errors %}<div class="p-form-error">{{ form.password1.errors.0 }}</div>{% endif %}
+        {% if form.password1.help_text %}<div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">{{ form.password1.help_text }}</div>{% endif %}
       </div>
 
-      <div class="field-block">
-        <label class="field-label" for="{{ form.password2.id_for_label }}">Повтор пароля</label>
+      <div class="p-field">
+        <label class="p-label" for="{{ form.password2.id_for_label }}">Повтор пароля</label>
         {{ form.password2 }}
-        {% if form.password2.errors %}<div class="text-danger" style="font-size:.82rem;margin-top:.3rem;">{{ form.password2.errors.0 }}</div>{% endif %}
+        {% if form.password2.errors %}<div class="p-form-error">{{ form.password2.errors.0 }}</div>{% endif %}
       </div>
 
-      <button class="btn btn-primary w-100 py-2 mt-1" type="submit">Создать аккаунт</button>
+      <button class="p-btn p-btn--primary" style="width:100%;justify-content:center;margin-top:.5rem;" type="submit">Создать аккаунт</button>
     </form>
 
-    <div class="auth-divider mt-3"><span>уже есть аккаунт?</span></div>
-    <a href="{% url 'accounts:login' %}" class="btn btn-outline-secondary w-100">Войти</a>
+    <div class="p-auth-divider"><span>уже есть аккаунт?</span></div>
+    <a href="{% url 'accounts:login' %}" class="p-btn p-btn--outline" style="width:100%;justify-content:center;">Войти</a>
   </div>
 </div>
 {% endblock %}

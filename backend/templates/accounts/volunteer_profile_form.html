@@ -1,146 +1,204 @@
 {% extends "base.html" %}
 {% block title %}Анкета волонтёра{% endblock %}
+
 {% block content %}
-<section class="page-shell mb-4">
-  <div class="page-head">
-    <div>
-      <span class="eyebrow">Анкета волонтёра</span>
-      <h1 class="page-title">Профиль и параметры участия</h1>
-      <p class="page-subtitle">Анкета должна быть заполнена так, чтобы координатор видел навыки, доступность, ограничения и реальные условия участия.</p>
-    </div>
-    <div class="completion-card">
-      <div class="completion-label">Заполненность</div>
-      <div class="completion-value">{{ volunteer_profile.profile_completion_percent }}%</div>
+
+<div class="p-page-header">
+  <div>
+    <span class="p-eyebrow">Анкета волонтёра</span>
+    <h1 class="p-page-title">Профиль и параметры участия</h1>
+    <p class="p-page-subtitle">Заполните анкету, чтобы координаторы видели ваши навыки, доступность и реальные условия участия.</p>
+  </div>
+  <div class="p-completion-ring" style="background:#fff;border-color:#e5e7eb;flex-shrink:0;">
+    <div class="p-completion-ring__label" style="color:#6b7280;">Заполненность</div>
+    <div class="p-completion-ring__value" style="color:#1c2b1e;">{{ volunteer_profile.profile_completion_percent }}%</div>
+    <div style="background:#e5e7eb;border-radius:100px;height:5px;margin-top:.4rem;overflow:hidden;">
+      <div style="height:5px;border-radius:100px;background:#2d6a4f;width:{{ volunteer_profile.profile_completion_percent }}%;"></div>
     </div>
   </div>
-</section>
+</div>
 
-<form method="post" class="vstack gap-4">{% csrf_token %}
-  {% if form_errors %}<div class="alert alert-danger form-error-summary" id="form-errors"><strong>Проверьте форму.</strong><ul class="mb-0 mt-2">{% for err in form_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
-  <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 1</span><h2 class="section-title">Базовая информация и контакты</h2></div></div>
-    <div class="form-grid form-grid--2">
-      <div class="field-block"><label class="field-label">Имя</label>{{ user_form.first_name }}</div>
-      <div class="field-block"><label class="field-label">Фамилия</label>{{ user_form.last_name }}</div>
-      <div class="field-block"><label class="field-label">Email</label>{{ user_form.email }}</div>
-      <div class="field-block"><label class="field-label">Телефон</label>{{ profile_form.phone }}</div>
-      <div class="field-block"><label class="field-label">Пол</label>{{ volunteer_form.gender }}</div>
-      <div class="field-block"><label class="field-label">Год рождения</label>{{ volunteer_form.birth_year }}</div>
-      <div class="field-block"><label class="field-label">Город</label>{{ volunteer_form.city }}</div>
-      <div class="field-block"><label class="field-label">Район</label>{{ volunteer_form.district }}</div>
+<form method="post" style="display:flex;flex-direction:column;gap:1.25rem;">
+  {% csrf_token %}
+  {% if form_errors %}
+    <div class="p-alert p-alert--error" id="form-errors">
+      <strong>Проверьте форму.</strong>
+      <ul style="margin:.4rem 0 0;padding-left:1.2rem;">
+        {% for err in form_errors %}<li>{{ err }}</li>{% endfor %}
+      </ul>
     </div>
-  </section>
+  {% endif %}
 
-  <section class="panel-card">
-    <div class="section-head section-head--split">
-      <div><span class="eyebrow">Блок 2</span><h2 class="section-title">Языки и уровень владения</h2></div>
-      <button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="langs">+ Добавить язык</button>
+  {# ── Блок 1: Базовая информация ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 1</span>
+        <h2 class="p-section-title">Базовая информация и контакты</h2>
+      </div>
+    </div>
+    <div class="p-form-grid">
+      <div class="p-field"><label class="p-label">Имя</label>{{ user_form.first_name }}</div>
+      <div class="p-field"><label class="p-label">Фамилия</label>{{ user_form.last_name }}</div>
+      <div class="p-field"><label class="p-label">Email</label>{{ user_form.email }}</div>
+      <div class="p-field"><label class="p-label">Телефон</label>{{ profile_form.phone }}</div>
+      <div class="p-field"><label class="p-label">Пол</label>{{ volunteer_form.gender }}</div>
+      <div class="p-field"><label class="p-label">Год рождения</label>{{ volunteer_form.birth_year }}</div>
+      <div class="p-field"><label class="p-label">Город</label>{{ volunteer_form.city }}</div>
+      <div class="p-field"><label class="p-label">Район</label>{{ volunteer_form.district }}</div>
+    </div>
+  </div>
+
+  {# ── Блок 2: Языки ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 2</span>
+        <h2 class="p-section-title">Языки и уровень владения</h2>
+      </div>
+      <button type="button" class="p-btn p-btn--ghost p-btn--sm js-add-form" data-prefix="langs">+ Добавить язык</button>
     </div>
     {{ language_formset.management_form }}
-    <div class="inline-form-list" id="langs-forms">
+    <div class="p-inline-list" id="langs-forms">
       {% for form in language_formset %}
-        <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">
+        <div class="p-inline-row js-form-row" data-prefix="langs">
           {{ form.id }}
-          <div class="field-block"><label class="field-label">Язык</label>{{ form.language }}</div>
-          <div class="field-block"><label class="field-label">Уровень</label>{{ form.level }}</div>
-          <div class="field-actions">
-            {% if form.DELETE %}<label class="field-label">Удалить</label><div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
-            <button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button>
+          <div class="p-field"><label class="p-label">Язык</label>{{ form.language }}</div>
+          <div class="p-field"><label class="p-label">Уровень</label>{{ form.level }}</div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:.25rem;">
+            {% if form.DELETE %}<div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
+            <button type="button" class="p-btn p-btn--danger p-btn--sm js-remove-form">Удалить</button>
           </div>
         </div>
       {% endfor %}
     </div>
     <template id="langs-empty-form">
-      <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">
+      <div class="p-inline-row js-form-row" data-prefix="langs">
         __ID__
-        <div class="field-block"><label class="field-label">Язык</label>__LANGUAGE__</div>
-        <div class="field-block"><label class="field-label">Уровень</label>__LEVEL__</div>
-        <div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div>
+        <div class="p-field"><label class="p-label">Язык</label>__LANGUAGE__</div>
+        <div class="p-field"><label class="p-label">Уровень</label>__LEVEL__</div>
+        <div style="display:flex;align-items:flex-end;padding-bottom:.25rem;">
+          <button type="button" class="p-btn p-btn--danger p-btn--sm js-remove-form">Удалить</button>
+        </div>
       </div>
     </template>
-  </section>
+  </div>
 
-  <section class="panel-card">
-    <div class="section-head section-head--split">
-      <div><span class="eyebrow">Блок 3</span><h2 class="section-title">Навыки и компетенции</h2></div>
-      <button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="skills">+ Добавить навык</button>
+  {# ── Блок 3: Навыки ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 3</span>
+        <h2 class="p-section-title">Навыки и компетенции</h2>
+      </div>
+      <button type="button" class="p-btn p-btn--ghost p-btn--sm js-add-form" data-prefix="skills">+ Добавить навык</button>
     </div>
     {{ skill_formset.management_form }}
-    <div class="inline-form-list" id="skills-forms">
+    <div class="p-inline-list" id="skills-forms">
       {% for form in skill_formset %}
-        <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="skills">
+        <div class="p-inline-row js-form-row" data-prefix="skills">
           {{ form.id }}
-          <div class="field-block"><label class="field-label">Навык</label>{{ form.skill }}</div>
-          <div class="field-block"><label class="field-label">Уровень</label>{{ form.level }}</div>
-          <div class="field-actions">
-            {% if form.DELETE %}<label class="field-label">Удалить</label><div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
-            <button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button>
+          <div class="p-field"><label class="p-label">Навык</label>{{ form.skill }}</div>
+          <div class="p-field"><label class="p-label">Уровень</label>{{ form.level }}</div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:.25rem;">
+            {% if form.DELETE %}<div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
+            <button type="button" class="p-btn p-btn--danger p-btn--sm js-remove-form">Удалить</button>
           </div>
         </div>
       {% endfor %}
     </div>
     <template id="skills-empty-form">
-      <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="skills">
+      <div class="p-inline-row js-form-row" data-prefix="skills">
         __ID__
-        <div class="field-block"><label class="field-label">Навык</label>__SKILL__</div>
-        <div class="field-block"><label class="field-label">Уровень</label>__LEVEL__</div>
-        <div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div>
+        <div class="p-field"><label class="p-label">Навык</label>__SKILL__</div>
+        <div class="p-field"><label class="p-label">Уровень</label>__LEVEL__</div>
+        <div style="display:flex;align-items:flex-end;padding-bottom:.25rem;">
+          <button type="button" class="p-btn p-btn--danger p-btn--sm js-remove-form">Удалить</button>
+        </div>
       </div>
     </template>
-  </section>
+  </div>
 
-  <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 4</span><h2 class="section-title">Доступность</h2></div></div>
-    <div class="form-grid form-grid--2 mb-3">
-      <div class="field-block"><label class="field-label">Доступен с</label>{{ volunteer_form.availability_start_date }}</div>
-      <div class="field-block"><label class="field-label">Доступен до</label>{{ volunteer_form.availability_end_date }}</div>
+  {# ── Блок 4: Доступность ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 4</span>
+        <h2 class="p-section-title">Доступность</h2>
+      </div>
     </div>
-    <div class="availability-header">
-      <div class="field-label">Выбери удобные слоты по дням недели</div>
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="toggle-all-availability">Выбрать / снять все</button>
+    <div class="p-form-grid" style="margin-bottom:1.1rem;">
+      <div class="p-field"><label class="p-label">Доступен с</label>{{ volunteer_form.availability_start_date }}</div>
+      <div class="p-field"><label class="p-label">Доступен до</label>{{ volunteer_form.availability_end_date }}</div>
     </div>
-    <div class="availability-grid">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:.5rem;">
+      <label class="p-label" style="margin:0;">Выбери удобные слоты по дням недели</label>
+      <button type="button" class="p-btn p-btn--ghost p-btn--sm" id="toggle-all-availability">Выбрать / снять все</button>
+    </div>
+    <div class="p-avail-grid">
       {% for value, label in volunteer_form.availability_matrix.field.choices %}
-        <label class="availability-cell">
+        <label class="p-avail-cell">
           <input type="checkbox" name="{{ volunteer_form.availability_matrix.html_name }}" value="{{ value }}" {% if value in volunteer_form.availability_matrix.value %}checked{% endif %}>
           <span>{{ label }}</span>
         </label>
       {% endfor %}
     </div>
-    <div class="toggle-grid mt-4">
-      <label class="toggle-card">{{ volunteer_form.ready_for_night_shifts }}<span>Готов к ночным сменам</span></label>
-      <label class="toggle-card">{{ volunteer_form.can_travel }}<span>Готов выезжать в другие районы</span></label>
-      <label class="toggle-card">{{ volunteer_form.has_car }}<span>Есть автомобиль</span></label>
+    <div class="p-toggle-grid" style="margin-top:1.1rem;">
+      <label class="p-toggle-card">{{ volunteer_form.ready_for_night_shifts }}<span>Готов к ночным сменам</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.can_travel }}<span>Готов выезжать в другие районы</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.has_car }}<span>Есть автомобиль</span></label>
     </div>
-  </section>
+  </div>
 
-  <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 5</span><h2 class="section-title">Предпочтения и мотивация</h2></div></div>
-    <div class="form-grid form-grid--2">
-      <div class="field-block"><label class="field-label">Цель участия</label>{{ volunteer_form.participation_goal }}</div>
-      <div class="field-block field-block--full"><label class="field-label">Предпочтительные направления</label><div class="choice-cloud">{{ volunteer_form.preferred_directions }}</div></div>
-      <div class="field-block field-block--full"><label class="field-label">Предпочтительные типы задач</label><div class="choice-cloud">{{ volunteer_form.preferred_task_types }}</div></div>
-      <div class="field-block field-block--full"><label class="field-label">Мотивация</label>{{ volunteer_form.motivation_text }}</div>
+  {# ── Блок 5: Предпочтения ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 5</span>
+        <h2 class="p-section-title">Предпочтения и мотивация</h2>
+      </div>
     </div>
-  </section>
-
-  <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 6</span><h2 class="section-title">Ограничения и условия</h2></div></div>
-    <div class="toggle-grid">
-      <label class="toggle-card">{{ volunteer_form.physical_work_ok }}<span>Физическая нагрузка допустима</span></label>
-      <label class="toggle-card">{{ volunteer_form.carry_heavy_ok }}<span>Могу переносить тяжести</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_night_shifts }}<span>Нежелательны ночные смены</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_outdoor_winter_work }}<span>Нежелательна работа на улице зимой</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_large_crowds }}<span>Нежелательна работа с большим потоком людей</span></label>
+    <div class="p-form-grid">
+      <div class="p-field"><label class="p-label">Цель участия</label>{{ volunteer_form.participation_goal }}</div>
+      <div class="p-field p-field--full">
+        <label class="p-label">Предпочтительные направления</label>
+        <div class="p-card .choice-cloud" style="padding:.5rem;border:1.5px solid #e5e7eb;border-radius:10px;">{{ volunteer_form.preferred_directions }}</div>
+      </div>
+      <div class="p-field p-field--full">
+        <label class="p-label">Предпочтительные типы задач</label>
+        <div style="padding:.5rem;border:1.5px solid #e5e7eb;border-radius:10px;">{{ volunteer_form.preferred_task_types }}</div>
+      </div>
+      <div class="p-field p-field--full"><label class="p-label">Мотивация</label>{{ volunteer_form.motivation_text }}</div>
     </div>
-    <div class="field-block mt-3"><label class="field-label">Ограничения и противопоказания</label>{{ volunteer_form.restrictions_note }}</div>
-  </section>
+  </div>
 
-  <div class="action-row">
-    <button class="btn btn-primary btn-lg" type="submit">Сохранить анкету</button>
-    <a class="btn btn-outline-secondary btn-lg" href="{% url 'accounts:volunteer_dashboard' %}">Назад</a>
+  {# ── Блок 6: Ограничения ── #}
+  <div class="p-section-card">
+    <div class="p-section-head">
+      <div>
+        <span class="p-eyebrow">Блок 6</span>
+        <h2 class="p-section-title">Ограничения и условия</h2>
+      </div>
+    </div>
+    <div class="p-toggle-grid">
+      <label class="p-toggle-card">{{ volunteer_form.physical_work_ok }}<span>Физическая нагрузка допустима</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.carry_heavy_ok }}<span>Могу переносить тяжести</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.avoid_night_shifts }}<span>Нежелательны ночные смены</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.avoid_outdoor_winter_work }}<span>Нежелательна работа на улице зимой</span></label>
+      <label class="p-toggle-card">{{ volunteer_form.avoid_large_crowds }}<span>Нежелательна работа с большим потоком людей</span></label>
+    </div>
+    <div class="p-field" style="margin-top:1rem;">
+      <label class="p-label">Ограничения и противопоказания</label>
+      {{ volunteer_form.restrictions_note }}
+    </div>
+  </div>
+
+  <div class="p-action-row">
+    <button class="p-btn p-btn--primary p-btn--lg" type="submit">Сохранить анкету</button>
+    <a class="p-btn p-btn--ghost p-btn--lg" href="{% url 'accounts:volunteer_dashboard' %}">Назад</a>
   </div>
 </form>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -150,20 +208,16 @@
   function getVisibleRows(prefix) {
     return Array.from(document.querySelectorAll(`.js-form-row[data-prefix="${prefix}"]`)).filter(row => row.style.display !== 'none');
   }
-
   function countChosen(group) {
     return new Set(
       Array.from(document.querySelectorAll(`.js-unique-select[data-group="${group}"]`))
         .filter(select => select.closest('.js-form-row')?.style.display !== 'none')
-        .map(select => select.value)
-        .filter(Boolean)
+        .map(select => select.value).filter(Boolean)
     ).size;
   }
-
   function totalAvailable(select) {
     return Array.from(select.options).filter(opt => opt.value).length;
   }
-
   function updateAddButtons() {
     const configs = [
       {prefix: 'langs', group: 'volunteer-language'},
@@ -175,7 +229,6 @@
       if (!btn || !anySelect) return;
       const max = totalAvailable(anySelect);
       const chosen = countChosen(cfg.group);
-      const visibleRows = getVisibleRows(cfg.prefix).length;
       const hasBlankVisible = getVisibleRows(cfg.prefix).some(row => {
         const select = row.querySelector(`.js-unique-select[data-group="${cfg.group}"]`);
         return select && !select.value;
@@ -184,7 +237,6 @@
       btn.textContent = cfg.prefix === 'langs' ? '+ Добавить язык' : '+ Добавить навык';
     });
   }
-
   function refreshGroup(group) {
     const selects = Array.from(document.querySelectorAll(`.js-unique-select[data-group="${group}"]`))
       .filter(select => select.closest('.js-form-row')?.style.display !== 'none');
@@ -196,7 +248,6 @@
       });
     });
   }
-
   function initUniqueSelects() {
     document.querySelectorAll('.js-unique-select').forEach(select => {
       if (!select.dataset.bound) {
@@ -210,7 +261,6 @@
     ['volunteer-language', 'volunteer-skill'].forEach(refreshGroup);
     updateAddButtons();
   }
-
   function bindDistrictSelects() {
     const citySelect = document.getElementById('id_volunteer-city');
     const districtSelect = document.getElementById('id_volunteer-district');
@@ -220,18 +270,11 @@
       const current = districtSelect.value || districtSelect.dataset.selected || '';
       const options = data[citySelect.value] || [];
       districtSelect.innerHTML = '<option value="">---------</option>' + options.map(item => `<option value="${item.id}">${item.name}</option>`).join('');
-      if (options.some(item => String(item.id) === String(current))) {
-        districtSelect.value = String(current);
-      }
+      if (options.some(item => String(item.id) === String(current))) { districtSelect.value = String(current); }
     }
-    citySelect.addEventListener('change', () => {
-      districtSelect.dataset.selected = '';
-      districtSelect.value = '';
-      render();
-    });
+    citySelect.addEventListener('change', () => { districtSelect.dataset.selected = ''; districtSelect.value = ''; render(); });
     render();
   }
-
   function bindRemoveButtons(scope) {
     scope.querySelectorAll('.js-remove-form').forEach(btn => {
       if (btn.dataset.bound) return;
@@ -239,18 +282,13 @@
       btn.addEventListener('click', () => {
         const row = btn.closest('.js-form-row');
         const deleteInput = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
-        if (deleteInput) {
-          deleteInput.checked = true;
-          row.style.display = 'none';
-        } else {
-          row.remove();
-        }
+        if (deleteInput) { deleteInput.checked = true; row.style.display = 'none'; }
+        else { row.remove(); }
         ['volunteer-language', 'volunteer-skill'].forEach(refreshGroup);
         updateAddButtons();
       });
     });
   }
-
   function setupFormset(prefix, placeholders) {
     const container = document.getElementById(`${prefix}-forms`);
     const totalInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
@@ -272,7 +310,6 @@
     });
     bindRemoveButtons(container);
   }
-
   setupFormset('langs', {
     '__LANGUAGE__': `{{ language_formset.empty_form.language }}`,
     '__LEVEL__': `{{ language_formset.empty_form.level }}`,
@@ -287,16 +324,13 @@
   const toggleAllBtn = document.getElementById('toggle-all-availability');
   if (toggleAllBtn) {
     toggleAllBtn.addEventListener('click', () => {
-      const boxes = Array.from(document.querySelectorAll('.availability-grid input[type="checkbox"]'));
+      const boxes = Array.from(document.querySelectorAll('.p-avail-cell input[type="checkbox"]'));
       const allChecked = boxes.every(b => b.checked);
       boxes.forEach(b => { b.checked = !allChecked; });
     });
   }
-
   const errorBlock = document.getElementById('form-errors');
-  if (errorBlock) {
-    errorBlock.scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
+  if (errorBlock) { errorBlock.scrollIntoView({behavior: 'smooth', block: 'start'}); }
 })();
 </script>
 {% endblock %}

@@ -1,43 +1,91 @@
 {% extends "base.html" %}
 {% block title %}{{ page_title }}{% endblock %}
+
 {% block content %}
-<section class="page-shell mb-4">
-  <div class="page-head"><div><span class="eyebrow">Мероприятие</span><h1 class="page-title">{{ page_title }}</h1></div><a class="btn btn-outline-secondary" href="{% url 'events:org_dashboard' %}">Назад</a></div>
-</section>
-<section class="panel-card">
-  <form method="post">{% csrf_token %}
-    {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
-    <div class="form-grid form-grid--2">
-      <div class="field-block field-block--full"><label class="field-label">{{ form.title.label }}</label>{{ form.title }}</div>
-      <div class="field-block field-block--full"><label class="field-label">{{ form.description.label }}</label>{{ form.description }}</div>
-      <div class="field-block"><label class="field-label">{{ form.city.label }}</label>{{ form.city }}</div>
-      <div class="field-block"><label class="field-label">{{ form.district.label }}</label>{{ form.district }}</div>
-      <div class="field-block field-block--full"><label class="field-label">{{ form.address_text.label }}</label>{{ form.address_text }}</div>
-      <div class="field-block"><label class="field-label">{{ form.start_date.label }}</label>{{ form.start_date }}</div>
-      <div class="field-block"><label class="field-label">{{ form.end_date.label }}</label>{{ form.end_date }}</div>
-      <div class="field-block field-block--full"><label class="toggle-card toggle-card--simple">{{ form.is_public }}<span>{{ form.is_public.label }}</span></label></div>
+
+<div class="p-page-header">
+  <div>
+    <span class="p-eyebrow">Мероприятие</span>
+    <h1 class="p-page-title">{{ page_title }}</h1>
+  </div>
+  <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'events:org_dashboard' %}">← Назад</a>
+</div>
+
+<div class="p-section-card">
+  <form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="p-alert p-alert--error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="p-form-grid">
+      <div class="p-field p-field--full">
+        <label class="p-label">{{ form.title.label }}</label>
+        {{ form.title }}
+        {% if form.title.errors %}<div class="p-form-error">{{ form.title.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field p-field--full">
+        <label class="p-label">{{ form.description.label }}</label>
+        {{ form.description }}
+        {% if form.description.errors %}<div class="p-form-error">{{ form.description.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field">
+        <label class="p-label">{{ form.city.label }}</label>
+        {{ form.city }}
+        {% if form.city.errors %}<div class="p-form-error">{{ form.city.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field">
+        <label class="p-label">{{ form.district.label }}</label>
+        {{ form.district }}
+        {% if form.district.errors %}<div class="p-form-error">{{ form.district.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field p-field--full">
+        <label class="p-label">{{ form.address_text.label }}</label>
+        {{ form.address_text }}
+        {% if form.address_text.errors %}<div class="p-form-error">{{ form.address_text.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field">
+        <label class="p-label">{{ form.start_date.label }}</label>
+        {{ form.start_date }}
+        {% if form.start_date.errors %}<div class="p-form-error">{{ form.start_date.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="p-field">
+        <label class="p-label">{{ form.end_date.label }}</label>
+        {{ form.end_date }}
+        {% if form.end_date.errors %}<div class="p-form-error">{{ form.end_date.errors.0 }}</div>{% endif %}
+      </div>
     </div>
-    <div class="action-row mt-4"><button class="btn btn-primary">Сохранить</button></div>
+
+    <label class="p-toggle-card" style="margin-top:.5rem;display:inline-flex;">
+      {{ form.is_public }}
+      <span>{{ form.is_public.label }}</span>
+    </label>
+
+    <div class="p-action-row">
+      <button class="p-btn p-btn--primary p-btn--lg" type="submit">Сохранить</button>
+      <a class="p-btn p-btn--ghost" href="{% url 'events:org_dashboard' %}">Отмена</a>
+    </div>
   </form>
-</section>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
 {{ district_map|json_script:"event-district-map" }}
 <script>
 (function(){
- const city=document.getElementById('id_city');
- const district=document.getElementById('id_district');
- if(!city||!district) return;
- const data=JSON.parse(document.getElementById('event-district-map').textContent||'{}');
- function render(){
-   const current = district.value || district.dataset.selected || '';
-   const options=data[city.value]||[];
-   district.innerHTML = '<option value="">---------</option>' + options.map(item=>`<option value="${item.id}">${item.name}</option>`).join('');
-   if(options.some(item=>String(item.id)===String(current))){district.value=String(current);}
- }
- city.addEventListener('change', ()=>{ district.dataset.selected=''; district.value=''; render(); });
- render();
+  const city = document.getElementById('id_city');
+  const district = document.getElementById('id_district');
+  if (!city || !district) return;
+  const data = JSON.parse(document.getElementById('event-district-map').textContent || '{}');
+  function render() {
+    const current = district.value || district.dataset.selected || '';
+    const options = data[city.value] || [];
+    district.innerHTML = '<option value="">---------</option>' + options.map(item => `<option value="${item.id}">${item.name}</option>`).join('');
+    if (options.some(item => String(item.id) === String(current))) { district.value = String(current); }
+  }
+  city.addEventListener('change', () => { district.dataset.selected = ''; district.value = ''; render(); });
+  render();
 })();
 </script>
 {% endblock %}
