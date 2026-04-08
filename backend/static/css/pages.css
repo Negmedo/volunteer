@@ -1,0 +1,834 @@
+/* ============================================================
+   VolunteerSKO, pages.css
+   Стили внутренних страниц в стиле Civic / Organic
+   Подключить в base.html ПОСЛЕ app.css:
+   <link href="/static/css/pages.css" rel="stylesheet">
+   ============================================================ */
+
+/* ── Переменные (совпадают с темой главной) ── */
+:root {
+  --p-green:     #2d6a4f;
+  --p-green-dk:  #1b4332;
+  --p-green-lt:  #d8f3dc;
+  --p-green-mid: #52b788;
+  --p-sand:      #f5f0eb;
+  --p-cream:     #faf7f4;
+  --p-ink:       #1c2b1e;
+  --p-muted:     #6b7280;
+  --p-border:    #e5e7eb;
+  --p-surface:   #ffffff;
+  --p-amber:     #e9c46a;
+  --p-red:       #dc2626;
+  --p-red-lt:    #fee2e2;
+  --p-yellow-lt: #fef3c7;
+  --p-radius:    16px;
+  --p-radius-sm: 10px;
+  --p-shadow:    0 2px 12px rgba(28,43,30,.07);
+  --p-shadow-md: 0 4px 20px rgba(28,43,30,.10);
+}
+
+/* ── Body & reset для внутренних страниц ── */
+body {
+  background: var(--p-sand);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Main контейнер (убирает Bootstrap padding для внутренних страниц) ── */
+.vsk-main .container {
+  max-width: 1140px;
+  padding-top: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+/* ============================================================
+   AUTH — Вход / Регистрация
+   ============================================================ */
+.p-auth-shell {
+  min-height: calc(100vh - 128px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: var(--p-sand);
+}
+
+.p-auth-card {
+  background: var(--p-surface);
+  border-radius: 24px;
+  border: 1px solid var(--p-border);
+  box-shadow: var(--p-shadow-md);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  animation: p-fadeUp .5s ease both;
+}
+
+.p-auth-logo {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, var(--p-green), var(--p-green-mid));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 auto 1.5rem;
+}
+
+.p-auth-title {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--p-ink);
+  text-align: center;
+  margin-bottom: .4rem;
+  letter-spacing: -.02em;
+}
+
+.p-auth-subtitle {
+  font-size: .88rem;
+  color: var(--p-muted);
+  text-align: center;
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
+}
+
+.p-auth-card .field-block {
+  margin-bottom: 1rem;
+}
+
+.p-auth-divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.25rem 0;
+  color: var(--p-muted);
+  font-size: .8rem;
+}
+.p-auth-divider::before,
+.p-auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--p-border);
+}
+
+/* ============================================================
+   PAGE HEADER — общий для всех внутренних страниц
+   ============================================================ */
+.p-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.p-eyebrow {
+  display: block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--p-green);
+  margin-bottom: .35rem;
+}
+
+.p-page-title {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 900;
+  color: var(--p-ink);
+  margin: 0 0 .3rem;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.p-page-subtitle {
+  font-size: .9rem;
+  color: var(--p-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   HERO BANNER — кабинет волонтёра
+   ============================================================ */
+.p-hero-banner {
+  background: linear-gradient(135deg, var(--p-green-dk) 0%, var(--p-green) 100%);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.p-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,.07);
+  border-radius: 50%;
+}
+.p-hero-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: 30%;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,.05);
+  border-radius: 50%;
+}
+
+.p-hero-banner__label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.65);
+  margin-bottom: .4rem;
+}
+
+.p-hero-banner__title {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 .3rem;
+  letter-spacing: -.02em;
+}
+
+.p-hero-banner__sub {
+  font-size: .88rem;
+  color: rgba(255,255,255,.72);
+}
+
+/* Кольцо заполненности */
+.p-completion-ring {
+  background: rgba(255,255,255,.12);
+  border: 2px solid rgba(255,255,255,.25);
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  min-width: 120px;
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.p-completion-ring__label {
+  font-size: .72rem;
+  color: rgba(255,255,255,.65);
+  font-weight: 600;
+  margin-bottom: .25rem;
+}
+.p-completion-ring__value {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+/* ============================================================
+   КАРТОЧКИ / ПАНЕЛИ
+   ============================================================ */
+.p-card {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-radius);
+  padding: 1.5rem;
+  box-shadow: var(--p-shadow);
+  margin-bottom: 1.25rem;
+}
+
+.p-card-title {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--p-ink);
+  margin: 0 0 1rem;
+  letter-spacing: -.01em;
+}
+
+.p-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.1rem;
+}
+
+.p-card-head-left { min-width: 0; }
+
+/* ============================================================
+   СПИСОК ПОЗИЦИЙ / МЕРОПРИЯТИЙ (строки)
+   ============================================================ */
+.p-item-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--p-border);
+}
+.p-item-row:last-child { border-bottom: none; padding-bottom: 0; }
+.p-item-row:first-child { padding-top: 0; }
+
+.p-item-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--p-ink);
+  margin-bottom: .2rem;
+}
+.p-item-meta {
+  font-size: .8rem;
+  color: var(--p-muted);
+  line-height: 1.5;
+}
+.p-item-desc {
+  font-size: .85rem;
+  color: #4b5563;
+  margin-top: .35rem;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   СТАТУС-БЕЙДЖИ
+   ============================================================ */
+.p-badge {
+  display: inline-block;
+  font-size: .74rem;
+  font-weight: 700;
+  padding: .25rem .75rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.p-badge--applied   { background: #dbeafe; color: #1e40af; }
+.p-badge--assigned  { background: var(--p-yellow-lt); color: #92400e; }
+.p-badge--confirmed { background: var(--p-green-lt); color: var(--p-green-dk); }
+.p-badge--declined  { background: var(--p-red-lt); color: #991b1b; }
+.p-badge--completed { background: #f3f4f6; color: #374151; }
+.p-badge--new       { background: var(--p-green-lt); color: var(--p-green-dk); }
+
+/* ============================================================
+   ТЕГИ
+   ============================================================ */
+.p-tags-row {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+  margin-top: .75rem;
+}
+.p-tag {
+  font-size: .76rem;
+  font-weight: 600;
+  padding: .25rem .7rem;
+  border-radius: 100px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid var(--p-border);
+}
+.p-tag--green  { background: var(--p-green-lt); color: var(--p-green-dk); border-color: #b7e4c7; }
+.p-tag--blue   { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+.p-tag--amber  { background: var(--p-yellow-lt); color: #92400e; border-color: #fde68a; }
+.p-tag--red    { background: var(--p-red-lt); color: #991b1b; border-color: #fca5a5; }
+
+/* ============================================================
+   КНОПКИ (в едином стиле с главной)
+   ============================================================ */
+.p-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .5rem 1.2rem;
+  border-radius: 100px;
+  font-size: .875rem;
+  font-weight: 700;
+  font-family: 'Nunito', 'Inter', sans-serif;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, transform .1s, box-shadow .15s, border-color .15s;
+  white-space: nowrap;
+  line-height: 1;
+}
+.p-btn:focus-visible { outline: 2px solid var(--p-green); outline-offset: 2px; }
+
+.p-btn--primary {
+  background: var(--p-green);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(45,106,79,.22);
+}
+.p-btn--primary:hover { background: var(--p-green-dk); transform: translateY(-1px); color: #fff; }
+
+.p-btn--outline {
+  background: #fff;
+  color: var(--p-green);
+  border: 1.5px solid var(--p-green);
+}
+.p-btn--outline:hover { background: var(--p-green-lt); color: var(--p-green-dk); }
+
+.p-btn--ghost {
+  background: var(--p-surface);
+  color: #374151;
+  border: 1.5px solid var(--p-border);
+}
+.p-btn--ghost:hover { border-color: #9ca3af; background: #f9fafb; }
+
+.p-btn--danger {
+  background: var(--p-red-lt);
+  color: var(--p-red);
+  border: 1.5px solid #fca5a5;
+}
+.p-btn--danger:hover { background: var(--p-red); color: #fff; border-color: var(--p-red); }
+
+.p-btn--sm { padding: .35rem .9rem; font-size: .8rem; }
+.p-btn--lg { padding: .75rem 1.8rem; font-size: 1rem; }
+
+/* ============================================================
+   ФОРМЫ — поля
+   ============================================================ */
+.p-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  margin-bottom: 1rem;
+}
+.p-field--full { grid-column: 1 / -1; }
+
+.p-label {
+  font-size: .83rem;
+  font-weight: 600;
+  color: var(--p-ink);
+}
+
+.p-field input,
+.p-field select,
+.p-field textarea,
+.p-card input[type="text"],
+.p-card input[type="email"],
+.p-card input[type="password"],
+.p-card input[type="number"],
+.p-card input[type="date"],
+.p-card select,
+.p-card textarea {
+  width: 100%;
+  border: 1.5px solid var(--p-border);
+  border-radius: var(--p-radius-sm);
+  padding: .6rem .9rem;
+  font-size: .9rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--p-ink);
+  background: #fff;
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+.p-field input:focus,
+.p-field select:focus,
+.p-field textarea:focus,
+.p-card input:focus,
+.p-card select:focus,
+.p-card textarea:focus {
+  border-color: var(--p-green);
+  box-shadow: 0 0 0 3px rgba(45,106,79,.12);
+}
+
+.p-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 600px) { .p-form-grid { grid-template-columns: 1fr; } }
+
+.p-form-error {
+  font-size: .8rem;
+  color: var(--p-red);
+  margin-top: .2rem;
+}
+
+.p-alert {
+  border-radius: var(--p-radius-sm);
+  padding: .85rem 1.1rem;
+  font-size: .88rem;
+  margin-bottom: 1.1rem;
+  line-height: 1.6;
+}
+.p-alert--error   { background: var(--p-red-lt); color: #991b1b; border-left: 3px solid var(--p-red); }
+.p-alert--success { background: var(--p-green-lt); color: var(--p-green-dk); border-left: 3px solid var(--p-green); }
+.p-alert--warning { background: var(--p-yellow-lt); color: #92400e; border-left: 3px solid #f59e0b; }
+.p-alert--info    { background: #dbeafe; color: #1e40af; border-left: 3px solid #3b82f6; }
+
+/* ============================================================
+   TOGGLE-КАРТОЧКИ (чекбоксы)
+   ============================================================ */
+.p-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: .6rem;
+  margin-top: .5rem;
+}
+.p-toggle-card {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .7rem .9rem;
+  border: 1.5px solid var(--p-border);
+  border-radius: var(--p-radius-sm);
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--p-ink);
+  transition: border-color .15s, background .15s;
+  background: #fff;
+}
+.p-toggle-card:hover { border-color: var(--p-green); background: var(--p-green-lt); }
+.p-toggle-card input[type="checkbox"] { accent-color: var(--p-green); width: 16px; height: 16px; flex-shrink: 0; }
+
+/* ============================================================
+   AVAILABILITY GRID
+   ============================================================ */
+.p-avail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: .45rem;
+  margin-top: .5rem;
+}
+.p-avail-cell {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .55rem .75rem;
+  border: 1.5px solid var(--p-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .78rem;
+  color: #374151;
+  background: #fff;
+  transition: border-color .15s, background .15s;
+}
+.p-avail-cell:hover { border-color: var(--p-green); background: var(--p-green-lt); }
+.p-avail-cell input[type="checkbox"]:checked + span { color: var(--p-green-dk); font-weight: 600; }
+.p-avail-cell input[type="checkbox"] { accent-color: var(--p-green); flex-shrink: 0; }
+
+/* ============================================================
+   INLINE FORMSET СТРОКИ (языки, навыки)
+   ============================================================ */
+.p-inline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: .75rem;
+  align-items: end;
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--p-border);
+}
+.p-inline-row:last-child { border-bottom: none; }
+
+/* ============================================================
+   УВЕДОМЛЕНИЯ
+   ============================================================ */
+.p-notif-item {
+  display: flex;
+  gap: .9rem;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--p-border);
+}
+.p-notif-item:last-child { border-bottom: none; }
+
+.p-notif-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+  background: var(--p-border);
+}
+.p-notif-item--unread .p-notif-dot { background: var(--p-green); }
+
+.p-notif-title {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--p-ink);
+  margin-bottom: .2rem;
+}
+.p-notif-body {
+  font-size: .84rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: .3rem;
+}
+.p-notif-time {
+  font-size: .76rem;
+  color: var(--p-muted);
+}
+
+/* ============================================================
+   КАРТОЧКА ПОЗИЦИИ в detail мероприятия
+   ============================================================ */
+.p-position-card {
+  border: 1.5px solid var(--p-border);
+  border-radius: var(--p-radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--p-cream);
+  transition: box-shadow .2s;
+}
+.p-position-card:hover { box-shadow: var(--p-shadow); }
+.p-position-card:last-child { margin-bottom: 0; }
+
+.p-position-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-bottom: .6rem;
+}
+
+.p-position-title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--p-ink);
+  margin-bottom: .2rem;
+}
+
+/* Блок откликов внутри позиции */
+.p-applications-box {
+  background: #fff;
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-radius-sm);
+  padding: .9rem 1rem;
+  margin-top: .9rem;
+}
+.p-applications-box__head {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--p-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .6rem;
+}
+.p-application-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--p-border);
+  flex-wrap: wrap;
+}
+.p-application-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+/* ============================================================
+   COMPLETION BAR
+   ============================================================ */
+.p-completion-bar-wrap {
+  background: rgba(255,255,255,.2);
+  border-radius: 100px;
+  height: 6px;
+  margin-top: .5rem;
+  overflow: hidden;
+  width: 120px;
+}
+.p-completion-bar {
+  height: 6px;
+  border-radius: 100px;
+  background: #fff;
+  transition: width .5s ease;
+}
+
+/* ============================================================
+   ACTION ROW (кнопки внизу формы)
+   ============================================================ */
+.p-action-row {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.p-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--p-muted);
+}
+.p-empty__icon { font-size: 2.5rem; margin-bottom: .75rem; }
+.p-empty__title {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #374151;
+  margin-bottom: .4rem;
+}
+.p-empty__sub { font-size: .88rem; }
+
+/* ============================================================
+   АНИМАЦИЯ появления (для карточек)
+   ============================================================ */
+@keyframes p-fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.p-card   { animation: p-fadeUp .4s ease both; }
+.p-card:nth-child(2) { animation-delay: .07s; }
+.p-card:nth-child(3) { animation-delay: .14s; }
+
+/* ============================================================
+   ПЕРЕОПРЕДЕЛЕНИЕ Bootstrap-полей в контексте новых карточек
+   — чтобы форма из Django выглядела в Civic стиле
+   ============================================================ */
+.p-card .form-control,
+.p-card .form-select {
+  border: 1.5px solid var(--p-border) !important;
+  border-radius: var(--p-radius-sm) !important;
+  padding: .6rem .9rem !important;
+  font-size: .9rem !important;
+  color: var(--p-ink) !important;
+  background: #fff !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+.p-card .form-control:focus,
+.p-card .form-select:focus {
+  border-color: var(--p-green) !important;
+  box-shadow: 0 0 0 3px rgba(45,106,79,.12) !important;
+}
+.p-card select { appearance: auto; }
+
+/* field-block (Bootstrap-style class из старых форм) */
+.p-card .field-block { margin-bottom: 1rem; }
+.p-card .field-label {
+  display: block;
+  font-size: .83rem;
+  font-weight: 600;
+  color: var(--p-ink);
+  margin-bottom: .35rem;
+}
+.p-card .form-grid { gap: 1rem; }
+.p-card .field-block--full { grid-column: 1 / -1; }
+
+/* toggle-card внутри p-card */
+.p-card .toggle-card {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem .9rem;
+  border: 1.5px solid var(--p-border);
+  border-radius: var(--p-radius-sm);
+  cursor: pointer;
+  font-size: .85rem;
+  color: var(--p-ink);
+  transition: border-color .15s, background .15s;
+  background: #fff;
+}
+.p-card .toggle-card:hover { border-color: var(--p-green); background: var(--p-green-lt); }
+.p-card .toggle-card input { accent-color: var(--p-green); }
+.p-card .toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: .6rem;
+}
+.p-card .availability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: .4rem;
+  margin-top: .5rem;
+}
+.p-card .availability-cell {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .5rem .7rem;
+  border: 1.5px solid var(--p-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .78rem;
+  color: #374151;
+  background: #fff;
+  transition: border-color .15s, background .15s;
+}
+.p-card .availability-cell:hover { border-color: var(--p-green); background: var(--p-green-lt); }
+.p-card .availability-cell input { accent-color: var(--p-green); }
+.p-card .choice-cloud label {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .75rem; margin: .25rem .2rem;
+  border: 1.5px solid var(--p-border); border-radius: 100px;
+  font-size: .82rem; cursor: pointer; background: #fff;
+  transition: border-color .15s, background .15s;
+}
+.p-card .choice-cloud input[type="checkbox"]:checked + span,
+.p-card .choice-cloud label:has(input:checked) {
+  border-color: var(--p-green);
+  background: var(--p-green-lt);
+  color: var(--p-green-dk);
+}
+.p-card .inline-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: .75rem;
+  align-items: end;
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--p-border);
+}
+.p-card .inline-form-row:last-child { border-bottom: none; }
+.p-card .inline-form-list { margin-top: .5rem; }
+
+/* ============================================================
+   СЕКЦИИ анкеты / формы
+   ============================================================ */
+.p-section-card {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-radius);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--p-shadow);
+  animation: p-fadeUp .4s ease both;
+}
+.p-section-card + .p-section-card { animation-delay: .06s; }
+.p-section-card:nth-child(3) { animation-delay: .12s; }
+.p-section-card:nth-child(4) { animation-delay: .18s; }
+.p-section-card:nth-child(5) { animation-delay: .22s; }
+.p-section-card:nth-child(6) { animation-delay: .26s; }
+
+.p-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--p-border);
+}
+
+.p-section-title {
+  font-family: 'Nunito', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--p-ink);
+  margin: 0;
+  letter-spacing: -.01em;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .p-hero-banner { padding: 1.5rem; }
+  .p-page-header { gap: .75rem; }
+  .p-form-grid { grid-template-columns: 1fr !important; }
+  .p-card .form-grid { grid-template-columns: 1fr !important; }
+  .p-inline-row { grid-template-columns: 1fr; }
+}
