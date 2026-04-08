@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}Подбор: {{ position.title }}{% endblock %}
+
+{% block content %}
+<section class="page-shell mb-4">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">СППР · интеллектуальный подбор</span>
+      <h1 class="page-title">{{ position.title }}</h1>
+      <p class="page-subtitle">
+        Мероприятие: {{ position.event.title }}
+        {% if ml_available %}
+          &nbsp;·&nbsp;<span style="color:var(--success);font-weight:700;">🤖 ML-модуль активен</span>
+        {% else %}
+          &nbsp;·&nbsp;<span style="color:var(--warning);font-weight:700;">⚠ Локальный скоринг</span>
+        {% endif %}
+      </p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' position.event_id %}">
+      ← Назад к мероприятию
+    </a>
+  </div>
+</section>
+
+{# Требования роли #}
+<section class="panel-card mb-4">
+  <div class="section-head">
+    <span class="eyebrow">Требования позиции</span>
+    <h2 class="section-title">Что ищем</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
+    <div>
+      <div class="field-label">Обязательные навыки</div>
+      {% for item in position.required_skill_items.all %}
+        <span class="tag tag--required">{{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+    </div>
+    <div>
+      <div class="field-label">Желательные навыки</div>
+      {% for item in position.optional_skill_items.all %}
+        <span class="tag tag--optional">{{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+    </div>
+    <div>
+      <div class="field-label">Языки</div>
+      {% for item in position.language_requirements.all %}
+        <span class="tag tag--language">{{ item.language.name }} · {{ item.get_min_level_display }}</span>
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+    </div>
+    <div>
+      <div class="field-label">Условия</div>
+      <div style="font-size:.86rem;color:var(--text-2);display:flex;flex-direction:column;gap:.2rem;">
+        {% if position.requires_car %}<span>🚗 Нужен автомобиль</span>{% endif %}
+        {% if position.requires_night_shift %}<span>🌙 Ночные смены</span>{% endif %}
+        {% if position.requires_physical_work %}<span>💪 Физическая нагрузка</span>{% endif %}
+        {% if not position.requires_car and not position.requires_night_shift and not position.requires_physical_work %}
+          <span style="color:var(--muted);">особых требований нет</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if recommendations %}
+  <section class="panel-card mb-4">
+    <div class="section-head">
+      <span class="eyebrow">Рекомендации</span>
+      <h2 class="section-title">Советы координатору</h2>
+    </div>
+    <ul style="margin:0;padding-left:1.25rem;display:grid;gap:.4rem;">
+      {% for item in recommendations %}
+        <li style="color:var(--text-2);font-size:.92rem;">{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}
+
+{# Строгий подбор #}
+<section class="panel-card mb-4">
+  <div class="section-head section-head--split">
+    <div>
+      <span class="eyebrow">Строгий режим · все критерии пройдены</span>
+      <h2 class="section-title">Точное соответствие</h2>
+      <p class="page-subtitle mb-0">Hard filter + все обязательные требования</p>
+    </div>
+    {% if strict_results %}
+      <span class="status-badge status-badge--assigned">{{ strict_results|length }} кандидат{{ strict_results|length|pluralize:",,ов" }}</span>
+    {% endif %}
+  </div>
+
+  {% if strict_results %}
+    <div class="matching-table">
+      <div class="matching-head">
+        <div>Итог</div>
+        <div>ML</div>
+        <div>Навыки</div>
+        <div>Надёжность</div>
+        <div>Волонтёр</div>
+        <div>Объяснение</div>
+        <div></div>
+      </div>
+      {% for item in strict_results %}
+        <div class="matching-row">
+          <div><div class="matching-score">{{ item.score }}</div></div>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:var(--accent-2);">{{ item.ml_score }}</div>
+            <div style="font-size:.72rem;color:var(--muted);">ml_score</div>
+          </div>
+          <div>
+            <div style="font-size:.9rem;font-weight:600;">{{ item.skill_score }}</div>
+            <div style="font-size:.72rem;color:var(--muted);">навыки</div>
+          </div>
+          <div>
+            <div style="font-size:.9rem;font-weight:600;">{{ item.reliability }}</div>
+            <div style="font-size:.72rem;color:var(--muted);">надёжность</div>
+          </div>
+          <div>
+            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-2);">
+            {{ item.reasons|join:", " }}
+            {% if item.features %}
+              <details style="margin-top:.35rem;">
+                <summary style="cursor:pointer;color:var(--accent);font-size:.78rem;">признаки ↓</summary>
+                <div style="margin-top:.35rem;display:grid;gap:.15rem;font-size:.8rem;">
+                  {% for key, val in item.features.items %}
+                    <div style="display:flex;justify-content:space-between;gap:.75rem;">
+                      <span style="color:var(--muted);">{{ key }}</span>
+                      <span style="font-weight:700;">{{ val }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              </details>
+            {% endif %}
+          </div>
+          <div>
+            <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
+              {% csrf_token %}<button class="btn btn-sm btn-primary">Назначить</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="padding:1.5rem 0;text-align:center;color:var(--muted);">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">🔎</div>
+      По строгим критериям кандидаты не найдены.
+      {% if relaxed_results %} Смотрите расширенный подбор ниже.{% endif %}
+    </div>
+  {% endif %}
+</section>
+
+{# Расширенный подбор #}
+<section class="panel-card mb-4">
+  <div class="section-head section-head--split">
+    <div>
+      <span class="eyebrow">Расширенный режим · частичное соответствие</span>
+      <h2 class="section-title">Ослабленные критерии</h2>
+      <p class="page-subtitle mb-0">Кандидаты с частичным совпадением — назначать вручную</p>
+    </div>
+    {% if relaxed_results %}
+      <span class="status-badge status-badge--reviewed">{{ relaxed_results|length }} кандидат{{ relaxed_results|length|pluralize:",,ов" }}</span>
+    {% endif %}
+  </div>
+  {% if relaxed_results %}
+    <div class="matching-table">
+      <div class="matching-head">
+        <div>Итог</div><div>ML</div><div>Навыки</div><div>Надёжность</div><div>Волонтёр</div><div>Объяснение</div><div></div>
+      </div>
+      {% for item in relaxed_results %}
+        <div class="matching-row matching-row--relaxed">
+          <div><div class="matching-score" style="color:var(--warning);">{{ item.score }}</div></div>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:var(--warning);">{{ item.ml_score }}</div>
+            <div style="font-size:.72rem;color:var(--muted);">ml_score</div>
+          </div>
+          <div><div style="font-size:.9rem;font-weight:600;">{{ item.skill_score }}</div></div>
+          <div><div style="font-size:.9rem;font-weight:600;">{{ item.reliability }}</div></div>
+          <div>
+            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
+          </div>
+          <div style="font-size:.82rem;color:var(--text-2);">{{ item.reasons|join:", " }}</div>
+          <div>
+            <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
+              {% csrf_token %}<button class="btn btn-sm btn-outline-primary">Назначить вручную</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="padding:1.5rem 0;text-align:center;color:var(--muted);">
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">😔</div>
+      Даже после ослабления критериев кандидаты не найдены.
+    </div>
+  {% endif %}
+</section>
+
+{# Методологический блок — для диплома и демонстрации #}
+<section class="panel-card" style="background:var(--surface-2);">
+  <div class="section-head">
+    <span class="eyebrow">Методология СППР</span>
+    <h2 class="section-title">Как работает интеллектуальный подбор</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;font-size:.87rem;color:var(--text-2);">
+    <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">① Hard filter</div>
+      Жёсткое исключение по ограничениям: транспорт, ночные смены, физнагрузка, локация. Кандидат не проходит — до ML не доходит.
+    </div>
+    <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">② Вектор признаков</div>
+      7 нормированных признаков [0–1]: skill_match, language_match, availability_match, location_match, reliability_score, experience_score, motivation_match.
+    </div>
+    <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">③ ML-сервис</div>
+      Признаки → POST /predict → Flask endpoint. Возвращает ml_score и текстовые объяснения. Fallback на локальный скоринг если сервис недоступен.
+    </div>
+    <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">④ Гибридный балл</div>
+      <code style="font-size:.84rem;background:#f1f5f9;padding:.2rem .4rem;border-radius:.4rem;">0.5 × ml_score + 0.3 × skill + 0.2 × reliability</code>
+      <br>Список отсортирован по убыванию итогового балла.
+    </div>
+  </div>
+</section>
+{% endblock %}

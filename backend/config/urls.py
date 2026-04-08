@@ -1,16 +1,12 @@
 from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
     path("", include("apps.landing.urls")),
     path("accounts/", include("apps.accounts.urls")),
     path("events/", include("apps.events.urls")),
+    path("applications/", include("apps.applications.urls")),
+    path("notifications/", include("apps.notifications.urls")),
     path("matching/", include("apps.matching.urls")),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

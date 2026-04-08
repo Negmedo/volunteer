@@ -1,14 +1,15 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import pymysql
 
+pymysql.install_as_MySQLdb()
+load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR.parent / ".env")
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-secret")
-DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
-
-ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h.strip()]
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+DEBUG = os.getenv("DEBUG", "1") == "1"
+ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "*").split(",") if h.strip()]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -17,12 +18,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    "apps.accounts",
-    "apps.landing",
-    "apps.events",
-    "apps.matching",
     "apps.core",
+    "apps.accounts",
+    "apps.events",
+    "apps.applications",
+    "apps.notifications",
+    "apps.landing",
+    "apps.matching",
 ]
 
 MIDDLEWARE = [
@@ -48,12 +50,14 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.notifications.context_processors.unread_notifications_count",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 DATABASES = {
     "default": {
@@ -63,33 +67,35 @@ DATABASES = {
         "PASSWORD": os.getenv("DB_PASSWORD", "apppass"),
         "HOST": os.getenv("DB_HOST", "db"),
         "PORT": os.getenv("DB_PORT", "3306"),
-        "OPTIONS": {
-            "charset": "utf8mb4",
-        },
+        "OPTIONS": {"charset": "utf8mb4"},
     }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", "OPTIONS": {"min_length": 8}},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 LANGUAGE_CODE = "ru-ru"
-TIME_ZONE = "Asia/Qyzylorda"
+TIME_ZONE = "Asia/Almaty"
 USE_I18N = True
 USE_TZ = True
-
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-
-MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "accounts:dashboard"
-LOGOUT_REDIRECT_URL = "landing:landing"
+LOGOUT_REDIRECT_URL = "landing:home"
+
+# ── ML-сервис ─────────────────────────────────────────────────
+# URL Flask-endpoint для интеллектуального подбора.
+# В Docker: http://ml:8765/predict
+# Локально: http://localhost:8765/predict
+ML_SERVICE_URL = os.getenv("ML_SERVICE_URL", "http://ml:8765/predict")
+ 
+# Таймаут запроса к ML-сервису (секунды).
+# При превышении Django использует fallback — локальный скоринг.
+ML_SERVICE_TIMEOUT = int(os.getenv("ML_SERVICE_TIMEOUT", "3"))
+ 

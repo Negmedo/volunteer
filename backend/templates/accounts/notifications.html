@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Уведомления{% endblock %}
+
+{% block content %}
+
+<div class="p-page-header">
+  <div>
+    <span class="p-eyebrow">Кабинет</span>
+    <h1 class="p-page-title">Уведомления</h1>
+    <p class="p-page-subtitle">Назначения, отклики и системные сообщения</p>
+  </div>
+  <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+    <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'notifications:mark_all_read' %}">
+      Отметить все прочитанными
+    </a>
+    <a class="p-btn p-btn--outline p-btn--sm" href="{% url 'accounts:dashboard' %}">← Назад</a>
+  </div>
+</div>
+
+<div class="p-card">
+  {% if notifications %}
+    {% for item in notifications %}
+      <div class="p-notif-item {% if not item.is_read %}p-notif-item--unread{% endif %}">
+        <div class="p-notif-dot"></div>
+        <div style="flex:1;min-width:0;">
+          <div class="p-notif-title">{{ item.title }}</div>
+          {% if item.body %}
+            <div class="p-notif-body">{{ item.body }}</div>
+          {% endif %}
+          <div class="p-notif-time">{{ item.created_at|date:"d.m.Y H:i" }}</div>
+        </div>
+        {% if not item.is_read %}
+          <span class="p-badge p-badge--new" style="flex-shrink:0;">Новое</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="p-empty">
+      <div class="p-empty__icon">🔔</div>
+      <div class="p-empty__title">Уведомлений пока нет</div>
+      <div class="p-empty__sub">Здесь появятся уведомления о назначениях и откликах</div>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

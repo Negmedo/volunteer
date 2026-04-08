@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Удалить мероприятие{% endblock %}
+
+{% block content %}
+<div class="delete-shell">
+  <div class="delete-card">
+    <div class="delete-card__icon">🗑️</div>
+    <h1 class="delete-card__title">Удалить мероприятие?</h1>
+    <p class="delete-card__subject">«{{ event.title }}»</p>
+    <p class="delete-card__warn">
+      Это действие необратимо. Вместе с мероприятием будут удалены все роли, отклики и назначения.
+    </p>
+    <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Да, удалить</button>
+      </form>
+      <a href="{% url 'events:event_detail' event.id %}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

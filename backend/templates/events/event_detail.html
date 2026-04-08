@@ -2,117 +2,108 @@
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
-<section class="page-hero-card">
+
+<div class="p-page-header">
   <div>
-    <span class="eyebrow">Карточка мероприятия</span>
-    <h1 class="page-title mb-2">{{ event.title }}</h1>
-    <p class="page-subtitle mb-2">{{ event.description|default:"Описание пока не заполнено." }}</p>
+    <span class="p-eyebrow">Мероприятие</span>
+    <h1 class="p-page-title">{{ event.title }}</h1>
+    <p class="p-page-subtitle">
+      {% if event.start_date %}{{ event.start_date }}{% if event.end_date %} — {{ event.end_date }}{% endif %}{% endif %}
+      {% if event.city %} · {{ event.city }}{% endif %}
+      {% if event.district %} · {{ event.district.name }}{% endif %}
+      {% if not event.is_public %} · <span style="color:#d97706;font-weight:700;">🔒 Скрыто</span>{% endif %}
+    </p>
+  </div>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+    <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'events:event_update' event.id %}">Редактировать</a>
+    <a class="p-btn p-btn--danger p-btn--sm" href="{% url 'events:event_delete' event.id %}">Удалить</a>
+    <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+  </div>
+</div>
 
-    <div class="meta-chips">
-      {% if event.city %}<span class="meta-chip">Город: {{ event.city }}</span>{% endif %}
-      {% if event.district %}<span class="meta-chip">Район: {{ event.district }}</span>{% endif %}
-      {% if event.start_date %}<span class="meta-chip">Начало: {{ event.start_date }}</span>{% endif %}
-      {% if event.end_date %}<span class="meta-chip">Окончание: {{ event.end_date }}</span>{% endif %}
+{% if event.description %}
+  <div class="p-card" style="margin-bottom:1.25rem;">
+    <p style="margin:0;color:#4b5563;line-height:1.75;font-size:.9rem;">{{ event.description }}</p>
+  </div>
+{% endif %}
+
+<div class="p-card">
+  <div class="p-card-head">
+    <div class="p-card-head-left">
+      <span class="p-eyebrow">Роли</span>
+      <h2 class="p-card-title" style="margin-bottom:0;">Позиции мероприятия</h2>
     </div>
+    <span style="font-size:.84rem;color:#6b7280;">{{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
   </div>
 
-  <div class="action-row action-row--wrap">
-    <a href="{{ back_url }}" class="btn btn-brand-outline">{{ back_label }}</a>
-
-    {% if user.is_authenticated and volunteer_profile and can_apply_to_event %}
-      <form method="post" action="{% url 'events:apply_to_event' event.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="from" value="{{ back_source }}">
-        <button type="submit" class="btn btn-brand">Откликнуться на мероприятие</button>
-      </form>
-    {% endif %}
-  </div>
-</section>
-
-<section class="panel-card">
-  <div class="section-head section-head--tight">
-    <div>
-      <h2 class="section-title section-title--sm">Роли и позиции</h2>
-      <p class="section-subtitle">Здесь видно, на какие роли можно откликнуться и какие требования действуют.</p>
-    </div>
-  </div>
-
-  {% if positions %}
-    <div class="position-list">
-      {% for position in positions %}
-        <article class="position-card">
-          <div class="position-card__head">
-            <div>
-              <h3 class="position-card__title">{{ position.title }}</h3>
-              {% if position.description %}
-                <p class="position-card__desc">{{ position.description }}</p>
-              {% endif %}
-            </div>
-
-            <div class="position-card__meta">
-              <span class="status-pill">{{ position.get_status_display }}</span>
-              <span class="meta-chip">Свободно: {{ position.open_slots }} / {{ position.slots_total }}</span>
-            </div>
+  {% for position in event.positions.all %}
+    <div class="p-position-card">
+      <div class="p-position-card__head">
+        <div>
+          <h3 class="p-position-title">{{ position.title }}</h3>
+          <div style="font-size:.82rem;color:#6b7280;display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.15rem;">
+            {% if position.direction %}<span>{{ position.direction }}</span>{% endif %}
+            {% if position.task_type %}<span>{{ position.task_type }}</span>{% endif %}
+            <span>👥 Нужно: {{ position.slots_total }}</span>
           </div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+          <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'matching:position_matching' position.id %}">Подбор</a>
+          <a class="p-btn p-btn--ghost p-btn--sm" href="{% url 'events:position_update' position.id %}">Редактировать</a>
+          <a class="p-btn p-btn--danger p-btn--sm" href="{% url 'events:position_delete' position.id %}">Удалить</a>
+        </div>
+      </div>
 
-          <div class="position-card__grid">
-            <div>
-              <div class="mini-label">Минимальный опыт</div>
-              <div class="mini-value">{{ position.get_min_experience_level_display }}</div>
-            </div>
+      {% if position.description %}
+        <p style="font-size:.88rem;color:#4b5563;margin:.65rem 0 0;line-height:1.65;">{{ position.description }}</p>
+      {% endif %}
 
+      <div class="p-tags-row">
+        {% for item in position.required_skill_items.all %}
+          <span class="p-tag p-tag--green">✅ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+        {% endfor %}
+        {% for item in position.optional_skill_items.all %}
+          <span class="p-tag p-tag--amber">⭐ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
+        {% endfor %}
+        {% for item in position.language_requirements.all %}
+          <span class="p-tag p-tag--blue">🌐 {{ item.language.name }} · {{ item.get_min_level_display }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="p-applications-box">
+        <div class="p-applications-box__head">Отклики: {{ position.applications.count }}</div>
+        {% for app in position.applications.all %}
+          <div class="p-application-row">
             <div>
-              <div class="mini-label">Обязательные навыки</div>
-              <div class="tag-list">
-                {% for skill in position.required_skills.all %}
-                  <span class="tag">{{ skill.name }}</span>
-                {% empty %}
-                  <span class="text-muted small">Не указаны</span>
-                {% endfor %}
+              <div style="font-size:.9rem;font-weight:700;color:#1c2b1e;">
+                {{ app.volunteer_profile.user.get_full_name|default:app.volunteer_profile.user.username }}
               </div>
+              <div style="font-size:.8rem;color:#6b7280;">{{ app.volunteer_profile.user.email }}</div>
             </div>
-
-            <div>
-              <div class="mini-label">Языки</div>
-              <div class="tag-list">
-                {% for language in position.required_languages.all %}
-                  <span class="tag">{{ language.name }}</span>
-                {% empty %}
-                  <span class="text-muted small">Не указаны</span>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-          <div class="position-card__actions">
-            {% if not user.is_authenticated %}
-              <a href="{% url 'accounts:login' %}" class="btn btn-sm btn-brand-outline">Войти для отклика</a>
-            {% elif volunteer_profile %}
-              {% if position.id in my_assignments %}
-                <span class="status-pill status-pill--success">Уже есть назначение</span>
-              {% elif position.id in my_applications %}
-                <span class="status-pill">Отклик уже отправлен</span>
-              {% elif position.status == 'OPEN' and position.open_slots > 0 %}
-                <form method="post" action="{% url 'events:apply_to_position' position.id %}" class="position-apply-form">
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+              <span class="p-badge p-badge--{{ app.status }}">{{ app.get_status_display }}</span>
+              {% if app.status != 'assigned' and app.status != 'confirmed' and app.status != 'completed' %}
+                <form method="post" action="{% url 'applications:assign_application' app.id %}">
                   {% csrf_token %}
-                  <input type="hidden" name="from" value="{{ back_source }}">
-                  <div class="mb-2">
-                    {{ application_form.motivation_text }}
-                  </div>
-                  <button type="submit" class="btn btn-sm btn-brand">Откликнуться на роль</button>
+                  <button class="p-btn p-btn--primary p-btn--sm" type="submit">Назначить</button>
                 </form>
-              {% else %}
-                <span class="text-muted small">Недоступно</span>
               {% endif %}
-            {% else %}
-              <span class="text-muted small">Отклик доступен только волонтёру</span>
-            {% endif %}
+            </div>
           </div>
-        </article>
-      {% endfor %}
+        {% empty %}
+          <div style="font-size:.84rem;color:#9ca3af;">Откликов пока нет.</div>
+        {% endfor %}
+      </div>
     </div>
-  {% else %}
-    <div class="empty-state">Позиции пока не настроены.</div>
-  {% endif %}
-</section>
+
+  {% empty %}
+    <div class="p-empty">
+      <div class="p-empty__icon">🎭</div>
+      <div class="p-empty__title">Ролей пока нет</div>
+      <div class="p-empty__sub" style="margin-bottom:1rem;">Добавьте роли, чтобы волонтёры могли откликаться</div>
+      <a class="p-btn p-btn--primary p-btn--sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+    </div>
+  {% endfor %}
+</div>
+
 {% endblock %}

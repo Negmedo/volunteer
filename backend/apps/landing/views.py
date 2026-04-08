@@ -1,18 +1,19 @@
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from apps.events.models import Event
+from apps.accounts.models import VolunteerProfile
 
-User = get_user_model()
-
-
-def landing_view(request):
-    users_count = User.objects.count()
-    events_count = Event.objects.count()
-
-    public_events = Event.objects.filter(is_public=True).order_by("-created_at")[:10]
-
-    return render(request, "landing/index.html", {
-        "users_count": users_count,
-        "events_count": events_count,
-        "public_events": public_events,
+def home(request):
+    stats = {
+        'users_count': User.objects.count(),
+        'events_count': Event.objects.count(),
+        'public_events_count': Event.objects.filter(is_public=True).count(),
+        'hours_count': sum(
+            VolunteerProfile.objects.values_list('volunteer_hours', flat=True)
+        ) if VolunteerProfile.objects.exists() else 0,
+    }
+    public_events = Event.objects.filter(is_public=True).order_by('-start_date')[:5]
+    return render(request, 'landing/home.html', {
+        'stats': stats,
+        'public_events': public_events,
     })

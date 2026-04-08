@@ -1,104 +1,63 @@
-{% extends "accounts/auth_base.html" %}
+{% extends "base.html" %}
+{% block title %}Регистрация — VolunteerSKO{% endblock %}
 
-{% block auth_form %}
-<form method="post" class="auth-form active-form">
-  {% csrf_token %}
-  <h2 class="auth-title">Создать аккаунт</h2>
-  <p class="auth-subtitle">После регистрации ты сможешь заполнить анкету и откликаться на мероприятия.</p>
+{% block content %}
+<div class="p-auth-shell">
+  <div class="p-auth-card" style="max-width:480px;">
+    <div class="p-auth-logo">V</div>
+    <h1 class="p-auth-title">Создать аккаунт</h1>
+    <p class="p-auth-subtitle">Зарегистрируйтесь как волонтёр или координатор организации</p>
 
-  {% if form.non_field_errors %}
-    <div class="auth-error">{{ form.non_field_errors }}</div>
-  {% endif %}
-
-  <div class="input-row">
-    <div class="input-group">
-      <label for="id_first_name">Имя</label>
-      <input
-        type="text"
-        name="first_name"
-        id="id_first_name"
-        placeholder="Имя"
-        value="{{ form.first_name.value|default:'' }}"
-      >
-      {% if form.first_name.errors %}
-        <div class="auth-error-small">{{ form.first_name.errors }}</div>
-      {% endif %}
-    </div>
-
-    <div class="input-group">
-      <label for="id_last_name">Фамилия</label>
-      <input
-        type="text"
-        name="last_name"
-        id="id_last_name"
-        placeholder="Фамилия"
-        value="{{ form.last_name.value|default:'' }}"
-      >
-      {% if form.last_name.errors %}
-        <div class="auth-error-small">{{ form.last_name.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
-
-  <div class="input-group">
-    <label for="id_username">Логин</label>
-    <input
-      type="text"
-      name="username"
-      id="id_username"
-      placeholder="Придумайте логин"
-      required
-      value="{{ form.username.value|default:'' }}"
-    >
-    {% if form.username.errors %}
-      <div class="auth-error-small">{{ form.username.errors }}</div>
+    {% if form.non_field_errors %}
+      <div class="p-alert p-alert--error">{% for e in form.non_field_errors %}{{ e }}{% endfor %}</div>
     {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="p-form-grid">
+        <div class="p-field">
+          <label class="p-label" for="{{ form.first_name.id_for_label }}">Имя</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<div class="p-form-error">{{ form.first_name.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="p-field">
+          <label class="p-label" for="{{ form.last_name.id_for_label }}">Фамилия</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<div class="p-form-error">{{ form.last_name.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="p-field">
+        <label class="p-label" for="{{ form.username.id_for_label }}">Логин</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="p-form-error">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="p-field">
+        <label class="p-label" for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="p-form-error">{{ form.email.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="p-field">
+        <label class="p-label" for="{{ form.password1.id_for_label }}">Пароль</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}<div class="p-form-error">{{ form.password1.errors.0 }}</div>{% endif %}
+        {% if form.password1.help_text %}<div style="font-size:.78rem;color:#6b7280;margin-top:.25rem;">{{ form.password1.help_text }}</div>{% endif %}
+      </div>
+
+      <div class="p-field">
+        <label class="p-label" for="{{ form.password2.id_for_label }}">Повтор пароля</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}<div class="p-form-error">{{ form.password2.errors.0 }}</div>{% endif %}
+      </div>
+
+      <button class="p-btn p-btn--primary" style="width:100%;justify-content:center;margin-top:.5rem;" type="submit">Создать аккаунт</button>
+    </form>
+
+    <div class="p-auth-divider"><span>уже есть аккаунт?</span></div>
+    <a href="{% url 'accounts:login' %}" class="p-btn p-btn--outline" style="width:100%;justify-content:center;">Войти</a>
   </div>
-
-  <div class="input-group">
-    <label for="id_email">Email</label>
-    <input
-      type="email"
-      name="email"
-      id="id_email"
-      placeholder="example@mail.com"
-      value="{{ form.email.value|default:'' }}"
-    >
-    {% if form.email.errors %}
-      <div class="auth-error-small">{{ form.email.errors }}</div>
-    {% endif %}
-  </div>
-
-  <div class="input-row">
-    <div class="input-group">
-      <label for="id_password1">Пароль</label>
-      <input
-        type="password"
-        name="password1"
-        id="id_password1"
-        placeholder="Пароль"
-        required
-      >
-      {% if form.password1.errors %}
-        <div class="auth-error-small">{{ form.password1.errors }}</div>
-      {% endif %}
-    </div>
-
-    <div class="input-group">
-      <label for="id_password2">Повтор пароля</label>
-      <input
-        type="password"
-        name="password2"
-        id="id_password2"
-        placeholder="Повторите пароль"
-        required
-      >
-      {% if form.password2.errors %}
-        <div class="auth-error-small">{{ form.password2.errors }}</div>
-      {% endif %}
-    </div>
-  </div>
-
-  <button type="submit" class="auth-submit-btn">Зарегистрироваться</button>
-</form>
+</div>
 {% endblock %}
