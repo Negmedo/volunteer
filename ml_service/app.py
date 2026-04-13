@@ -4,7 +4,7 @@ ml_service/app.py
 Baseline ML-сервис для СППР волонтёров.
 Реализует Вариант А: формульный scoring + объяснения.
 
-Архитектура:
+Архитектур:
   Django → POST /predict → ml_service → {"ml_score": float, "reasons": [...]}
 
 Когда появятся реальные данные — логику внутри predict()
