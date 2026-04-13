@@ -14,7 +14,7 @@
         {% if not event.is_public %} · <span style="color:var(--warning);font-weight:700;">Скрыто</span>{% endif %}
       </p>
     </div>
-    <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
       <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:event_update' event.id %}">Редактировать</a>
       <a class="btn btn-outline-danger btn-sm" href="{% url 'events:event_delete' event.id %}">Удалить</a>
       <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
@@ -28,13 +28,35 @@
   </section>
 {% endif %}
 
+{# CSV export / import #}
+<section class="panel-card mb-4" style="background:var(--surface-2);">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
+    <div>
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:.95rem;">Данные мероприятия</div>
+      <div style="font-size:.84rem;color:var(--muted);">Экспорт и импорт участников</div>
+    </div>
+    <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+      <a class="btn btn-outline-secondary btn-sm"
+         href="{% url 'applications:export_assignments_csv' event.id %}">
+        ⬇ Экспорт CSV
+      </a>
+      <a class="btn btn-outline-secondary btn-sm"
+         href="{% url 'applications:import_volunteers_csv' event.id %}">
+        ⬆ Импорт CSV
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="panel-card">
   <div class="section-head section-head--split">
     <div>
       <span class="eyebrow">Роли</span>
       <h2 class="section-title">Позиции мероприятия</h2>
     </div>
-    <span style="font-size:.86rem;color:var(--muted);">{{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
+    <span style="font-size:.86rem;color:var(--muted);">
+      {{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}
+    </span>
   </div>
 
   {% for position in event.positions.all %}
@@ -49,15 +71,9 @@
           </div>
         </div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-          <a class="btn btn-sm btn-primary" href="{% url 'matching:position_matching' position.id %}">
-            Подбор
-          </a>
-          <a class="btn btn-sm btn-outline-secondary" href="{% url 'events:position_update' position.id %}">
-            Редактировать
-          </a>
-          <a class="btn btn-sm btn-outline-danger" href="{% url 'events:position_delete' position.id %}">
-            Удалить
-          </a>
+          <a class="btn btn-sm btn-primary" href="{% url 'matching:position_matching' position.id %}">Подбор</a>
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'events:position_update' position.id %}">Редактировать</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'events:position_delete' position.id %}">Удалить</a>
         </div>
       </div>
 
@@ -77,6 +93,7 @@
         {% endfor %}
       </div>
 
+      {# Отклики #}
       <div class="applications-box">
         <div class="applications-box__head">
           Отклики: {{ position.applications.count }}
@@ -84,15 +101,20 @@
 
         {% for app in position.applications.all %}
           <div class="application-row">
-            <div>
+            <div style="flex:1;min-width:0;">
               <strong style="font-size:.92rem;">
                 {{ app.volunteer_profile.user.get_full_name|default:app.volunteer_profile.user.username }}
               </strong>
-              <div style="font-size:.82rem;color:var(--muted);">{{ app.volunteer_profile.user.email }}</div>
+              <div style="font-size:.8rem;color:var(--muted);">
+                {{ app.volunteer_profile.user.email }}
+                {% if app.motivation_text %}
+                  · <em style="color:var(--text-2);">«{{ app.motivation_text|truncatechars:60 }}»</em>
+                {% endif %}
+              </div>
             </div>
-            <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
               <span class="status-badge status-badge--{{ app.status }}">{{ app.get_status_display }}</span>
-              {% if app.status != 'assigned' and app.status != 'confirmed' and app.status != 'completed' %}
+              {% if app.status == 'new' or app.status == 'reviewed' %}
                 <form method="post" action="{% url 'applications:assign_application' app.id %}">
                   {% csrf_token %}
                   <button class="btn btn-sm btn-primary">Назначить</button>
@@ -104,6 +126,97 @@
           <div style="font-size:.86rem;color:var(--muted);">Откликов пока нет.</div>
         {% endfor %}
       </div>
+
+      {# Назначения — полный lifecycle #}
+      {% with assignments=position.assignments.all %}
+        {% if assignments %}
+          <div class="applications-box mt-1">
+            <div class="applications-box__head">
+              Назначения: {{ assignments.count }}
+            </div>
+            {% for asgn in assignments %}
+              <div class="application-row">
+                <div style="flex:1;min-width:0;">
+                  <strong style="font-size:.92rem;">
+                    {{ asgn.volunteer_profile.user.get_full_name|default:asgn.volunteer_profile.user.username }}
+                  </strong>
+                  <div style="font-size:.8rem;color:var(--muted);">
+                    {{ asgn.volunteer_profile.user.email }}
+                    {% if asgn.hours_worked %} · {{ asgn.hours_worked }} ч{% endif %}
+                    {% if asgn.coordinator_rating %} · ★ {{ asgn.coordinator_rating }}/5{% endif %}
+                  </div>
+                  {% if asgn.coordinator_note %}
+                    <div style="font-size:.8rem;color:var(--muted);font-style:italic;">{{ asgn.coordinator_note|truncatechars:80 }}</div>
+                  {% endif %}
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                  <span class="status-badge status-badge--{{ asgn.status }}">{{ asgn.get_status_display }}</span>
+
+                  {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
+                    {# Модальная форма завершения #}
+                    <button class="btn btn-sm btn-success"
+                            onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='flex'">
+                      ✓ Выполнено
+                    </button>
+                    <form method="post" action="{% url 'applications:mark_failed' asgn.id %}"
+                          onsubmit="return confirm('Зафиксировать неявку? Это снизит attendance_rate волонтёра.');">
+                      {% csrf_token %}
+                      <button class="btn btn-sm btn-outline-danger">✗ Не явился</button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
+
+              {# Inline-модал завершения #}
+              {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
+                <div id="modal-complete-{{ asgn.id }}"
+                     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;">
+                  <div style="background:var(--surface);border-radius:var(--radius-xl);padding:2rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg);">
+                    <h3 style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:1rem;">
+                      Завершить участие
+                    </h3>
+                    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1.25rem;">
+                      {{ asgn.volunteer_profile.user.get_full_name|default:asgn.volunteer_profile.user.username }}
+                      — {{ position.title }}
+                    </p>
+                    <form method="post" action="{% url 'applications:mark_completed' asgn.id %}" class="vstack gap-3">
+                      {% csrf_token %}
+                      <div class="field-block">
+                        <label class="field-label">Часов отработано</label>
+                        <input type="number" name="hours_worked" class="form-control" value="0" min="0" max="999">
+                      </div>
+                      <div class="field-block">
+                        <label class="field-label">Оценка волонтёра (1–5)</label>
+                        <select name="coordinator_rating" class="form-select">
+                          <option value="">— не выставлять —</option>
+                          <option value="5">5 — отлично</option>
+                          <option value="4">4 — хорошо</option>
+                          <option value="3">3 — удовлетворительно</option>
+                          <option value="2">2 — плохо</option>
+                          <option value="1">1 — очень плохо</option>
+                        </select>
+                      </div>
+                      <div class="field-block">
+                        <label class="field-label">Комментарий <span style="font-weight:400;color:var(--muted);">— необязательно</span></label>
+                        <textarea name="coordinator_note" class="form-control" rows="2"></textarea>
+                      </div>
+                      <div style="display:flex;gap:.75rem;">
+                        <button type="submit" class="btn btn-success" style="flex:1;">Сохранить</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='none'">
+                          Отмена
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
     </div>
   {% empty %}
     <div style="text-align:center;padding:2.5rem 1rem;color:var(--muted);">

@@ -25,3 +25,13 @@ Open:
 - applications, assignments and notifications
 - seeded dictionaries and demo users
 - logout returns to the landing page
+
+## damp create
+docker exec volunteer-db-1 sh -c "mysqldump --default-character-set=utf8mb4 --no-tablespaces -uapp -papppass volunteers_db > /tmp/volunteers_dump.sql"
+
+docker cp volunteer-db-1:/tmp/volunteers_dump.sql .\volunteers_dump.sql
+
+docker exec volunteer-db-1 rm /tmp/volunteers_dump.sql
+
+## damp use
+cmd /c "docker exec -i volunteer-db-1 mysql --default-character-set=utf8mb4 -uapp -papppass volunteers_db < volunteers_dump.sql"

@@ -97,5 +97,5 @@ ML_SERVICE_URL = os.getenv("ML_SERVICE_URL", "http://ml:8765/predict")
  
 # Таймаут запроса к ML-сервису (секунды).
 # При превышении Django использует fallback — локальный скоринг.
-ML_SERVICE_TIMEOUT = int(os.getenv("ML_SERVICE_TIMEOUT", "3"))
+ML_SERVICE_TIMEOUT = int(os.getenv("ML_SERVICE_TIMEOUT", "30"))
  

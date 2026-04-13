@@ -65,6 +65,9 @@ def event_detail(request, event_id):
             'positions__optional_skill_items__skill',
             'positions__language_requirements__language',
             'positions__applications__volunteer_profile__user',
+            # Назначения — нужны для кнопок completed/failed
+            'positions__assignments__volunteer_profile__user',
+            'positions__assignments__volunteer_profile',
         ),
         id=event_id,
         created_by=request.user,
@@ -103,23 +106,27 @@ def position_create(request, event_id):
 @login_required
 def position_update(request, position_id):
     position = get_object_or_404(EventPosition, id=position_id, event__created_by=request.user)
+    event = position.event
     form = EventPositionForm(request.POST or None, instance=position, prefix='position')
     required_formset = RequiredSkillFormSetFactory(request.POST or None, instance=position, prefix='required')
     optional_formset = OptionalSkillFormSetFactory(request.POST or None, instance=position, prefix='optional')
     language_formset = LanguageReqFormSetFactory(request.POST or None, instance=position, prefix='langs')
     if request.method == 'POST' and all([form.is_valid(), required_formset.is_valid(), optional_formset.is_valid(), language_formset.is_valid()]):
         with transaction.atomic():
-            form.save()
+            position = form.save()
+            required_formset.instance = position
             required_formset.save()
+            optional_formset.instance = position
             optional_formset.save()
+            language_formset.instance = position
             language_formset.save()
             position.availability_requirements.all().delete()
             for item in form.cleaned_data.get('availability_matrix', []):
                 weekday, time_of_day = item.split(':', 1)
                 EventPositionAvailabilityRequirement.objects.create(position=position, weekday=int(weekday), time_of_day=time_of_day)
         messages.success(request, 'Роль обновлена')
-        return redirect('events:event_detail', event_id=position.event_id)
-    return render(request, 'events/position_form.html', {'event': position.event, 'form': form, 'required_formset': required_formset, 'optional_formset': optional_formset, 'language_formset': language_formset, 'page_title': 'Редактировать роль'})
+        return redirect('events:event_detail', event_id=event.id)
+    return render(request, 'events/position_form.html', {'event': event, 'form': form, 'required_formset': required_formset, 'optional_formset': optional_formset, 'language_formset': language_formset, 'page_title': 'Редактировать роль'})
 
 
 @login_required

@@ -16,7 +16,6 @@ apps/matching/services.py
 
 import logging
 import urllib.request
-import urllib.error
 import json
 
 from django.conf import settings
@@ -25,7 +24,6 @@ from apps.accounts.models import VolunteerProfile, SkillLevel, LanguageLevel
 
 logger = logging.getLogger(__name__)
 
-# ── Словари для сравнения уровней ────────────────────────────
 SKILL_ORDER = {
     SkillLevel.BEGINNER:      1,
     SkillLevel.INTERMEDIATE:  2,
@@ -33,13 +31,13 @@ SKILL_ORDER = {
     SkillLevel.PROFESSIONAL:  4,
 }
 LANG_ORDER = {
-    LanguageLevel.BASIC:         1,
-    LanguageLevel.CONVERSATIONAL: 2,
-    LanguageLevel.FLUENT:         3,
+    LanguageLevel.BASIC:          1,
+    LanguageLevel.CONVERSATIONAL:  2,
+    LanguageLevel.FLUENT:          3,
 }
 
 
-# ── 0. Базовая выборка кандидатов ────────────────────────────
+# ── 0. Кандидаты ─────────────────────────────────────────────
 def _base_candidates():
     return (
         VolunteerProfile.objects
@@ -55,13 +53,26 @@ def _base_candidates():
     )
 
 
-# ── 1. Hard filter ───────────────────────────────────────────
+# ── 1. Проверка ML-сервиса ───────────────────────────────────
+def check_ml_service() -> bool:
+    """
+    Проверяет доступность ML-сервиса через /health endpoint.
+    Вызывается один раз за запрос — не завязан на наличие кандидатов.
+    """
+    url = getattr(settings, "ML_SERVICE_URL", "http://ml:8765/predict")
+    health_url = url.replace("/predict", "/health")
+    timeout = getattr(settings, "ML_SERVICE_TIMEOUT", 3)
+    try:
+        req = urllib.request.Request(health_url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status == 200
+    except Exception as exc:
+        logger.warning("ML service health check failed: %s", exc)
+        return False
+
+
+# ── 2. Hard filter ───────────────────────────────────────────
 def _passes_hard_filter(position, volunteer) -> bool:
-    """
-    Этап 1 по рекомендациям: жёсткая фильтрация.
-    Кандидат исключается, если он физически или логистически не подходит.
-    Возвращает False → кандидат отсеивается ДО ML.
-    """
     if position.requires_car and not volunteer.has_car:
         return False
     if position.requires_night_shift and volunteer.avoid_night_shifts:
@@ -76,7 +87,6 @@ def _passes_hard_filter(position, volunteer) -> bool:
 
 
 def _location_match_strict(position, volunteer) -> bool:
-    """Жёсткая проверка локации для строгого режима."""
     if position.event.city_id and volunteer.city_id:
         if position.event.city_id != volunteer.city_id:
             return False
@@ -86,20 +96,10 @@ def _location_match_strict(position, volunteer) -> bool:
     return True
 
 
-# ── 2. Feature builder ───────────────────────────────────────
+# ── 3. Feature builder ───────────────────────────────────────
 def build_features(position, volunteer) -> dict:
     """
-    Этап 2: формирование вектора нормированных признаков [0, 1].
-    Каждый признак задокументирован — это важно для диплома и ML.
-
-    Признаки:
-      skill_match        — совпадение обязательных + желательных навыков
-      language_match     — совпадение языковых требований
-      availability_match — совпадение слотов доступности
-      location_match     — близость локации (0.0 / 0.5 / 0.8 / 1.0)
-      reliability_score  — надёжность волонтёра (посещаемость + рейтинг)
-      experience_score   — опыт по количеству завершённых ролей
-      motivation_match   — совпадение предпочтительных направлений
+    Вектор нормированных признаков [0, 1] для пары (роль, волонтёр).
     """
     volunteer_skills = {
         item.skill_id: SKILL_ORDER.get(item.level, 0)
@@ -158,7 +158,7 @@ def build_features(position, volunteer) -> dict:
     else:
         availability_match = 1.0
 
-    # location_match (градуированная, не бинарная)
+    # location_match (градуированная)
     if position.event.district_id and volunteer.district_id:
         if volunteer.district_id == position.event.district_id:
             location_match = 1.0
@@ -171,9 +171,9 @@ def build_features(position, volunteer) -> dict:
     else:
         location_match = 0.7
 
-    # reliability_score (посещаемость + рейтинг координатора)
+    # reliability_score
     attendance = float(volunteer.attendance_rate or 0) / 100.0
-    rating     = float(volunteer.coordinator_rating or 0) / 5.0
+    rating = float(volunteer.coordinator_rating or 0) / 5.0
     if attendance > 0 and rating > 0:
         reliability_score = round((attendance + rating) / 2, 3)
     elif attendance > 0:
@@ -181,17 +181,17 @@ def build_features(position, volunteer) -> dict:
     elif rating > 0:
         reliability_score = round(rating, 3)
     else:
-        reliability_score = 0.5   # нет истории → нейтральное значение
+        reliability_score = 0.5
 
-    # experience_score (на основе процента заполненности профиля)
+    # experience_score
     experience_score = round(float(volunteer.profile_completion_percent or 0) / 100.0, 3)
 
-    # motivation_match (предпочтительное направление / тип задачи)
-    direction_ok  = bool(
+    # motivation_match
+    direction_ok = bool(
         position.direction_id
         and volunteer.preferred_directions.filter(id=position.direction_id).exists()
     )
-    task_type_ok  = bool(
+    task_type_ok = bool(
         position.task_type_id
         and volunteer.preferred_task_types.filter(id=position.task_type_id).exists()
     )
@@ -213,19 +213,10 @@ def build_features(position, volunteer) -> dict:
     }
 
 
-# ── 3. ML client ─────────────────────────────────────────────
+# ── 4. ML client ─────────────────────────────────────────────
 def call_ml_service(features: dict) -> dict | None:
-    """
-    Отправляет вектор признаков на Flask ML-endpoint.
-    При недоступности сервиса возвращает None (Django переключится на fallback).
-
-    API-контракт (POST /predict):
-      Вход:  {"skill_match": float, ..., "motivation_match": float}
-      Выход: {"ml_score": float, "reasons": [...]}
-    """
     url = getattr(settings, "ML_SERVICE_URL", "http://ml:8765/predict")
     timeout = getattr(settings, "ML_SERVICE_TIMEOUT", 3)
-
     try:
         payload = json.dumps(features).encode("utf-8")
         req = urllib.request.Request(
@@ -242,18 +233,12 @@ def call_ml_service(features: dict) -> dict | None:
 
 
 def _fallback_score(features: dict) -> dict:
-    """
-    Локальный fallback scoring если ML-сервис недоступен.
-    Используется та же формула, что и в ml_service/app.py.
-    """
+    """Локальный скоринг если ML-сервис недоступен."""
     weights = {
-        "skill_match":        0.30,
-        "language_match":     0.15,
-        "availability_match": 0.15,
-        "location_match":     0.15,
-        "reliability_score":  0.10,
-        "experience_score":   0.10,
-        "motivation_match":   0.05,
+        "skill_match": 0.30, "language_match": 0.15,
+        "availability_match": 0.15, "location_match": 0.15,
+        "reliability_score": 0.10, "experience_score": 0.10,
+        "motivation_match": 0.05,
     }
     score = round(sum(features[k] * w for k, w in weights.items()), 4)
     reasons = []
@@ -270,72 +255,46 @@ def _fallback_score(features: dict) -> dict:
     return {"ml_score": score, "reasons": reasons}
 
 
-# ── 4. Hybrid score ──────────────────────────────────────────
+# ── 5. Hybrid score ──────────────────────────────────────────
 def compute_hybrid_score(ml_score: float, features: dict) -> float:
-    """
-    Финальный балл: взвешенная комбинация ML и детерминированных признаков.
-    Формула задокументирована для диплома (Модуль 4, API-контракт).
-
-    hybrid = 0.5 * ml_score + 0.3 * skill_match + 0.2 * reliability_score
-    """
-    hybrid = (
+    return round(
         0.5 * ml_score
         + 0.3 * features["skill_match"]
-        + 0.2 * features["reliability_score"]
+        + 0.2 * features["reliability_score"],
+        3,
     )
-    return round(hybrid, 3)
 
 
-# ── 5. Оркестратор ───────────────────────────────────────────
+# ── 6. Кандидат-pipeline ─────────────────────────────────────
 def _score_candidate(position, volunteer, strict: bool) -> dict | None:
-    """
-    Полный pipeline для одного кандидата:
-      hard_filter → features → ML → hybrid_score → результат
-    """
-    # Hard filter
     if not _passes_hard_filter(position, volunteer):
         return None
-
-    # Локация: строгий / расширенный режим
     if strict and not _location_match_strict(position, volunteer):
         return None
 
-    # Признаки
     features = build_features(position, volunteer)
 
-    # Строгая проверка обязательных навыков
     if strict:
-        req_skills = list(position.required_skill_items.select_related("skill"))
         volunteer_skills = {
             item.skill_id: SKILL_ORDER.get(item.level, 0)
             for item in volunteer.skills.all()
         }
-        for req in req_skills:
+        for req in position.required_skill_items.select_related("skill"):
             if volunteer_skills.get(req.skill_id, 0) < SKILL_ORDER.get(req.min_level, 0):
                 return None
 
-        req_langs = list(position.language_requirements.select_related("language"))
         volunteer_langs = {
             item.language_id: LANG_ORDER.get(item.level, 0)
             for item in volunteer.languages.all()
         }
-        for req in req_langs:
+        for req in position.language_requirements.select_related("language"):
             if volunteer_langs.get(req.language_id, 0) < LANG_ORDER.get(req.min_level, 0):
                 return None
 
-    # ML-вызов
-    ml_result = call_ml_service(features)
-    if ml_result is None:
-        ml_result = _fallback_score(features)
-
+    ml_result = call_ml_service(features) or _fallback_score(features)
     ml_score = float(ml_result.get("ml_score", 0.0))
-    reasons  = ml_result.get("reasons", [])
-
-    # Hybrid score
+    reasons = ml_result.get("reasons", [])
     hybrid = compute_hybrid_score(ml_score, features)
-
-    # Пометка расширенного режима
-    is_relaxed = not strict
 
     return {
         "volunteer":   volunteer,
@@ -345,32 +304,26 @@ def _score_candidate(position, volunteer, strict: bool) -> dict | None:
         "reliability": round(features["reliability_score"], 3),
         "features":    features,
         "reasons":     reasons,
-        "is_relaxed":  is_relaxed,
+        "is_relaxed":  not strict,
     }
 
 
+# ── 7. Оркестратор ───────────────────────────────────────────
 def run_position_matching(position) -> dict:
     """
-    Главный метод подбора для одной позиции.
-
-    Возвращает:
-      strict_results   — кандидаты, прошедшие все строгие фильтры
-      relaxed_results  — кандидаты с частичным соответствием
-      recommendations  — текстовые рекомендации координатору
-      ml_available     — True если ML-сервис ответил хотя бы раз
+    ml_available проверяется через /health — независимо от наличия кандидатов.
+    Это устраняет ложное срабатывание "локальный скоринг" при пустом списке.
     """
+    ml_available = check_ml_service()
+
     strict_results  = []
     relaxed_results = []
-    ml_available    = False
 
     for volunteer in _base_candidates():
         result = _score_candidate(position, volunteer, strict=True)
         if result is not None:
-            if result["ml_score"] > 0:
-                ml_available = True
             strict_results.append(result)
             continue
-
         relaxed = _score_candidate(position, volunteer, strict=False)
         if relaxed is not None:
             relaxed_results.append(relaxed)
@@ -378,7 +331,6 @@ def run_position_matching(position) -> dict:
     strict_results.sort(key=lambda x: x["score"], reverse=True)
     relaxed_results.sort(key=lambda x: x["score"], reverse=True)
 
-    # Рекомендации координатору
     recommendations = []
     if not strict_results:
         recommendations.append("По строгим критериям кандидаты не найдены.")
