@@ -29,7 +29,6 @@
   </div>
 {% endif %}
 
-{# Статистика волонтёра #}
 {% if volunteer_profile.completed_events_count or volunteer_profile.volunteer_hours %}
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-bottom:1.25rem;">
     <div class="stat-tile">
@@ -59,7 +58,6 @@
 
 <div class="row g-4">
 
-  {# Доступные роли #}
   <div class="col-lg-7">
     <div class="panel-card h-100">
       <div class="section-head section-head--split">
@@ -70,7 +68,7 @@
       </div>
 
       {% if available_positions %}
-        <div class="stack-layout">
+        <div class="stack-layout scroll-panel scroll-panel--lg">
           {% for position in available_positions %}
             <div class="position-item">
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;flex-wrap:wrap;">
@@ -86,7 +84,6 @@
                       {{ position.description|truncatechars:90 }}
                     </p>
                   {% endif %}
-                  {# Краткие теги требований #}
                   <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;">
                     {% for item in position.required_skill_items.all|slice:":3" %}
                       <span class="tag tag--required" style="font-size:.72rem;padding:.2rem .55rem;">
@@ -101,7 +98,6 @@
                     {% endif %}
                   </div>
                 </div>
-                {# Ссылка на страницу роли — не слепой отклик #}
                 <a href="{% url 'applications:position_detail' position.id %}"
                    class="btn btn-outline-primary btn-sm" style="flex-shrink:0;">
                   Подробнее →
@@ -122,7 +118,6 @@
     </div>
   </div>
 
-  {# Отклики и назначения #}
   <div class="col-lg-5">
     <div class="panel-card mb-4">
       <div class="section-head">
@@ -131,6 +126,7 @@
       </div>
 
       {% if my_applications %}
+        <div class="scroll-panel scroll-panel--md">
         {% for item in my_applications %}
           <div class="app-item">
             <div style="min-width:0;flex:1;">
@@ -142,6 +138,7 @@
             </span>
           </div>
         {% endfor %}
+        </div>
       {% else %}
         <p style="color:var(--muted);font-size:.9rem;margin:0;">Откликов пока нет.</p>
       {% endif %}
@@ -154,6 +151,7 @@
       </div>
 
       {% if my_assignments %}
+        <div class="scroll-panel scroll-panel--md">
         {% for item in my_assignments %}
           <div class="app-item">
             <div style="min-width:0;flex:1;">
@@ -178,13 +176,14 @@
                   </form>
                   <form method="post" action="{% url 'applications:assignment_decline' item.id %}">
                     {% csrf_token %}
-                    <button class="btn btn-outline-danger btn-sm">Отклонить</button>
+                    <button class="btn btn-outline-danger btn-sm">Отказаться</button>
                   </form>
                 </div>
               {% endif %}
             </div>
           </div>
         {% endfor %}
+        </div>
       {% else %}
         <p style="color:var(--muted);font-size:.9rem;margin:0;">Назначений пока нет.</p>
       {% endif %}

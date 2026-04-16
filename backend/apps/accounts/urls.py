@@ -1,5 +1,13 @@
 from django.urls import path
-from .views import signup_view, UserLoginView, logout_view, dashboard_router, volunteer_profile_edit, volunteer_dashboard
+from .views import (
+    signup_view,
+    UserLoginView,
+    logout_view,
+    dashboard_router,
+    volunteer_profile_edit,
+    volunteer_dashboard,
+    volunteer_profile_detail,
+)
 
 app_name = 'accounts'
 
@@ -10,4 +18,5 @@ urlpatterns = [
     path('dashboard/', dashboard_router, name='dashboard'),
     path('volunteer/', volunteer_dashboard, name='volunteer_dashboard'),
     path('volunteer/profile/', volunteer_profile_edit, name='volunteer_profile'),
+    path('volunteers/<int:profile_id>/', volunteer_profile_detail, name='volunteer_profile_detail'),
 ]

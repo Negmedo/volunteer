@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db import transaction
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.forms.formsets import DELETION_FIELD_NAME
 from apps.core.models import City
 
@@ -147,6 +147,7 @@ def volunteer_dashboard(request):
     volunteer_profile, _ = VolunteerProfile.objects.get_or_create(user=request.user)
     available_positions = (
         EventPosition.objects.select_related("event", "event__city", "event__district", "direction", "task_type")
+        .prefetch_related("required_skill_items__skill")
         .filter(event__is_public=True)
         .exclude(applications__volunteer_profile=volunteer_profile)
         .order_by("event__start_date", "event__title", "title")
@@ -169,5 +170,40 @@ def volunteer_dashboard(request):
             "available_positions": available_positions,
             "my_applications": my_applications,
             "my_assignments": my_assignments,
+        },
+    )
+
+
+@login_required
+def volunteer_profile_detail(request, profile_id):
+    role = getattr(request.user.profile, "role", Role.VOLUNTEER)
+    if role not in [Role.ORG, Role.ADMIN]:
+        messages.error(request, "Просмотр анкеты доступен только организатору.")
+        return redirect("accounts:dashboard")
+
+    volunteer_profile = get_object_or_404(
+        VolunteerProfile.objects.select_related("user", "city", "district", "user__profile")
+        .prefetch_related(
+            "languages__language",
+            "skills__skill",
+            "availability_items",
+            "preferred_directions",
+            "preferred_task_types",
+            "applications__position__event",
+            "assignments__position__event",
+        ),
+        id=profile_id,
+    )
+
+    recent_applications = volunteer_profile.applications.select_related("position", "position__event").order_by("-created_at")[:10]
+    recent_assignments = volunteer_profile.assignments.select_related("position", "position__event").order_by("-created_at")[:10]
+
+    return render(
+        request,
+        "accounts/volunteer_profile_detail.html",
+        {
+            "volunteer_profile": volunteer_profile,
+            "recent_applications": recent_applications,
+            "recent_assignments": recent_assignments,
         },
     )

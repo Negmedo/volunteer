@@ -13,6 +13,10 @@
       <a class="btn btn-outline-secondary btn-sm" href="{% url 'notifications:mark_all_read' %}">
         Отметить все прочитанными
       </a>
+      <form method="post" action="{% url 'notifications:clear' %}" onsubmit="return confirm('Удалить все уведомления?');">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger btn-sm" type="submit">Удалить все</button>
+      </form>
       <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:dashboard' %}">Назад</a>
     </div>
   </div>
@@ -20,7 +24,7 @@
 
 <section class="panel-card">
   {% if notifications %}
-    <div class="stack-layout">
+    <div class="stack-layout scroll-panel scroll-panel--lg">
       {% for item in notifications %}
         <div class="notif-item {% if not item.is_read %}notif-item--unread{% else %}notif-item--read{% endif %}">
           <div class="notif-item__dot"></div>
@@ -31,9 +35,15 @@
             {% endif %}
             <div class="notif-item__time">{{ item.created_at|date:"d.m.Y H:i" }}</div>
           </div>
-          {% if not item.is_read %}
-            <span class="status-badge status-badge--applied" style="flex-shrink:0;">Новое</span>
-          {% endif %}
+          <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
+            {% if not item.is_read %}
+              <span class="status-badge status-badge--applied">Новое</span>
+            {% endif %}
+            <form method="post" action="{% url 'notifications:delete' item.id %}">
+              {% csrf_token %}
+              <button class="btn btn-outline-danger btn-sm" type="submit">Удалить</button>
+            </form>
+          </div>
         </div>
       {% endfor %}
     </div>

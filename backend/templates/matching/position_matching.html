@@ -22,7 +22,6 @@
   </div>
 </section>
 
-{# Требования роли #}
 <section class="panel-card mb-4">
   <div class="section-head">
     <span class="eyebrow">Требования позиции</span>
@@ -75,7 +74,6 @@
   </section>
 {% endif %}
 
-{# Строгий подбор #}
 <section class="panel-card mb-4">
   <div class="section-head section-head--split">
     <div>
@@ -89,7 +87,7 @@
   </div>
 
   {% if strict_results %}
-    <div class="matching-table">
+    <div class="matching-table scroll-panel scroll-panel--lg">
       <div class="matching-head">
         <div>Итог</div>
         <div>ML</div>
@@ -115,7 +113,7 @@
             <div style="font-size:.72rem;color:var(--muted);">надёжность</div>
           </div>
           <div>
-            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <a href="{% url 'accounts:volunteer_profile_detail' item.volunteer.id %}" style="font-size:.92rem;font-weight:700;text-decoration:none;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</a>
             <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
           </div>
           <div style="font-size:.82rem;color:var(--text-2);">
@@ -136,7 +134,8 @@
           </div>
           <div>
             <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
-              {% csrf_token %}<button class="btn btn-sm btn-primary">Назначить</button>
+              {% csrf_token %}
+              <button class="btn btn-sm btn-primary">Назначить</button>
             </form>
           </div>
         </div>
@@ -144,27 +143,25 @@
     </div>
   {% else %}
     <div style="padding:1.5rem 0;text-align:center;color:var(--muted);">
-      <div style="font-size:1.5rem;margin-bottom:.5rem;">🔎</div>
-      По строгим критериям кандидаты не найдены.
-      {% if relaxed_results %} Смотрите расширенный подбор ниже.{% endif %}
+      <div style="font-size:1.5rem;margin-bottom:.5rem;">😕</div>
+      Строгий подбор не нашёл кандидатов.
     </div>
   {% endif %}
 </section>
 
-{# Расширенный подбор #}
 <section class="panel-card mb-4">
   <div class="section-head section-head--split">
     <div>
-      <span class="eyebrow">Расширенный режим · частичное соответствие</span>
-      <h2 class="section-title">Ослабленные критерии</h2>
-      <p class="page-subtitle mb-0">Кандидаты с частичным совпадением — назначать вручную</p>
+      <span class="eyebrow">Ослабленный режим</span>
+      <h2 class="section-title">Частичное соответствие</h2>
+      <p class="page-subtitle mb-0">После смягчения части критериев</p>
     </div>
     {% if relaxed_results %}
       <span class="status-badge status-badge--reviewed">{{ relaxed_results|length }} кандидат{{ relaxed_results|length|pluralize:",,ов" }}</span>
     {% endif %}
   </div>
   {% if relaxed_results %}
-    <div class="matching-table">
+    <div class="matching-table scroll-panel scroll-panel--lg">
       <div class="matching-head">
         <div>Итог</div><div>ML</div><div>Навыки</div><div>Надёжность</div><div>Волонтёр</div><div>Объяснение</div><div></div>
       </div>
@@ -178,7 +175,7 @@
           <div><div style="font-size:.9rem;font-weight:600;">{{ item.skill_score }}</div></div>
           <div><div style="font-size:.9rem;font-weight:600;">{{ item.reliability }}</div></div>
           <div>
-            <strong style="font-size:.92rem;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</strong>
+            <a href="{% url 'accounts:volunteer_profile_detail' item.volunteer.id %}" style="font-size:.92rem;font-weight:700;text-decoration:none;">{{ item.volunteer.user.get_full_name|default:item.volunteer.user.username }}</a>
             <div style="font-size:.8rem;color:var(--muted);">{{ item.volunteer.user.email }}</div>
           </div>
           <div style="font-size:.82rem;color:var(--text-2);">{{ item.reasons|join:", " }}</div>
@@ -198,7 +195,6 @@
   {% endif %}
 </section>
 
-{# Методологический блок — для диплома и демонстрации #}
 <section class="panel-card" style="background:var(--surface-2);">
   <div class="section-head">
     <span class="eyebrow">Методология СППР</span>

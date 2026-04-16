@@ -28,7 +28,6 @@
   </section>
 {% endif %}
 
-{# CSV export / import #}
 <section class="panel-card mb-4" style="background:var(--surface-2);">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
     <div>
@@ -93,18 +92,18 @@
         {% endfor %}
       </div>
 
-      {# Отклики #}
       <div class="applications-box">
         <div class="applications-box__head">
           Отклики: {{ position.applications.count }}
         </div>
 
+        <div class="scroll-panel scroll-panel--md">
         {% for app in position.applications.all %}
           <div class="application-row">
             <div style="flex:1;min-width:0;">
-              <strong style="font-size:.92rem;">
+              <a href="{% url 'accounts:volunteer_profile_detail' app.volunteer_profile.id %}" style="font-size:.92rem;font-weight:700;text-decoration:none;">
                 {{ app.volunteer_profile.user.get_full_name|default:app.volunteer_profile.user.username }}
-              </strong>
+              </a>
               <div style="font-size:.8rem;color:var(--muted);">
                 {{ app.volunteer_profile.user.email }}
                 {% if app.motivation_text %}
@@ -125,21 +124,22 @@
         {% empty %}
           <div style="font-size:.86rem;color:var(--muted);">Откликов пока нет.</div>
         {% endfor %}
+        </div>
       </div>
 
-      {# Назначения — полный lifecycle #}
       {% with assignments=position.assignments.all %}
         {% if assignments %}
           <div class="applications-box mt-1">
             <div class="applications-box__head">
               Назначения: {{ assignments.count }}
             </div>
+            <div class="scroll-panel scroll-panel--md">
             {% for asgn in assignments %}
               <div class="application-row">
                 <div style="flex:1;min-width:0;">
-                  <strong style="font-size:.92rem;">
+                  <a href="{% url 'accounts:volunteer_profile_detail' asgn.volunteer_profile.id %}" style="font-size:.92rem;font-weight:700;text-decoration:none;">
                     {{ asgn.volunteer_profile.user.get_full_name|default:asgn.volunteer_profile.user.username }}
-                  </strong>
+                  </a>
                   <div style="font-size:.8rem;color:var(--muted);">
                     {{ asgn.volunteer_profile.user.email }}
                     {% if asgn.hours_worked %} · {{ asgn.hours_worked }} ч{% endif %}
@@ -153,7 +153,6 @@
                   <span class="status-badge status-badge--{{ asgn.status }}">{{ asgn.get_status_display }}</span>
 
                   {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
-                    {# Модальная форма завершения #}
                     <button class="btn btn-sm btn-success"
                             onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='flex'">
                       ✓ Выполнено
@@ -167,7 +166,6 @@
                 </div>
               </div>
 
-              {# Inline-модал завершения #}
               {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
                 <div id="modal-complete-{{ asgn.id }}"
                      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;">
@@ -183,47 +181,36 @@
                       {% csrf_token %}
                       <div class="field-block">
                         <label class="field-label">Часов отработано</label>
-                        <input type="number" name="hours_worked" class="form-control" value="0" min="0" max="999">
+                        <input type="number" name="hours_worked" min="0" step="1" class="form-control" required>
                       </div>
                       <div class="field-block">
-                        <label class="field-label">Оценка волонтёра (1–5)</label>
-                        <select name="coordinator_rating" class="form-select">
-                          <option value="">— не выставлять —</option>
-                          <option value="5">5 — отлично</option>
-                          <option value="4">4 — хорошо</option>
-                          <option value="3">3 — удовлетворительно</option>
-                          <option value="2">2 — плохо</option>
-                          <option value="1">1 — очень плохо</option>
-                        </select>
+                        <label class="field-label">Оценка координатора (1–5)</label>
+                        <input type="number" name="coordinator_rating" min="1" max="5" step="1" class="form-control" required>
                       </div>
                       <div class="field-block">
-                        <label class="field-label">Комментарий <span style="font-weight:400;color:var(--muted);">— необязательно</span></label>
-                        <textarea name="coordinator_note" class="form-control" rows="2"></textarea>
+                        <label class="field-label">Комментарий</label>
+                        <textarea name="coordinator_note" rows="3" class="form-control" placeholder="Пришёл вовремя, хорошо справился..."></textarea>
                       </div>
-                      <div style="display:flex;gap:.75rem;">
-                        <button type="submit" class="btn btn-success" style="flex:1;">Сохранить</button>
+                      <div style="display:flex;justify-content:flex-end;gap:.6rem;">
                         <button type="button" class="btn btn-outline-secondary"
                                 onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='none'">
                           Отмена
                         </button>
+                        <button type="submit" class="btn btn-success">Сохранить</button>
                       </div>
                     </form>
                   </div>
                 </div>
               {% endif %}
-
             {% endfor %}
+            </div>
           </div>
         {% endif %}
       {% endwith %}
-
     </div>
   {% empty %}
-    <div style="text-align:center;padding:2.5rem 1rem;color:var(--muted);">
-      <div style="font-size:2rem;margin-bottom:.6rem;">🎭</div>
-      <div style="font-weight:700;">Ролей пока нет</div>
-      <div style="font-size:.86rem;margin:.4rem 0 1rem;">Добавьте роли, чтобы волонтёры могли откликаться</div>
-      <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+    <div style="text-align:center;padding:2rem 1rem;color:var(--muted);">
+      Пока не добавлено ни одной роли.
     </div>
   {% endfor %}
 </section>

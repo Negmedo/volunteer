@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Анкета волонтёра{% endblock %}
+
+{% block content %}
+<section class="page-shell mb-4">
+  <div class="page-head">
+    <div>
+      <span class="eyebrow">Просмотр анкеты</span>
+      <h1 class="page-title">
+        {{ volunteer_profile.user.get_full_name|default:volunteer_profile.user.username }}
+      </h1>
+      <p class="page-subtitle">
+        {% if volunteer_profile.city %}{{ volunteer_profile.city }}{% endif %}
+        {% if volunteer_profile.district %} · {{ volunteer_profile.district.name }}{% endif %}
+        {% if volunteer_profile.user.profile.phone %} · {{ volunteer_profile.user.profile.phone }}{% endif %}
+        {% if volunteer_profile.user.email %} · {{ volunteer_profile.user.email }}{% endif %}
+      </p>
+    </div>
+    <a class="btn btn-outline-secondary" href="javascript:history.back()">← Назад</a>
+  </div>
+</section>
+
+<div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1rem;">
+  <section class="panel-card" style="grid-column:span 12;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;">
+      <div class="stat-tile">
+        <div class="stat-label">Заполненность</div>
+        <div class="stat-value">{{ volunteer_profile.profile_completion_percent }}%</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">Завершено</div>
+        <div class="stat-value">{{ volunteer_profile.completed_events_count }}</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">Часы</div>
+        <div class="stat-value">{{ volunteer_profile.volunteer_hours }}</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">Явка</div>
+        <div class="stat-value">{{ volunteer_profile.attendance_rate|floatformat:0 }}%</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">Рейтинг</div>
+        <div class="stat-value">
+          {% if volunteer_profile.coordinator_rating %}{{ volunteer_profile.coordinator_rating|floatformat:1 }}{% else %}—{% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-card" style="grid-column:span 7;">
+    <div class="section-head">
+      <span class="eyebrow">Основные данные</span>
+      <h2 class="section-title">Профиль</h2>
+    </div>
+    <div class="detail-grid">
+      <div><strong>ФИО:</strong> {{ volunteer_profile.user.get_full_name|default:"—" }}</div>
+      <div><strong>Email:</strong> {{ volunteer_profile.user.email|default:"—" }}</div>
+      <div><strong>Телефон:</strong> {{ volunteer_profile.user.profile.phone|default:"—" }}</div>
+      <div><strong>Город:</strong> {{ volunteer_profile.city|default:"—" }}</div>
+      <div><strong>Район:</strong> {{ volunteer_profile.district.name|default:"—" }}</div>
+      <div><strong>Год рождения:</strong> {{ volunteer_profile.birth_year|default:"—" }}</div>
+      <div><strong>Пол:</strong> {{ volunteer_profile.get_gender_display|default:"—" }}</div>
+      <div><strong>Цель участия:</strong> {{ volunteer_profile.get_participation_goal_display|default:"—" }}</div>
+      <div><strong>Период:</strong>
+        {% if volunteer_profile.availability_start_date or volunteer_profile.availability_end_date %}
+          {{ volunteer_profile.availability_start_date|default:"?" }} — {{ volunteer_profile.availability_end_date|default:"?" }}
+        {% else %}—{% endif %}
+      </div>
+      <div><strong>Ночные смены:</strong> {% if volunteer_profile.ready_for_night_shifts %}Да{% else %}Нет{% endif %}</div>
+      <div><strong>Поездки:</strong> {% if volunteer_profile.can_travel %}Да{% else %}Нет{% endif %}</div>
+      <div><strong>Авто:</strong> {% if volunteer_profile.has_car %}Есть{% else %}Нет{% endif %}</div>
+    </div>
+
+    {% if volunteer_profile.motivation_text %}
+      <div class="field-block" style="margin-top:1rem;">
+        <div class="field-label">Мотивация</div>
+        <div class="info-box">{{ volunteer_profile.motivation_text }}</div>
+      </div>
+    {% endif %}
+
+    {% if volunteer_profile.restrictions_note %}
+      <div class="field-block" style="margin-top:1rem;">
+        <div class="field-label">Ограничения / комментарий</div>
+        <div class="info-box">{{ volunteer_profile.restrictions_note }}</div>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="panel-card" style="grid-column:span 5;">
+    <div class="section-head">
+      <span class="eyebrow">Компетенции</span>
+      <h2 class="section-title">Языки и навыки</h2>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Языки</div>
+      <div class="tags-row">
+        {% for item in volunteer_profile.languages.all %}
+          <span class="tag tag--language">{{ item.language.name }} · {{ item.get_level_display }}</span>
+        {% empty %}
+          <span style="color:var(--muted);font-size:.88rem;">Не указаны</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Навыки</div>
+      <div class="tags-row">
+        {% for item in volunteer_profile.skills.all %}
+          <span class="tag">{{ item.skill.name }} · {{ item.get_level_display }}</span>
+        {% empty %}
+          <span style="color:var(--muted);font-size:.88rem;">Не указаны</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Предпочтительные направления</div>
+      <div class="tags-row">
+        {% for item in volunteer_profile.preferred_directions.all %}
+          <span class="tag tag--soft">{{ item.name }}</span>
+        {% empty %}
+          <span style="color:var(--muted);font-size:.88rem;">Не указаны</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Предпочтительные типы задач</div>
+      <div class="tags-row">
+        {% for item in volunteer_profile.preferred_task_types.all %}
+          <span class="tag tag--soft">{{ item.name }}</span>
+        {% empty %}
+          <span style="color:var(--muted);font-size:.88rem;">Не указаны</span>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-card" style="grid-column:span 6;">
+    <div class="section-head section-head--split">
+      <div>
+        <span class="eyebrow">Доступность</span>
+        <h2 class="section-title">Расписание</h2>
+      </div>
+    </div>
+    <div class="scroll-panel scroll-panel--sm">
+      <div class="tags-row">
+        {% for item in volunteer_profile.availability_items.all %}
+          <span class="tag">{{ item.get_weekday_display }} · {{ item.get_time_of_day_display }}</span>
+        {% empty %}
+          <span style="color:var(--muted);font-size:.88rem;">Не указана</span>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-card" style="grid-column:span 6;">
+    <div class="section-head">
+      <span class="eyebrow">История</span>
+      <h2 class="section-title">Последние назначения</h2>
+    </div>
+    <div class="scroll-panel scroll-panel--md">
+      {% for item in recent_assignments %}
+        <div class="app-item">
+          <div style="min-width:0;flex:1;">
+            <div class="app-item__title">{{ item.position.event.title }}</div>
+            <div class="app-item__meta">{{ item.position.title }}</div>
+          </div>
+          <span class="status-badge status-badge--{{ item.status }}">{{ item.get_status_display }}</span>
+        </div>
+      {% empty %}
+        <p style="margin:0;color:var(--muted);">Назначений пока нет.</p>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

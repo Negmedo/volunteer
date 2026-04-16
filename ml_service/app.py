@@ -17,13 +17,13 @@ app = Flask(__name__)
 
 # Веса признаков — задокументированы явно для диплома
 WEIGHTS = {
-    "skill_match":       0.30,
-    "language_match":    0.15,
-    "availability_match":0.15,
-    "location_match":    0.15,
-    "reliability_score": 0.10,
-    "experience_score":  0.10,
-    "motivation_match":  0.05,
+    "skill_match":       0.30, #вес навыков
+    "language_match":    0.15, #вес языков
+    "availability_match":0.15, #вес доступности
+    "location_match":    0.15, #вес локации
+    "reliability_score": 0.10, #вес надёжности
+    "experience_score":  0.10, #вес опыта
+    "motivation_match":  0.05, #вес мотивации
 }
 
 
