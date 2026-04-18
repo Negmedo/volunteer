@@ -186,12 +186,12 @@ a:hover { color: var(--accent-dk); }
 .btn-outline-light {
   background: rgba(255,255,255,.08);
   border-color: rgba(255,255,255,.42);
-  color:  #000;
+  color:  #fff;
 }
 .btn-outline-light:hover {
   background: rgba(255,255,255,.18);
   border-color: rgba(255,255,255,.62);
-  color: #fff;
+  color: #000;
 }
 
 .btn-outline-secondary {
