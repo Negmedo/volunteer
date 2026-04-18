@@ -60,8 +60,12 @@
         <div class="footer-title footer-col-head">Навигация</div>
         <div class="footer-link-col">
           <a href="{% url 'landing:home' %}" class="footer-link">Главная</a>
+          {% if user.is_authenticated %}
+          <a class="footer-link" href="{% url 'accounts:dashboard' %}">Открыть кабинет</a>
+        {% else %}
           <a href="{% url 'accounts:login' %}" class="footer-link">Вход</a>
           <a href="{% url 'accounts:signup' %}" class="footer-link">Регистрация</a>
+        {% endif %}
         </div>
       </div>
       <div>
