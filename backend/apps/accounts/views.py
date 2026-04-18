@@ -4,8 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
-from django.forms.formsets import DELETION_FIELD_NAME
-from apps.core.models import City
+from apps.core.models import City, Skill, Language
 
 from apps.applications.models import Application, Assignment
 from apps.events.models import EventPosition
@@ -15,38 +14,83 @@ from .forms import (
     ProfileForm,
     UserIdentityForm,
     VolunteerProfileForm,
-    VolunteerLanguageFormSetFactory,
-    VolunteerSkillFormSetFactory,
 )
-from .models import Profile, Role, VolunteerProfile, VolunteerAvailability
+from .models import (
+    Profile, Role, VolunteerProfile, VolunteerAvailability, VolunteerSkill, VolunteerLanguage,
+    SkillLevel, LanguageLevel,
+)
 
 
-def _ensure_minimum_form_rows(formset_factory, instance, prefix, post_data=None, minimum=1):
-    formset = formset_factory(post_data or None, instance=instance, prefix=prefix)
-    if post_data is None and formset.total_form_count() == 0:
-        formset = formset_factory(None, instance=instance, prefix=prefix, queryset=formset.queryset.none())
-        formset.extra = minimum
-    return formset
-
-
-def _collect_form_errors(*forms_or_formsets):
+def _collect_form_errors(*forms):
     errors = []
-    for item in forms_or_formsets:
+    for item in forms:
         if hasattr(item, 'errors'):
-            if isinstance(item.errors, list):
-                for error_dict in item.errors:
-                    if hasattr(error_dict, 'items'):
-                        for field, field_errors in error_dict.items():
-                            for error in field_errors:
-                                errors.append(f"{field}: {error}")
-            else:
-                for field, field_errors in item.errors.items():
-                    for error in field_errors:
-                        errors.append(f"{field}: {error}")
-        if hasattr(item, 'non_form_errors'):
-            for error in item.non_form_errors():
+            for field, field_errors in item.errors.items():
+                for error in field_errors:
+                    errors.append(f"{field}: {error}")
+        if hasattr(item, 'non_field_errors'):
+            for error in item.non_field_errors():
                 errors.append(str(error))
     return errors
+
+
+def _selected_values_map(post_data, selected_name, level_prefix):
+    selected = set(post_data.getlist(selected_name))
+    return {int(pk): post_data.get(f'{level_prefix}{pk}') for pk in selected if str(pk).isdigit()}
+
+
+def _build_skill_catalog(profile=None, post_data=None):
+    selected = {}
+    if post_data is not None:
+        selected = _selected_values_map(post_data, 'skill_selected', 'skill_level_')
+    elif profile is not None:
+        selected = {item.skill_id: item.level for item in profile.skills.all()}
+
+    catalog = []
+    for skill in Skill.objects.select_related('category').all():
+        catalog.append({
+            'id': skill.id,
+            'name': skill.name,
+            'category': skill.category.name,
+            'checked': skill.id in selected,
+            'level': selected.get(skill.id, SkillLevel.BEGINNER),
+        })
+    return catalog
+
+
+def _build_language_catalog(profile=None, post_data=None):
+    selected = {}
+    if post_data is not None:
+        selected = _selected_values_map(post_data, 'language_selected', 'language_level_')
+    elif profile is not None:
+        selected = {item.language_id: item.level for item in profile.languages.all()}
+
+    catalog = []
+    for language in Language.objects.all():
+        catalog.append({
+            'id': language.id,
+            'name': language.name,
+            'checked': language.id in selected,
+            'level': selected.get(language.id, LanguageLevel.CONVERSATIONAL),
+        })
+    return catalog
+
+
+def _save_skills_and_languages(profile, post_data):
+    skill_levels = _selected_values_map(post_data, 'skill_selected', 'skill_level_')
+    language_levels = _selected_values_map(post_data, 'language_selected', 'language_level_')
+
+    VolunteerSkill.objects.filter(volunteer_profile=profile).delete()
+    VolunteerLanguage.objects.filter(volunteer_profile=profile).delete()
+
+    VolunteerSkill.objects.bulk_create([
+        VolunteerSkill(volunteer_profile=profile, skill_id=skill_id, level=level or SkillLevel.BEGINNER)
+        for skill_id, level in skill_levels.items()
+    ])
+    VolunteerLanguage.objects.bulk_create([
+        VolunteerLanguage(volunteer_profile=profile, language_id=language_id, level=level or LanguageLevel.CONVERSATIONAL)
+        for language_id, level in language_levels.items()
+    ])
 
 
 def signup_view(request):
@@ -92,26 +136,18 @@ def volunteer_profile_edit(request):
     user_form = UserIdentityForm(request.POST or None, instance=request.user, prefix="user")
     profile_form = ProfileForm(request.POST or None, instance=request.user.profile, prefix="contact")
     volunteer_form = VolunteerProfileForm(request.POST or None, instance=volunteer_profile, prefix="volunteer")
-    language_formset = _ensure_minimum_form_rows(VolunteerLanguageFormSetFactory, volunteer_profile, "langs", request.POST, minimum=1)
-    skill_formset = _ensure_minimum_form_rows(VolunteerSkillFormSetFactory, volunteer_profile, "skills", request.POST, minimum=1)
 
     if request.method == "POST":
-        forms_valid = all([
-            user_form.is_valid(),
-            profile_form.is_valid(),
-            volunteer_form.is_valid(),
-            language_formset.is_valid(),
-            skill_formset.is_valid(),
-        ])
+        forms_valid = all([user_form.is_valid(), profile_form.is_valid(), volunteer_form.is_valid()])
         if forms_valid:
             with transaction.atomic():
                 user_form.save()
                 profile_form.save()
-                vp = volunteer_form.save()
-                language_formset.instance = vp
-                language_formset.save()
-                skill_formset.instance = vp
-                skill_formset.save()
+                vp = volunteer_form.save(commit=False)
+                vp.ready_for_night_shifts = not bool(volunteer_form.cleaned_data.get("avoid_night_shifts"))
+                vp.save()
+                volunteer_form.save_m2m()
+                _save_skills_and_languages(vp, request.POST)
                 vp.availability_items.all().delete()
                 for item in volunteer_form.cleaned_data.get("availability_matrix", []):
                     weekday, time_of_day = item.split(":", 1)
@@ -120,8 +156,7 @@ def volunteer_profile_edit(request):
                 vp.save()
             messages.success(request, "Анкета сохранена")
             return redirect("accounts:volunteer_profile")
-        else:
-            messages.error(request, "Форма сохранена не была. Исправьте отмеченные поля ниже.")
+        messages.error(request, "Форма сохранена не была. Исправьте отмеченные поля ниже.")
 
     district_map = {str(city.id): [{"id": d.id, "name": d.name} for d in city.districts.all()] for city in City.objects.prefetch_related("districts")}
     return render(
@@ -131,11 +166,13 @@ def volunteer_profile_edit(request):
             "user_form": user_form,
             "profile_form": profile_form,
             "volunteer_form": volunteer_form,
-            "language_formset": language_formset,
-            "skill_formset": skill_formset,
             "volunteer_profile": volunteer_profile,
             "district_map": district_map,
-            "form_errors": _collect_form_errors(user_form, profile_form, volunteer_form, language_formset, skill_formset),
+            "form_errors": _collect_form_errors(user_form, profile_form, volunteer_form),
+            "skill_catalog": _build_skill_catalog(volunteer_profile, request.POST if request.method == 'POST' else None),
+            "language_catalog": _build_language_catalog(volunteer_profile, request.POST if request.method == 'POST' else None),
+            "skill_level_choices": SkillLevel.choices,
+            "language_level_choices": LanguageLevel.choices,
         },
     )
 
@@ -150,6 +187,7 @@ def volunteer_dashboard(request):
         .prefetch_related("required_skill_items__skill")
         .filter(event__is_public=True)
         .exclude(applications__volunteer_profile=volunteer_profile)
+        .exclude(assignments__volunteer_profile=volunteer_profile)
         .order_by("event__start_date", "event__title", "title")
     )
     my_applications = (

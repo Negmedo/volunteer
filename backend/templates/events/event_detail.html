@@ -116,7 +116,7 @@
               {% if app.status == 'new' or app.status == 'reviewed' %}
                 <form method="post" action="{% url 'applications:assign_application' app.id %}">
                   {% csrf_token %}
-                  <button class="btn btn-sm btn-primary">Назначить</button>
+                  <button class="btn btn-sm btn-primary">Отправить приглашение</button>
                 </form>
               {% endif %}
             </div>
@@ -152,7 +152,7 @@
                 <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
                   <span class="status-badge status-badge--{{ asgn.status }}">{{ asgn.get_status_display }}</span>
 
-                  {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
+                  {% if asgn.status == 'confirmed' %}
                     <button class="btn btn-sm btn-success"
                             onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='flex'">
                       ✓ Выполнено
@@ -160,13 +160,13 @@
                     <form method="post" action="{% url 'applications:mark_failed' asgn.id %}"
                           onsubmit="return confirm('Зафиксировать неявку? Это снизит attendance_rate волонтёра.');">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-outline-danger">✗ Не явился</button>
+                      <button class="btn btn-sm btn-outline-danger">✗ Зафиксировать неявку</button>
                     </form>
                   {% endif %}
                 </div>
               </div>
 
-              {% if asgn.status == 'assigned' or asgn.status == 'confirmed' %}
+              {% if asgn.status == 'confirmed' %}
                 <div id="modal-complete-{{ asgn.id }}"
                      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;">
                   <div style="background:var(--surface);border-radius:var(--radius-xl);padding:2rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg);">

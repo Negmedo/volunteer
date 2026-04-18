@@ -7,6 +7,7 @@ from apps.accounts.models import VolunteerProfile
 class ApplicationStatus(models.TextChoices):
     NEW = 'new', 'Новая'
     REVIEWED = 'reviewed', 'Рассмотрена'
+    INVITED = 'invited', 'Приглашение отправлено'
     ASSIGNED = 'assigned', 'Назначен'
     CONFIRMED = 'confirmed', 'Подтверждено'
     COMPLETED = 'completed', 'Завершено'
@@ -51,7 +52,6 @@ class Assignment(models.Model):
         default=ApplicationStatus.ASSIGNED
     )
 
-    # Поля, заполняемые организатором после мероприятия
     coordinator_rating = models.PositiveSmallIntegerField(
         null=True, blank=True,
         help_text='Оценка координатора от 1 до 5'

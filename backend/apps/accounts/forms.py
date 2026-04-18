@@ -2,45 +2,14 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from django.forms import inlineformset_factory, BaseInlineFormSet
 
 from .models import (
     Profile,
     VolunteerProfile,
-    VolunteerLanguage,
-    VolunteerSkill,
     Gender,
-    LanguageLevel,
-    SkillLevel,
     TimeOfDay,
     WEEKDAY_CHOICES,
 )
-
-
-class UniqueInlineFormSet(BaseInlineFormSet):
-    unique_field_name = None
-
-    def clean_birth_year(self):
-        value = self.cleaned_data.get("birth_year")
-        return value or 2000
-
-    def clean(self):
-        super().clean()
-        seen = set()
-        for form in self.forms:
-            if not hasattr(form, "cleaned_data") or not form.cleaned_data:
-                continue
-            if form.cleaned_data.get("DELETE"):
-                continue
-            field_name = self.unique_field_name
-            if not field_name:
-                continue
-            value = form.cleaned_data.get(field_name)
-            if not value:
-                continue
-            if value in seen:
-                raise forms.ValidationError("Нельзя выбирать одинаковые значения дважды.")
-            seen.add(value)
 
 
 class SignupForm(forms.ModelForm):
@@ -66,10 +35,6 @@ class SignupForm(forms.ModelForm):
     def clean_password1(self):
         validate_password(self.cleaned_data["password1"], self.instance)
         return self.cleaned_data["password1"]
-
-    def clean_birth_year(self):
-        value = self.cleaned_data.get("birth_year")
-        return value or 2000
 
     def clean(self):
         cleaned = super().clean()
@@ -122,7 +87,7 @@ class VolunteerProfileForm(forms.ModelForm):
         model = VolunteerProfile
         fields = [
             "gender", "birth_year", "city", "district", "availability_start_date", "availability_end_date",
-            "ready_for_night_shifts", "can_travel", "has_car", "physical_work_ok", "carry_heavy_ok",
+            "can_travel", "has_car", "physical_work_ok", "carry_heavy_ok",
             "restrictions_note", "avoid_night_shifts", "avoid_outdoor_winter_work", "avoid_large_crowds",
             "participation_goal", "motivation_text", "preferred_directions", "preferred_task_types",
         ]
@@ -133,7 +98,6 @@ class VolunteerProfileForm(forms.ModelForm):
             "district": "Район",
             "availability_start_date": "Доступен с",
             "availability_end_date": "Доступен до",
-            "ready_for_night_shifts": "Готов к ночным сменам",
             "can_travel": "Готов выезжать в другие районы",
             "has_car": "Есть автомобиль",
             "physical_work_ok": "Физическая нагрузка допустима",
@@ -164,8 +128,6 @@ class VolunteerProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["gender"].choices = [("", "---------")] + list(Gender.choices)
-        self.fields["preferred_directions"].widget = forms.CheckboxSelectMultiple()
-        self.fields["preferred_task_types"].widget = forms.CheckboxSelectMultiple()
         if not self.is_bound and not self.instance.birth_year:
             self.initial["birth_year"] = 2000
         city = None
@@ -200,59 +162,3 @@ class VolunteerProfileForm(forms.ModelForm):
         if start and end and start > end:
             raise forms.ValidationError("Дата начала не может быть позже даты окончания.")
         return cleaned
-
-
-class VolunteerLanguageForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["language"].empty_label = "Выберите язык"
-
-    class Meta:
-        model = VolunteerLanguage
-        fields = ["language", "level"]
-        labels = {"language": "Язык", "level": "Уровень"}
-        widgets = {
-            "language": forms.Select(attrs={"class": "form-select js-unique-select", "data-group": "volunteer-language"}),
-            "level": forms.Select(attrs={"class": "form-select"}),
-        }
-
-
-class VolunteerSkillForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["skill"].empty_label = "Выберите навык"
-
-    class Meta:
-        model = VolunteerSkill
-        fields = ["skill", "level"]
-        labels = {"skill": "Навык", "level": "Уровень"}
-        widgets = {
-            "skill": forms.Select(attrs={"class": "form-select js-unique-select", "data-group": "volunteer-skill"}),
-            "level": forms.Select(attrs={"class": "form-select"}),
-        }
-
-
-class VolunteerLanguageFormSet(UniqueInlineFormSet):
-    unique_field_name = "language"
-
-
-class VolunteerSkillFormSet(UniqueInlineFormSet):
-    unique_field_name = "skill"
-
-
-VolunteerLanguageFormSetFactory = inlineformset_factory(
-    VolunteerProfile,
-    VolunteerLanguage,
-    form=VolunteerLanguageForm,
-    formset=VolunteerLanguageFormSet,
-    extra=0,
-    can_delete=True,
-)
-VolunteerSkillFormSetFactory = inlineformset_factory(
-    VolunteerProfile,
-    VolunteerSkill,
-    form=VolunteerSkillForm,
-    formset=VolunteerSkillFormSet,
-    extra=0,
-    can_delete=True,
-)

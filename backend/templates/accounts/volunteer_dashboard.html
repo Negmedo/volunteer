@@ -168,11 +168,11 @@
               <span class="status-badge status-badge--{{ item.status }}">
                 {{ item.get_status_display }}
               </span>
-              {% if item.status == 'assigned' %}
+              {% if item.status == 'invited' %}
                 <div style="display:flex;gap:.4rem;">
                   <form method="post" action="{% url 'applications:assignment_confirm' item.id %}">
                     {% csrf_token %}
-                    <button class="btn btn-success btn-sm">Принять</button>
+                    <button class="btn btn-success btn-sm">Подтвердить</button>
                   </form>
                   <form method="post" action="{% url 'applications:assignment_decline' item.id %}">
                     {% csrf_token %}

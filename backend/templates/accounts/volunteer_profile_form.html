@@ -6,7 +6,7 @@
     <div>
       <span class="eyebrow">Анкета волонтёра</span>
       <h1 class="page-title">Профиль и параметры участия</h1>
-      <p class="page-subtitle">Анкета должна быть заполнена так, чтобы координатор видел навыки, доступность, ограничения и реальные условия участия.</p>
+      <p class="page-subtitle">Анкета синхронизирована с формулами подбора: навыки, языки, доступность, мотивация и ограничения реально участвуют в расчёте.</p>
     </div>
     <div class="completion-card">
       <div class="completion-label">Заполненность</div>
@@ -17,6 +17,7 @@
 
 <form method="post" class="vstack gap-4">{% csrf_token %}
   {% if form_errors %}<div class="alert alert-danger form-error-summary" id="form-errors"><strong>Проверьте форму.</strong><ul class="mb-0 mt-2">{% for err in form_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
+
   <section class="panel-card">
     <div class="section-head"><div><span class="eyebrow">Блок 1</span><h2 class="section-title">Базовая информация и контакты</h2></div></div>
     <div class="form-grid form-grid--2">
@@ -32,65 +33,48 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head section-head--split">
-      <div><span class="eyebrow">Блок 2</span><h2 class="section-title">Языки и уровень владения</h2></div>
-      <button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="langs">+ Добавить язык</button>
-    </div>
-    {{ language_formset.management_form }}
-    <div class="inline-form-list" id="langs-forms">
-      {% for form in language_formset %}
-        <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">
-          {{ form.id }}
-          <div class="field-block"><label class="field-label">Язык</label>{{ form.language }}</div>
-          <div class="field-block"><label class="field-label">Уровень</label>{{ form.level }}</div>
-          <div class="field-actions">
-            {% if form.DELETE %}<label class="field-label">Удалить</label><div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
-            <button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button>
-          </div>
-        </div>
+    <div class="section-head"><div><span class="eyebrow">Блок 2</span><h2 class="section-title">Языки и уровень владения</h2></div></div>
+    <div class="option-grid option-grid--languages">
+      {% for item in language_catalog %}
+        <label class="option-card option-card--selective">
+          <span class="option-card__main">
+            <input type="checkbox" name="language_selected" value="{{ item.id }}" {% if item.checked %}checked{% endif %} class="js-toggle-option" data-target="language-level-{{ item.id }}">
+            <span>{{ item.name }}</span>
+          </span>
+          <select name="language_level_{{ item.id }}" id="language-level-{{ item.id }}" class="form-select option-card__select" {% if not item.checked %}disabled{% endif %}>
+            {% for value, label in language_level_choices %}
+              <option value="{{ value }}" {% if item.level == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
       {% endfor %}
     </div>
-    <template id="langs-empty-form">
-      <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="langs">
-        __ID__
-        <div class="field-block"><label class="field-label">Язык</label>__LANGUAGE__</div>
-        <div class="field-block"><label class="field-label">Уровень</label>__LEVEL__</div>
-        <div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div>
-      </div>
-    </template>
   </section>
 
   <section class="panel-card">
-    <div class="section-head section-head--split">
-      <div><span class="eyebrow">Блок 3</span><h2 class="section-title">Навыки и компетенции</h2></div>
-      <button type="button" class="btn btn-outline-secondary btn-sm js-add-form" data-prefix="skills">+ Добавить навык</button>
-    </div>
-    {{ skill_formset.management_form }}
-    <div class="inline-form-list" id="skills-forms">
-      {% for form in skill_formset %}
-        <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="skills">
-          {{ form.id }}
-          <div class="field-block"><label class="field-label">Навык</label>{{ form.skill }}</div>
-          <div class="field-block"><label class="field-label">Уровень</label>{{ form.level }}</div>
-          <div class="field-actions">
-            {% if form.DELETE %}<label class="field-label">Удалить</label><div class="checkbox-shell d-none">{{ form.DELETE }}</div>{% endif %}
-            <button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button>
-          </div>
-        </div>
+    <div class="section-head"><div><span class="eyebrow">Блок 3</span><h2 class="section-title">Навыки и компетенции</h2><p class="page-subtitle mb-0">Отметьте все навыки, которыми реально владеете. Этот единый список используется и для обязательных, и для желательных требований роли.</p></div></div>
+    <div class="option-grid option-grid--skills">
+      {% for item in skill_catalog %}
+        <label class="option-card option-card--selective">
+          <span class="option-card__main">
+            <input type="checkbox" name="skill_selected" value="{{ item.id }}" {% if item.checked %}checked{% endif %} class="js-toggle-option" data-target="skill-level-{{ item.id }}">
+            <span>
+              <strong>{{ item.name }}</strong>
+              <small>{{ item.category }}</small>
+            </span>
+          </span>
+          <select name="skill_level_{{ item.id }}" id="skill-level-{{ item.id }}" class="form-select option-card__select" {% if not item.checked %}disabled{% endif %}>
+            {% for value, label in skill_level_choices %}
+              <option value="{{ value }}" {% if item.level == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
       {% endfor %}
     </div>
-    <template id="skills-empty-form">
-      <div class="inline-form-row inline-form-row--actions js-form-row" data-prefix="skills">
-        __ID__
-        <div class="field-block"><label class="field-label">Навык</label>__SKILL__</div>
-        <div class="field-block"><label class="field-label">Уровень</label>__LEVEL__</div>
-        <div class="field-actions"><button type="button" class="btn btn-outline-danger btn-sm js-remove-form">Удалить</button></div>
-      </div>
-    </template>
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 4</span><h2 class="section-title">Доступность</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">Блок 4</span><h2 class="section-title">Доступность и логистика</h2></div></div>
     <div class="form-grid form-grid--2 mb-3">
       <div class="field-block"><label class="field-label">Доступен с</label>{{ volunteer_form.availability_start_date }}</div>
       <div class="field-block"><label class="field-label">Доступен до</label>{{ volunteer_form.availability_end_date }}</div>
@@ -108,7 +92,6 @@
       {% endfor %}
     </div>
     <div class="toggle-grid mt-4">
-      <label class="toggle-card">{{ volunteer_form.ready_for_night_shifts }}<span>Готов к ночным сменам</span></label>
       <label class="toggle-card">{{ volunteer_form.can_travel }}<span>Готов выезжать в другие районы</span></label>
       <label class="toggle-card">{{ volunteer_form.has_car }}<span>Есть автомобиль</span></label>
     </div>
@@ -147,155 +130,46 @@
 {{ district_map|json_script:"district-map" }}
 <script>
 (function() {
-  function getVisibleRows(prefix) {
-    return Array.from(document.querySelectorAll(`.js-form-row[data-prefix="${prefix}"]`)).filter(row => row.style.display !== 'none');
-  }
+  document.querySelectorAll('.js-toggle-option').forEach(function(checkbox) {
+    const target = document.getElementById(checkbox.dataset.target);
+    const sync = function() {
+      if (!target) return;
+      target.disabled = !checkbox.checked;
+    };
+    checkbox.addEventListener('change', sync);
+    sync();
+  });
 
-  function countChosen(group) {
-    return new Set(
-      Array.from(document.querySelectorAll(`.js-unique-select[data-group="${group}"]`))
-        .filter(select => select.closest('.js-form-row')?.style.display !== 'none')
-        .map(select => select.value)
-        .filter(Boolean)
-    ).size;
-  }
-
-  function totalAvailable(select) {
-    return Array.from(select.options).filter(opt => opt.value).length;
-  }
-
-  function updateAddButtons() {
-    const configs = [
-      {prefix: 'langs', group: 'volunteer-language'},
-      {prefix: 'skills', group: 'volunteer-skill'},
-    ];
-    configs.forEach(cfg => {
-      const btn = document.querySelector(`.js-add-form[data-prefix="${cfg.prefix}"]`);
-      const anySelect = document.querySelector(`.js-unique-select[data-group="${cfg.group}"]`);
-      if (!btn || !anySelect) return;
-      const max = totalAvailable(anySelect);
-      const chosen = countChosen(cfg.group);
-      const visibleRows = getVisibleRows(cfg.prefix).length;
-      const hasBlankVisible = getVisibleRows(cfg.prefix).some(row => {
-        const select = row.querySelector(`.js-unique-select[data-group="${cfg.group}"]`);
-        return select && !select.value;
-      });
-      btn.disabled = chosen >= max || hasBlankVisible;
-      btn.textContent = cfg.prefix === 'langs' ? '+ Добавить язык' : '+ Добавить навык';
-    });
-  }
-
-  function refreshGroup(group) {
-    const selects = Array.from(document.querySelectorAll(`.js-unique-select[data-group="${group}"]`))
-      .filter(select => select.closest('.js-form-row')?.style.display !== 'none');
-    const chosen = selects.map(s => s.value).filter(Boolean);
-    selects.forEach(select => {
-      Array.from(select.options).forEach(opt => {
-        if (!opt.value) return;
-        opt.disabled = chosen.includes(opt.value) && opt.value !== select.value;
-      });
-    });
-  }
-
-  function initUniqueSelects() {
-    document.querySelectorAll('.js-unique-select').forEach(select => {
-      if (!select.dataset.bound) {
-        select.dataset.bound = '1';
-        select.addEventListener('change', () => {
-          refreshGroup(select.dataset.group);
-          updateAddButtons();
-        });
-      }
-    });
-    ['volunteer-language', 'volunteer-skill'].forEach(refreshGroup);
-    updateAddButtons();
-  }
-
-  function bindDistrictSelects() {
-    const citySelect = document.getElementById('id_volunteer-city');
-    const districtSelect = document.getElementById('id_volunteer-district');
-    if (!citySelect || !districtSelect) return;
-    const data = JSON.parse(document.getElementById('district-map').textContent || '{}');
-    function render() {
-      const current = districtSelect.value || districtSelect.dataset.selected || '';
-      const options = data[citySelect.value] || [];
-      districtSelect.innerHTML = '<option value="">---------</option>' + options.map(item => `<option value="${item.id}">${item.name}</option>`).join('');
-      if (options.some(item => String(item.id) === String(current))) {
-        districtSelect.value = String(current);
-      }
-    }
-    citySelect.addEventListener('change', () => {
-      districtSelect.dataset.selected = '';
-      districtSelect.value = '';
-      render();
-    });
-    render();
-  }
-
-  function bindRemoveButtons(scope) {
-    scope.querySelectorAll('.js-remove-form').forEach(btn => {
-      if (btn.dataset.bound) return;
-      btn.dataset.bound = '1';
-      btn.addEventListener('click', () => {
-        const row = btn.closest('.js-form-row');
-        const deleteInput = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
-        if (deleteInput) {
-          deleteInput.checked = true;
-          row.style.display = 'none';
-        } else {
-          row.remove();
+  const districtMapNode = document.getElementById('district-map');
+  const citySelect = document.getElementById('{{ volunteer_form.city.id_for_label }}');
+  const districtSelect = document.getElementById('{{ volunteer_form.district.id_for_label }}');
+  if (districtMapNode && citySelect && districtSelect) {
+    const districtMap = JSON.parse(districtMapNode.textContent);
+    const initialDistrict = districtSelect.value;
+    const updateDistricts = function(selectedCityId, selectedDistrictId) {
+      const items = districtMap[selectedCityId] || [];
+      districtSelect.innerHTML = '<option value="">---------</option>';
+      items.forEach(function(item) {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item.name;
+        if (String(item.id) === String(selectedDistrictId || '')) {
+          option.selected = true;
         }
-        ['volunteer-language', 'volunteer-skill'].forEach(refreshGroup);
-        updateAddButtons();
+        districtSelect.appendChild(option);
       });
-    });
+    };
+    updateDistricts(citySelect.value, initialDistrict);
+    citySelect.addEventListener('change', function() { updateDistricts(citySelect.value, ''); });
   }
 
-  function setupFormset(prefix, placeholders) {
-    const container = document.getElementById(`${prefix}-forms`);
-    const totalInput = document.getElementById(`id_${prefix}-TOTAL_FORMS`);
-    const template = document.getElementById(`${prefix}-empty-form`);
-    document.querySelectorAll(`.js-add-form[data-prefix="${prefix}"]`).forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (btn.disabled) return;
-        let html = template.innerHTML;
-        const index = parseInt(totalInput.value, 10);
-        Object.entries(placeholders).forEach(([token, fieldHtml]) => {
-          html = html.replace(token, fieldHtml.replaceAll('__prefix__', index));
-        });
-        html = html.replace('__ID__', '');
-        container.insertAdjacentHTML('beforeend', html);
-        totalInput.value = index + 1;
-        bindRemoveButtons(container);
-        initUniqueSelects();
-      });
+  const availabilityButton = document.getElementById('toggle-all-availability');
+  if (availabilityButton) {
+    availabilityButton.addEventListener('click', function() {
+      const checkboxes = Array.from(document.querySelectorAll('.availability-grid input[type="checkbox"]'));
+      const shouldCheck = checkboxes.some(function(item) { return !item.checked; });
+      checkboxes.forEach(function(item) { item.checked = shouldCheck; });
     });
-    bindRemoveButtons(container);
-  }
-
-  setupFormset('langs', {
-    '__LANGUAGE__': `{{ language_formset.empty_form.language }}`,
-    '__LEVEL__': `{{ language_formset.empty_form.level }}`,
-  });
-  setupFormset('skills', {
-    '__SKILL__': `{{ skill_formset.empty_form.skill }}`,
-    '__LEVEL__': `{{ skill_formset.empty_form.level }}`,
-  });
-  bindDistrictSelects();
-  initUniqueSelects();
-
-  const toggleAllBtn = document.getElementById('toggle-all-availability');
-  if (toggleAllBtn) {
-    toggleAllBtn.addEventListener('click', () => {
-      const boxes = Array.from(document.querySelectorAll('.availability-grid input[type="checkbox"]'));
-      const allChecked = boxes.every(b => b.checked);
-      boxes.forEach(b => { b.checked = !allChecked; });
-    });
-  }
-
-  const errorBlock = document.getElementById('form-errors');
-  if (errorBlock) {
-    errorBlock.scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 })();
 </script>

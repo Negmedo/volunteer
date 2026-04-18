@@ -595,6 +595,7 @@ form p .helptext, .form-text {
 .status-badge--new { background: #edf0eb; color: #59685f; }
 .status-badge--applied { background: #e5efe9; color: #2b6a4e; }
 .status-badge--reviewed { background: var(--warning-lt); color: #9a6924; }
+.status-badge--invited { background: #eef4fb; color: #355b82; }
 .status-badge--assigned, .status-badge--completed { background: #dff0e7; color: #2f7255; }
 .status-badge--confirmed { background: #caebd8; color: #23503d; }
 .status-badge--declined, .status-badge--failed { background: var(--danger-lt); color: #924848; }
@@ -707,6 +708,53 @@ form p .helptext, .form-text {
   display: grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
   gap: .7rem;
+}
+
+.option-grid {
+  display: grid;
+  gap: .8rem;
+}
+.option-grid--skills {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.option-grid--languages {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.option-card {
+  border-radius: 18px;
+  border: 1px solid rgba(200,186,168,.6);
+  background: rgba(255,255,255,.82);
+  padding: .95rem 1rem;
+  display: grid;
+  gap: .8rem;
+}
+.option-card--selective {
+  grid-template-columns: minmax(0,1fr) 150px;
+  align-items: center;
+}
+.option-card--double {
+  align-content: start;
+}
+.option-card__header {
+  display: grid;
+  gap: .15rem;
+}
+.option-card__header small,
+.option-card__main small {
+  color: var(--muted);
+  display: block;
+}
+.option-card__row,
+.option-card__main {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+.option-card__row {
+  justify-content: space-between;
+}
+.option-card__select {
+  min-width: 140px;
 }
 .availability-cell,
 .toggle-card,
