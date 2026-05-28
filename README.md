@@ -35,3 +35,6 @@ Open:
 
 ## damp use
 - cmd /c "docker exec -i volunteer-db-1 mysql --default-character-set=utf8mb4 -uapp -papppass volunteers_db < volunteers_dump.sql"
+
+## damp use on server
+- docker exec -i volunteer_db_1 mysql --default-character-set=utf8mb4 -uapp -pvol12unteer34 volunteers_db < volunteers_dump.sql

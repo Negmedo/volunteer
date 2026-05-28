@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %}{{ page_title }}{% endblock %}
+{% block breadcrumb %}
+<div class="navbar-breadcrumb-row w-100">
+  <nav class="app-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'landing:home' %}">Главная</a>
+    <span class="bc-sep">›</span>
+    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">{{ page_title }}</span>
+  </nav>
+</div>
+{% endblock %}
+
+
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head"><div><span class="eyebrow">Мероприятие</span><h1 class="page-title">{{ page_title }}</h1></div><a class="btn btn-outline-secondary" href="{% url 'events:org_dashboard' %}">Назад</a></div>

@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Анкета волонтёра{% endblock %}
+{% block breadcrumb %}
+<div class="navbar-breadcrumb-row w-100">
+  <nav class="app-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'landing:home' %}">Главная</a>
+    <span class="bc-sep">›</span>
+    <a href="{% url 'accounts:dashboard' %}">Кабинет</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Анкета: {{ volunteer_profile.user.get_full_name|default:volunteer_profile.user.username }}</span>
+  </nav>
+</div>
+{% endblock %}
+
+
 
 {% block content %}
 <section class="page-shell mb-4">
@@ -16,7 +29,7 @@
         {% if volunteer_profile.user.email %} · {{ volunteer_profile.user.email }}{% endif %}
       </p>
     </div>
-    <a class="btn btn-outline-secondary" href="javascript:history.back()">← Назад</a>
+    <a class="btn btn-outline-secondary" href="{% url 'accounts:dashboard' %}">← Назад</a>
   </div>
 </section>
 

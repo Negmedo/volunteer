@@ -32,6 +32,8 @@ services:
 
   ml:
     build: ./ml_service
+    # Нет volume-mount: код и обученная модель берутся из образа,
+    # а не с хоста. Пересборка: docker-compose build ml
     ports:
       - "8765:8765"
     restart: unless-stopped
@@ -56,8 +58,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      ml:
-        condition: service_healthy
+    # ml убран из depends_on: web стартует независимо от ml.
+    # Если ml недоступен — services.py автоматически переключается на fallback.
 
 volumes:
   db_data:

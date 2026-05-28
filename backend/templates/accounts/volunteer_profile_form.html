@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %}Анкета волонтёра{% endblock %}
+{% block breadcrumb %}
+<div class="navbar-breadcrumb-row w-100">
+  <nav class="app-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'landing:home' %}">Главная</a>
+    <span class="bc-sep">›</span>
+    <a href="{% url 'accounts:volunteer_dashboard' %}">Кабинет волонтёра</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Анкета</span>
+  </nav>
+</div>
+{% endblock %}
+
+
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
@@ -8,6 +21,7 @@
       <h1 class="page-title">Профиль и параметры участия</h1>
       <p class="page-subtitle">Анкета синхронизирована с формулами подбора: навыки, языки, доступность, мотивация и ограничения реально участвуют в расчёте.</p>
     </div>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:volunteer_dashboard' %}">← Назад</a>
     <div class="completion-card">
       <div class="completion-label">Заполненность</div>
       <div class="completion-value">{{ volunteer_profile.profile_completion_percent }}%</div>
@@ -29,7 +43,7 @@
       <div class="field-block"><label class="field-label">Год рождения</label>{{ volunteer_form.birth_year }}</div>
       <div class="field-block"><label class="field-label">Город</label>{{ volunteer_form.city }}</div>
       <div class="field-block"><label class="field-label">Район</label>{{ volunteer_form.district }}</div>
-    </div>
+    </div> 
   </section>
 
   <section class="panel-card">

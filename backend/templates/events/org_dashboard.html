@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Кабинет организации{% endblock %}
+{% block breadcrumb %}
+<div class="navbar-breadcrumb-row w-100">
+  <nav class="app-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'landing:home' %}">Главная</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Кабинет организации</span>
+  </nav>
+</div>
+{% endblock %}
+
+
 
 {% block content %}
 <section class="page-shell mb-4">

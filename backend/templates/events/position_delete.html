@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Удалить роль{% endblock %}
+{% block breadcrumb %}
+<div class="navbar-breadcrumb-row w-100">
+  <nav class="app-breadcrumb" aria-label="breadcrumb">
+    <a href="{% url 'landing:home' %}">Главная</a>
+    <span class="bc-sep">›</span>
+    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <span class="bc-sep">›</span>
+    <a href="{% url 'events:event_detail' position.event_id %}">{{ position.event.title }}</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Удалить роль</span>
+  </nav>
+</div>
+{% endblock %}
+
+
 
 {% block content %}
 <div class="delete-shell">

@@ -715,7 +715,13 @@ form p .helptext, .form-text {
   gap: .8rem;
 }
 .option-grid--skills {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.option-card--double .option-card__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .7rem;
 }
 .option-grid--languages {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -729,8 +735,16 @@ form p .helptext, .form-text {
   gap: .8rem;
 }
 .option-card--selective {
-  grid-template-columns: minmax(0,1fr) 150px;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+}
+.option-card--selective .option-card__main {
+  flex: 1;
+}
+.option-card--selective .option-card__select {
+  width: 100%;
+  min-width: 0;
 }
 .option-card--double {
   align-content: start;
@@ -753,8 +767,19 @@ form p .helptext, .form-text {
 .option-card__row {
   justify-content: space-between;
 }
+.option-card__row .option-card__main {
+  flex: 1;
+  min-width: 0;
+}
+.option-card__row .option-card__select {
+  width: auto;
+  min-width: 120px;
+  max-width: 160px;
+  flex-shrink: 0;
+}
 .option-card__select {
-  min-width: 140px;
+  min-width: 120px;
+  max-width: 100%;
 }
 .availability-cell,
 .toggle-card,
