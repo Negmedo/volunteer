@@ -1,0 +1,490 @@
+# en translations for VolunteerSKO UI
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Кабинет"
+msgstr "Dashboard"
+
+msgid "Уведомления"
+msgstr "Notifications"
+
+msgid "Выход"
+msgstr "Sign out"
+
+msgid "Вход"
+msgstr "Sign in"
+
+msgid "Регистрация"
+msgstr "Sign up"
+
+msgid "Кабинет волонтёра"
+msgstr "Volunteer Dashboard"
+
+msgid "Кабинет организации"
+msgstr "Organization Dashboard"
+
+msgid "Координатор"
+msgstr "Coordinator"
+
+msgid "Управляйте мероприятиями, ролями и подбором волонтёров"
+msgstr "Manage events, roles and volunteer matching"
+
+msgid "+ Создать мероприятие"
+msgstr "+ Create Event"
+
+msgid "Мероприятий пока нет"
+msgstr "No events yet"
+
+msgid "Создайте первое мероприятие и добавьте роли для волонтёров"
+msgstr "Create your first event and add volunteer roles"
+
+msgid "Подбор"
+msgstr "Matching"
+
+msgid "Редактировать"
+msgstr "Edit"
+
+msgid "Удалить"
+msgstr "Delete"
+
+msgid "Мероприятие"
+msgstr "Event"
+
+msgid "Роль / позиция"
+msgstr "Role / Position"
+
+msgid "+ Добавить роль"
+msgstr "+ Add Role"
+
+msgid "Скрыто"
+msgstr "Hidden"
+
+msgid "Мест:"
+msgstr "Slots:"
+
+msgid "Открытые позиции"
+msgstr "Open Positions"
+
+msgid "Экспорт и импорт участников"
+msgstr "Export & Import Participants"
+
+msgid "Последние назначения"
+msgstr "Recent Assignments"
+
+msgid "Назначений пока нет."
+msgstr "No assignments yet."
+
+msgid "Удалить мероприятие?"
+msgstr "Delete event?"
+
+msgid "Да, удалить"
+msgstr "Yes, delete"
+
+msgid "Отмена"
+msgstr "Cancel"
+
+msgid "Удалить роль?"
+msgstr "Delete role?"
+
+msgid "Основные данные роли"
+msgstr "Role Details"
+
+msgid "Сохранить роль"
+msgstr "Save Role"
+
+msgid "Требования к навыкам"
+msgstr "Skill Requirements"
+
+msgid "Обязательные"
+msgstr "Required"
+
+msgid "Желательные"
+msgstr "Preferred"
+
+msgid "Языковые требования"
+msgstr "Language Requirements"
+
+msgid "Требования к доступности"
+msgstr "Availability Requirements"
+
+msgid "Добро пожаловать"
+msgstr "Welcome"
+
+msgid "Войдите в кабинет волонтёра или организации"
+msgstr "Sign in to your volunteer or organization account"
+
+msgid "Логин"
+msgstr "Username"
+
+msgid "Пароль"
+msgstr "Password"
+
+msgid "Войти"
+msgstr "Sign In"
+
+msgid "нет аккаунта?"
+msgstr "no account?"
+
+msgid "Зарегистрироваться"
+msgstr "Sign Up"
+
+msgid "Создать аккаунт"
+msgstr "Create Account"
+
+msgid "Зарегистрируйтесь как волонтёр или координатор организации"
+msgstr "Register as a volunteer or organization coordinator"
+
+msgid "Имя"
+msgstr "First Name"
+
+msgid "Фамилия"
+msgstr "Last Name"
+
+msgid "Повтор пароля"
+msgstr "Confirm Password"
+
+msgid "уже есть аккаунт?"
+msgstr "already have an account?"
+
+msgid "Управляй откликами, назначениями и анкетой из одного места."
+msgstr "Manage applications, assignments, and your profile from one place."
+
+msgid "Заполненность"
+msgstr "Completion"
+
+msgid "Редактировать анкету"
+msgstr "Edit Profile"
+
+msgid "Завершено"
+msgstr "Completed"
+
+msgid "Часов"
+msgstr "Hours"
+
+msgid "Явка"
+msgstr "Attendance"
+
+msgid "Рейтинг"
+msgstr "Rating"
+
+msgid "Мои отклики"
+msgstr "My Applications"
+
+msgid "Мои назначения"
+msgstr "My Assignments"
+
+msgid "Откликов пока нет."
+msgstr "No applications yet."
+
+msgid "Подтвердить"
+msgstr "Confirm"
+
+msgid "Отказаться"
+msgstr "Decline"
+
+msgid "Подходящих открытых ролей пока нет"
+msgstr "No matching open roles yet"
+
+msgid "Анкета волонтёра"
+msgstr "Volunteer Profile"
+
+msgid "Профиль и параметры участия"
+msgstr "Profile & Participation Settings"
+
+msgid "Анкета синхронизирована с формулами подбора: навыки, языки, доступность, мотивация и ограничения реально участвуют в расчёте."
+msgstr "Your profile is synced with matching formulas: skills, languages, availability, motivation and restrictions are factored into the scoring."
+
+msgid "Сохранить анкету"
+msgstr "Save Profile"
+
+msgid "Сохранить"
+msgstr "Save"
+
+msgid "Основные данные"
+msgstr "Basic Info"
+
+msgid "Базовая информация и контакты"
+msgstr "Basic information and contacts"
+
+msgid "Пол"
+msgstr "Gender"
+
+msgid "Год рождения"
+msgstr "Birth Year"
+
+msgid "Город"
+msgstr "City"
+
+msgid "Район"
+msgstr "District"
+
+msgid "Телефон"
+msgstr "Phone"
+
+msgid "Доступность и логистика"
+msgstr "Availability & Logistics"
+
+msgid "Доступен с"
+msgstr "Available from"
+
+msgid "Доступен до"
+msgstr "Available until"
+
+msgid "Выбери удобные слоты по дням недели"
+msgstr "Select convenient time slots by day of week"
+
+msgid "Выбрать / снять все"
+msgstr "Select / deselect all"
+
+msgid "Есть автомобиль"
+msgstr "Has a car"
+
+msgid "Готов выезжать в другие районы"
+msgstr "Willing to travel to other districts"
+
+msgid "Ограничения и противопоказания"
+msgstr "Restrictions & Contraindications"
+
+msgid "Нежелательны ночные смены"
+msgstr "Night shifts undesirable"
+
+msgid "Нежелательна работа на улице зимой"
+msgstr "Outdoor winter work undesirable"
+
+msgid "Нежелательна работа с большим потоком людей"
+msgstr "Work with large crowds undesirable"
+
+msgid "Физическая нагрузка допустима"
+msgstr "Physical work is acceptable"
+
+msgid "Могу переносить тяжести"
+msgstr "Can carry heavy items"
+
+msgid "Ограничения / комментарий"
+msgstr "Restrictions / comment"
+
+msgid "Навыки и компетенции"
+msgstr "Skills & Competencies"
+
+msgid "Языки и уровень владения"
+msgstr "Languages & Proficiency"
+
+msgid "Предпочтения и мотивация"
+msgstr "Preferences & Motivation"
+
+msgid "Предпочтительные направления"
+msgstr "Preferred Directions"
+
+msgid "Предпочтительные типы задач"
+msgstr "Preferred Task Types"
+
+msgid "Цель участия"
+msgstr "Goal of Participation"
+
+msgid "Просмотр анкеты"
+msgstr "View Profile"
+
+msgid "Назначения, отклики и системные сообщения"
+msgstr "Assignments, applications and system messages"
+
+msgid "Отметить все прочитанными"
+msgstr "Mark all as read"
+
+msgid "Удалить все"
+msgstr "Delete all"
+
+msgid "Уведомлений пока нет"
+msgstr "No notifications yet"
+
+msgid "Здесь появятся уведомления о назначениях и откликах"
+msgstr "Assignment and application notifications will appear here"
+
+msgid "Новое"
+msgstr "New"
+
+msgid "СППР · интеллектуальный подбор"
+msgstr "DSS · Intelligent Matching"
+
+msgid "Что ищем"
+msgstr "What we're looking for"
+
+msgid "Требования позиции"
+msgstr "Position Requirements"
+
+msgid "Строгий режим · все критерии пройдены"
+msgstr "Strict mode · all criteria met"
+
+msgid "Ослабленный режим"
+msgstr "Relaxed mode"
+
+msgid "После смягчения части критериев"
+msgstr "After relaxing some criteria"
+
+msgid "Рекомендации"
+msgstr "Recommendations"
+
+msgid "Советы координатору"
+msgstr "Tips for coordinator"
+
+msgid "Список отсортирован по убыванию итогового балла."
+msgstr "List sorted by score descending."
+
+msgid "Точное соответствие"
+msgstr "Exact match"
+
+msgid "Частичное соответствие"
+msgstr "Partial match"
+
+msgid "Объяснение"
+msgstr "Explanation"
+
+msgid "Итог"
+msgstr "Score"
+
+msgid "Отклик на роль"
+msgstr "Apply for Role"
+
+msgid "Откликнуться"
+msgstr "Apply"
+
+msgid "Ваш отклик будет рассмотрен организатором."
+msgstr "Your application will be reviewed by the coordinator."
+
+msgid "Вы уже откликнулись на эту роль. Ожидайте ответа."
+msgstr "You have already applied for this role. Awaiting response."
+
+msgid "Вы уже назначены на эту роль."
+msgstr "You are already assigned to this role."
+
+msgid "Войдите, чтобы откликнуться."
+msgstr "Sign in to apply."
+
+msgid "О роли"
+msgstr "About the Role"
+
+msgid "Описание"
+msgstr "Description"
+
+msgid "Ограничения и условия"
+msgstr "Restrictions & Conditions"
+
+msgid "Доступность роли"
+msgstr "Role Availability"
+
+msgid "Импорт волонтёров из CSV"
+msgstr "Import Volunteers from CSV"
+
+msgid "Загрузить файл"
+msgstr "Upload File"
+
+msgid "Импортировать"
+msgstr "Import"
+
+msgid "Назад"
+msgstr "Back"
+
+msgid "← Назад"
+msgstr "← Back"
+
+msgid "Назад к мероприятию"
+msgstr "Back to Event"
+
+msgid "Открыть кабинет"
+msgstr "Open Dashboard"
+
+msgid "Навигация"
+msgstr "Navigation"
+
+msgid "О системе"
+msgstr "About"
+
+msgid "Для кого"
+msgstr "Who is it for"
+
+msgid "Волонтёры"
+msgstr "Volunteers"
+
+msgid "Организации"
+msgstr "Organizations"
+
+msgid "Платформа для координации волонтёров, мероприятий и интеллектуального подбора кандидатов."
+msgstr "Platform for coordinating volunteers, events and intelligent candidate matching."
+
+msgid "© 2026 VolunteerSKO"
+msgstr "© 2026 VolunteerSKO"
+
+msgid "Дипломный проект · Django + MySQL + Docker"
+msgstr "Thesis project · Django + MySQL + Docker"
+
+msgid "СППР для подбора волонтёров"
+msgstr "DSS for Volunteer Matching"
+
+msgid "Стань волонтёром и помоги там, где это действительно нужно"
+msgstr "Become a volunteer and help where it really matters"
+
+msgid "VolunteerSKO помогает организациям быстрее находить надёжных волонтёров, а людям — мероприятия, где их помощь будет по-настоящему полезной."
+msgstr "VolunteerSKO helps organizations find reliable volunteers faster, and helps people find events where their help will truly make a difference."
+
+msgid "Начать"
+msgstr "Get Started"
+
+msgid "Пользователей"
+msgstr "Users"
+
+msgid "Мероприятий"
+msgstr "Events"
+
+msgid "Часов волонтёрства"
+msgstr "Volunteer Hours"
+
+msgid "Кому ты поможешь"
+msgstr "Who will you help"
+
+msgid "Реальные сценарии, где важна каждая пара рук"
+msgstr "Real scenarios where every pair of hands matters"
+
+msgid "Поддержка при ЧС"
+msgstr "Emergency Support"
+
+msgid "Социальная помощь"
+msgstr "Social Assistance"
+
+msgid "Образовательные и городские события"
+msgstr "Educational & City Events"
+
+msgid "Как работает интеллектуальный подбор"
+msgstr "How intelligent matching works"
+
+msgid "Методология СППР"
+msgstr "DSS Methodology"
+
+msgid "Присоединиться к движению"
+msgstr "Join the Movement"
+
+msgid "Назад к роли"
+msgstr "Back to Role"
+
+msgid "Проверьте форму."
+msgstr "Please check the form."
+
+msgid "Проверьте форму роли."
+msgstr "Please check the role form."
+
+msgid "Русский"
+msgstr "Russian"
+
+msgid "Қазақша"
+msgstr "Kazakh"
+
+msgid "English"
+msgstr "English"
+
+msgid "Язык"
+msgstr "Language"

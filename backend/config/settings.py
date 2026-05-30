@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import pymysql
+from django.utils.translation import gettext_lazy as _
 
 pymysql.install_as_MySQLdb()
 load_dotenv()
@@ -30,6 +31,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -78,7 +80,16 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LANGUAGE_CODE = "ru-ru"
+LANGUAGE_CODE = "ru"
+LANGUAGES = [
+    ("ru", _("Русский")),
+    ("en", _("English")),
+    ("kk", _("Қазақша")),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 TIME_ZONE = "Asia/Almaty"
 USE_I18N = True
 USE_TZ = True
