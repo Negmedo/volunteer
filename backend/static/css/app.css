@@ -49,9 +49,34 @@ body {
   font-size: 15px;
   line-height: 1.65;
   color: var(--text);
-  background:
+
+  /* background:
     radial-gradient(circle at top left, rgba(255,255,255,.85), transparent 34%),
-    linear-gradient(180deg, #efe7dd 0%, #f6f0e8 26%, #f3eee7 100%);
+    linear-gradient(180deg, #efe7dd 0%, #f6f0e8 26%, #f3eee7 100%); */
+
+    
+  background-image: url("img/fon.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(245, 240, 232, 0.60);
+  backdrop-filter: blur(4px);
+  z-index: -1;
+}
+@media (max-width: 767px) {
+  body {
+    background-attachment: scroll; 
+  }
+  body::before {
+    position: absolute; /* fixed → absolute на мобиле */
+    min-height: 100vh;
+  }
 }
 
 h1, h2, h3, h4, h5, h6,

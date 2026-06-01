@@ -14,5 +14,5 @@ urlpatterns += i18n_patterns(
     path("applications/", include("apps.applications.urls")),
     path("notifications/", include("apps.notifications.urls")),
     path("matching/", include("apps.matching.urls")),
-    prefix_default_language=False,
+    # prefix_default_language=False,
 )

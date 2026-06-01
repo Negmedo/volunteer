@@ -81,15 +81,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "ru"
+
 LANGUAGES = [
     ("ru", _("Русский")),
-    ("en", _("English")),
     ("kk", _("Қазақша")),
+    ("en", _("English")),
 ]
 
-LOCALE_PATHS = [
-    BASE_DIR / "locale",
-]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 TIME_ZONE = "Asia/Almaty"
 USE_I18N = True
 USE_TZ = True
