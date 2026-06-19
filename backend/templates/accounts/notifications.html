@@ -1,36 +1,35 @@
 {% extends "base.html" %}
-{% block title %}Уведомления{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Уведомления" %}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'accounts:dashboard' %}">Кабинет</a>
+    <a href="{% url 'accounts:dashboard' %}">{% trans "Кабинет" %}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Уведомления</span>
+    <span class="bc-current">{% trans "Уведомления" %}</span>
   </nav>
 </div>
 {% endblock %}
-
-
 
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">Кабинет</span>
-      <h1 class="page-title">Уведомления</h1>
-      <p class="page-subtitle">Назначения, отклики и системные сообщения</p>
+      <span class="eyebrow">{% trans "Кабинет" %}</span>
+      <h1 class="page-title">{% trans "Уведомления" %}</h1>
+      <p class="page-subtitle">{% trans "Назначения, отклики и системные сообщения" %}</p>
     </div>
     <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
       <a class="btn btn-outline-secondary btn-sm" href="{% url 'notifications:mark_all_read' %}">
-        Отметить все прочитанными
+        {% trans "Отметить все прочитанными" %}
       </a>
-      <form method="post" action="{% url 'notifications:clear' %}" onsubmit="return confirm('Удалить все уведомления?');">
+      <form method="post" action="{% url 'notifications:clear' %}" onsubmit="return confirm('{% trans "Удалить все уведомления?" %}');">
         {% csrf_token %}
-        <button class="btn btn-outline-danger btn-sm" type="submit">Удалить все</button>
+        <button class="btn btn-outline-danger btn-sm" type="submit">{% trans "Удалить все" %}</button>
       </form>
-      <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:dashboard' %}">Назад</a>
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:dashboard' %}">{% trans "Назад" %}</a>
     </div>
   </div>
 </section>
@@ -50,11 +49,11 @@
           </div>
           <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
             {% if not item.is_read %}
-              <span class="status-badge status-badge--applied">Новое</span>
+              <span class="status-badge status-badge--applied">{% trans "Новое" %}</span>
             {% endif %}
             <form method="post" action="{% url 'notifications:delete' item.id %}">
               {% csrf_token %}
-              <button class="btn btn-outline-danger btn-sm" type="submit">Удалить</button>
+              <button class="btn btn-outline-danger btn-sm" type="submit">{% trans "Удалить" %}</button>
             </form>
           </div>
         </div>
@@ -63,8 +62,8 @@
   {% else %}
     <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
       <div style="font-size:2.5rem;margin-bottom:.75rem;">🔔</div>
-      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">Уведомлений пока нет</div>
-      <div style="font-size:.88rem;margin-top:.4rem;">Здесь появятся уведомления о назначениях и откликах</div>
+      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">{% trans "Уведомлений пока нет" %}</div>
+      <div style="font-size:.88rem;margin-top:.4rem;">{% trans "Здесь появятся уведомления о назначениях и откликах" %}</div>
     </div>
   {% endif %}
 </section>

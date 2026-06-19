@@ -488,3 +488,480 @@ msgstr "English"
 
 msgid "Язык"
 msgstr "Language"
+
+msgid "7 нормированных признаков [0–1]: навыки, язык, доступность, локация, надёжность, опыт, мотивация."
+msgstr "7 normalized features [0–1]: skills, language, availability, location, reliability, experience, motivation."
+
+msgid "CSV можно подготовить в Excel: Файл → Сохранить как → CSV UTF-8. При импорте используется кодировка UTF-8 с BOM."
+msgstr "CSV can be prepared in Excel: File → Save As → CSV UTF-8. UTF-8 with BOM encoding is used on import."
+
+msgid "CSV-файл"
+msgstr "CSV file"
+
+msgid "Авто"
+msgstr "Car"
+
+msgid "Активность"
+msgstr "Activity"
+
+msgid "Анкета"
+msgstr "Profile"
+
+msgid "Анкета заполнена менее чем на 50%"
+msgstr "Profile is less than 50% complete"
+
+msgid "Блок 1"
+msgstr "Block 1"
+
+msgid "Блок 2"
+msgstr "Block 2"
+
+msgid "Блок 3"
+msgstr "Block 3"
+
+msgid "Блок 4"
+msgstr "Block 4"
+
+msgid "Блок 5"
+msgstr "Block 5"
+
+msgid "Блок 6"
+msgstr "Block 6"
+
+msgid "Вектор признаков"
+msgstr "Feature Vector"
+
+msgid "Волонтёр"
+msgstr "Volunteer"
+
+msgid "Выполнено"
+msgstr "Completed"
+
+msgid "Да"
+msgstr "Yes"
+
+msgid "Даже после ослабления критериев кандидаты не найдены."
+msgstr "No candidates found even after relaxing criteria."
+
+msgid "Данные мероприятия"
+msgstr "Event Data"
+
+msgid "Действие"
+msgstr "Action"
+
+msgid "Детали"
+msgstr "Details"
+
+msgid "Доступность"
+msgstr "Availability"
+
+msgid "Доступные роли"
+msgstr "Available Roles"
+
+msgid "Если выбрана роль — для каждого найденного в системе пользователя будет создан отклик."
+msgstr "If a role is selected, an application will be created for each user found in the system."
+
+msgid "Если навык отмечен как обязательный, он автоматически учитывается и как желательный."
+msgstr "If a skill is marked as required, it is automatically counted as preferred too."
+
+msgid "Есть"
+msgstr "Yes"
+
+msgid "Желательный"
+msgstr "Preferred"
+
+msgid "Жёсткий фильтр"
+msgstr "Hard Filter"
+
+msgid "Жёсткий фильтр + все обязательные требования"
+msgstr "Hard filter + all mandatory requirements"
+
+msgid "Завершить участие"
+msgstr "Complete Participation"
+
+msgid "Закрыть"
+msgstr "Close"
+
+msgid "Заполните анкету, чтобы система могла вас подобрать"
+msgstr "Fill out your profile so the system can match you"
+
+msgid "Заполнить"
+msgstr "Fill in"
+
+msgid "Зафиксировать неявку"
+msgstr "Mark No-show"
+
+msgid "Зафиксировать неявку?"
+msgstr "Mark as no-show?"
+
+msgid "Импорт CSV"
+msgstr "CSV Import"
+
+msgid "Импорт данных"
+msgstr "Data Import"
+
+msgid "Исключение по ограничениям: транспорт, ночные смены, физнагрузка, локация."
+msgstr "Exclusion by constraints: transport, night shifts, physical work, location."
+
+msgid "История"
+msgstr "History"
+
+msgid "Комментарий"
+msgstr "Comment"
+
+msgid "Комментарий к отклику"
+msgstr "Application Comment"
+
+msgid "Компетенции"
+msgstr "Competencies"
+
+msgid "Локальный скоринг"
+msgstr "Local Scoring"
+
+msgid "Мотивация"
+msgstr "Motivation"
+
+msgid "Навыки"
+msgstr "Skills"
+
+msgid "Надёжность"
+msgstr "Reliability"
+
+msgid "Назначения"
+msgstr "Assignments"
+
+msgid "Направление"
+msgstr "Direction"
+
+msgid "Не указана"
+msgstr "Not specified"
+
+msgid "Не указаны"
+msgstr "Not specified"
+
+msgid "Нет"
+msgstr "No"
+
+msgid "Ночные смены"
+msgstr "Night Shifts"
+
+msgid "Нужен автомобиль"
+msgstr "Car required"
+
+msgid "Нужно"
+msgstr "Needed"
+
+msgid "Обязательный"
+msgstr "Required"
+
+msgid "Особых требований к навыкам нет."
+msgstr "No special skill requirements."
+
+msgid "Остальные колонки игнорируются."
+msgstr "Other columns are ignored."
+
+msgid "Отклик"
+msgstr "Application"
+
+msgid "Отклики"
+msgstr "Applications"
+
+msgid "Открыть"
+msgstr "Open"
+
+msgid "Отметьте все навыки, которыми реально владеете."
+msgstr "Check all skills you actually have."
+
+msgid "Отправить приглашение"
+msgstr "Send Invitation"
+
+msgid "Оценка координатора (1–5)"
+msgstr "Coordinator Rating (1–5)"
+
+msgid "Первая строка — заголовок. Обязательная колонка:"
+msgstr "First row is the header. Required column:"
+
+msgid "Перейти к форме отклика"
+msgstr "Go to Application Form"
+
+msgid "Переноска тяжестей"
+msgstr "Heavy lifting"
+
+msgid "Период"
+msgstr "Period"
+
+msgid "Подробнее"
+msgstr "More"
+
+msgid "Поездки"
+msgstr "Travel"
+
+msgid "Позиции мероприятия"
+msgstr "Event Positions"
+
+msgid "Пока не добавлено ни одной роли."
+msgstr "No roles added yet."
+
+msgid "Пользователи, которых нет в системе, будут пропущены. Уже существующие отклики не дублируются."
+msgstr "Users not in the system will be skipped. Existing applications will not be duplicated."
+
+msgid "После отправки отклика организатор получит уведомление и рассмотрит вашу кандидатуру. Вы не сможете удалить отклик самостоятельно."
+msgstr "After submitting, the coordinator will be notified and review your application. You will not be able to delete it yourself."
+
+msgid "Почта"
+msgstr "Email"
+
+msgid "Пригласить вручную"
+msgstr "Invite Manually"
+
+msgid "Признаки модели"
+msgstr "Model Features"
+
+msgid "Признаки подаются в модель, которая возвращает ML-метрику и текстовые объяснения."
+msgstr "Features are passed to the model, which returns an ML score and text explanations."
+
+msgid "Пришёл вовремя, хорошо справился..."
+msgstr "Arrived on time, performed well..."
+
+msgid "Профиль"
+msgstr "Profile"
+
+msgid "Расписание"
+msgstr "Schedule"
+
+msgid "Расскажите, почему хотите участвовать в этой роли. Это поможет организатору принять решение."
+msgstr "Tell us why you want to participate in this role. This will help the coordinator decide."
+
+msgid "Роли"
+msgstr "Roles"
+
+msgid "Роль для отклика (необязательно)"
+msgstr "Role for application (optional)"
+
+msgid "Строгий подбор не нашёл кандидатов."
+msgstr "Strict matching found no candidates."
+
+msgid "Тип задачи"
+msgstr "Task Type"
+
+msgid "Требования к роли:"
+msgstr "Role requirements:"
+
+msgid "Удалить все уведомления?"
+msgstr "Delete all notifications?"
+
+msgid "Удалить мероприятие"
+msgstr "Delete Event"
+
+msgid "Удалить роль"
+msgstr "Delete Role"
+
+msgid "Условия"
+msgstr "Conditions"
+
+msgid "ФИО"
+msgstr "Full Name"
+
+msgid "Файл CSV, подготовленный вручную или экспортированный из Excel."
+msgstr "A CSV file prepared manually or exported from Excel."
+
+msgid "Физическая нагрузка"
+msgstr "Physical Work"
+
+msgid "Формат файла"
+msgstr "File Format"
+
+msgid "Формула расчёта итогового балла"
+msgstr "Score Calculation Formula"
+
+msgid "Часов отработано"
+msgstr "Hours worked"
+
+msgid "Экспорт CSV"
+msgstr "Export CSV"
+
+msgid "Это действие необратимо. Вместе с мероприятием будут удалены все роли, отклики и назначения."
+msgstr "This action is irreversible. All roles, applications and assignments will be deleted along with the event."
+
+msgid "Это действие необратимо. Вместе с ролью будут удалены все отклики и назначения волонтёров на неё."
+msgstr "This action is irreversible. All applications and volunteer assignments will be deleted along with the role."
+
+msgid "Языки"
+msgstr "Languages"
+
+msgid "Языки и навыки"
+msgstr "Languages & Skills"
+
+msgid "волонтёрства"
+msgstr "of volunteering"
+
+msgid "ещё"
+msgstr "more"
+
+msgid "и"
+msgstr "and"
+
+msgid "из 5"
+msgstr "out of 5"
+
+msgid "кандидат"
+msgstr "candidate"
+
+msgid "мест"
+msgstr "slots"
+
+msgid "метрика"
+msgstr "score"
+
+msgid "модуль"
+msgstr "module"
+
+msgid "модуль активен"
+msgstr "module active"
+
+msgid "навыки"
+msgstr "skills"
+
+msgid "не указаны"
+msgstr "not specified"
+
+msgid "необязательно"
+msgstr "optional"
+
+msgid "особых требований нет"
+msgstr "no special requirements"
+
+msgid "рол"
+msgstr "role"
+
+msgid "система не будет включать вас в автоматический подбор."
+msgstr "the system will not include you in automatic matching."
+
+msgid "только проверить, без создания откликов"
+msgstr "check only, without creating applications"
+
+msgid "участий"
+msgstr "participations"
+
+msgid "ч"
+msgstr "h"
+
+msgid "← Назад к мероприятию"
+msgstr "← Back to Event"
+
+msgid "← Назад к роли"
+msgstr "← Back to Role"
+
+msgid "52 юридические консультации, 19 психологических тренингов и 17 индивидуальных консультаций. Работа с молодёжью, пенсионерами и уязвимыми группами."
+msgstr "52 legal consultations, 19 psychological trainings and 17 individual sessions. Work with youth, pensioners and vulnerable groups."
+
+msgid "IT-конференция СКО"
+msgstr "IT Conference SKO"
+
+msgid "Благотворительная ярмарка"
+msgstr "Charity Fair"
+
+msgid "Более 700 волонтёров помогали одиноким пенсионерам и людям с инвалидностью. Доставка продуктов, лекарств, уборка. Помощь получили более 1000 человек."
+msgstr "Over 700 volunteers helped lonely pensioners and people with disabilities. Delivery of food, medicine, cleaning. Over 1000 people received assistance."
+
+msgid "В рамках Birgemiz Taza Alem и Таза Казахстан организовано более 450 экологических мероприятий: субботники, очистка парков, посадка деревьев."
+msgstr "Under Birgemiz Taza Alem and Taza Kazakhstan, over 450 ecological events were held: clean-ups, park cleaning, tree planting."
+
+msgid "В рамках проекта Birgemiz Umit более 3450 добровольцев были задействованы в противопаводковых мероприятиях, профилактике пожаров и рейдах по пожарной безопасности."
+msgstr "Under the Birgemiz Umit project, over 3450 volunteers participated in flood prevention, fire prevention and fire safety raids."
+
+msgid "Волонтёрское движение в СКО — это мощная сила неравнодушных людей, готовых прийти на помощь в любой ситуации. Весной 2024 года, когда регион столкнулся с масштабными паводками, именно волонтёры стали надёжной опорой для спасателей и пострадавших жителей."
+msgstr "The volunteer movement in SKO is a powerful force of caring people ready to help in any situation. In spring 2024, when the region faced major floods, volunteers became a reliable support for rescuers and affected residents."
+
+msgid "Волонтёрское движение в Северо-Казахстанской области"
+msgstr "Volunteer Movement in North Kazakhstan Region"
+
+msgid "Волонтёры СКО"
+msgstr "Volunteers SKO"
+
+msgid "Волонтёры на регистрации, навигации гостей и техподдержке площадок."
+msgstr "Volunteers at registration, guest navigation and technical support of venues."
+
+msgid "Выдача гуманитарной помощи, маршрутизация людей, помощь на пунктах временного размещения и логистика."
+msgstr "Distribution of humanitarian aid, routing people, help at temporary shelter points and logistics."
+
+msgid "Выездная гуманитарная миссия"
+msgstr "Field Humanitarian Mission"
+
+msgid "Городской субботник"
+msgstr "City Clean-up"
+
+msgid "Гости · организация"
+msgstr "Guests · organization"
+
+msgid "Доставка вещей первой необходимости пожилым людям в отдалённых районах."
+msgstr "Delivery of essential goods to elderly people in remote areas."
+
+msgid "Истории и атмосфера"
+msgstr "Stories & Atmosphere"
+
+msgid "Историко-культурное наследие"
+msgstr "Historical & Cultural Heritage"
+
+msgid "Итоги 2025 года"
+msgstr "Results of 2025"
+
+msgid "Итоговое событие года"
+msgstr "Final Event of the Year"
+
+msgid "Координация · медиа"
+msgstr "Coordination · media"
+
+msgid "Кураторы площадок, переводчики и SMM-помощники для работы с аудиторией."
+msgstr "Venue curators, interpreters and SMM assistants for audience engagement."
+
+msgid "Логистика · помощь на выезде"
+msgstr "Logistics · field assistance"
+
+msgid "О нас"
+msgstr "About Us"
+
+msgid "Областной слёт «Волонтёр жолы 2025» объединил активистов со всего региона. Подведены итоги года и награждены самые активные добровольцы."
+msgstr "The regional gathering 'Volunteer zholy 2025' united activists from across the region. Year results were summarized and the most active volunteers were awarded."
+
+msgid "Около 60 мероприятий и 14 экскурсий по благоустройству памятников и мемориалов. Патриотические акции и проекты по сохранению исторической памяти."
+msgstr "About 60 events and 14 excursions for the improvement of monuments and memorials. Patriotic campaigns and historical memory preservation projects."
+
+msgid "Очистка парков и набережных, посадка деревьев. Навыки не нужны."
+msgstr "Cleaning parks and embankments, planting trees. No skills required."
+
+msgid "Поддержка пожилых людей, помощь семьям в трудной ситуации, участие в благотворительных инициативах."
+msgstr "Supporting elderly people, helping families in difficult situations, participating in charitable initiatives."
+
+msgid "Помощь в чрезвычайных ситуациях"
+msgstr "Emergency Assistance"
+
+msgid "Помощь на стойках, работа с гостями и координация зон в течение всего дня."
+msgstr "Help at booths, working with guests and coordinating zones throughout the day."
+
+msgid "Примеры мероприятий и ролей волонтёров"
+msgstr "Examples of Events and Volunteer Roles"
+
+msgid "Регистрация · техподдержка"
+msgstr "Registration · tech support"
+
+msgid "Регистрация участников, сопровождение площадок, координация потоков гостей и помощь организаторам."
+msgstr "Participant registration, venue support, guest flow coordination and assistance to organizers."
+
+msgid "Социальное направление"
+msgstr "Social Direction"
+
+msgid "Фестиваль восточной культуры"
+msgstr "Eastern Culture Festival"
+
+msgid "Что мы сделали"
+msgstr "What We've Done"
+
+msgid "Экологическое волонтёрство"
+msgstr "Ecological Volunteering"
+
+msgid "Экология · город"
+msgstr "Ecology · city"
+
+msgid "Юридическая и психологическая помощь"
+msgstr "Legal & Psychological Assistance"

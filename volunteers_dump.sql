@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.45, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.46, for Linux (x86_64)
 --
 -- Host: localhost    Database: volunteers_db
 -- ------------------------------------------------------
--- Server version	8.0.45
+-- Server version	8.0.46
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,7 @@ CREATE TABLE `accounts_profile` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `accounts_profile_user_id_49a85d32_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `accounts_profile` (
 
 LOCK TABLES `accounts_profile` WRITE;
 /*!40000 ALTER TABLE `accounts_profile` DISABLE KEYS */;
-INSERT INTO `accounts_profile` VALUES (1,'ADMIN','+77000000001','',1),(2,'ORG','+77000000002','Добрый штаб',2),(3,'VOLUNTEER','+77000000003','',3),(4,'VOLUNTEER','','',4),(5,'VOLUNTEER','','',5);
+INSERT INTO `accounts_profile` VALUES (1,'ADMIN','+77000000001','',1),(2,'ORG','+77000000002','Добрый штаб',2),(3,'VOLUNTEER','+77778965237','',3),(4,'VOLUNTEER','+77076240414','',4),(5,'VOLUNTEER','+77075621283','',5),(6,'VOLUNTEER','+77776844539','',6),(7,'VOLUNTEER','+77075822415','',7),(8,'VOLUNTEER','+77075874596','',8),(9,'VOLUNTEER','+77777896325','',9),(10,'VOLUNTEER','+77778521478','',10),(11,'VOLUNTEER','+77088963215','',11),(12,'VOLUNTEER','+77075824785','',12),(13,'ORG','','',13),(14,'VOLUNTEER','+77777412356','',14),(15,'VOLUNTEER','+77773569172','',15),(16,'VOLUNTEER','+77000000003','',16);
 /*!40000 ALTER TABLE `accounts_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +60,7 @@ CREATE TABLE `accounts_volunteeravailability` (
   UNIQUE KEY `accounts_volunteeravaila_volunteer_profile_id_wee_9eb6cdab_uniq` (`volunteer_profile_id`,`weekday`,`time_of_day`),
   CONSTRAINT `accounts_volunteerav_volunteer_profile_id_3627589d_fk_accounts_` FOREIGN KEY (`volunteer_profile_id`) REFERENCES `accounts_volunteerprofile` (`id`),
   CONSTRAINT `accounts_volunteeravailability_chk_1` CHECK ((`weekday` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=373 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `accounts_volunteeravailability` (
 
 LOCK TABLES `accounts_volunteeravailability` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteeravailability` DISABLE KEYS */;
-INSERT INTO `accounts_volunteeravailability` VALUES (353,1,'DAY',1),(354,1,'EVENING',1),(352,1,'MORNING',1),(356,2,'DAY',1),(357,2,'EVENING',1),(355,2,'MORNING',1),(359,3,'DAY',1),(360,3,'EVENING',1),(358,3,'MORNING',1),(362,4,'DAY',1),(363,4,'EVENING',1),(361,4,'MORNING',1),(365,5,'DAY',1),(366,5,'EVENING',1),(364,5,'MORNING',1),(368,6,'DAY',1),(369,6,'EVENING',1),(367,6,'MORNING',1),(371,7,'DAY',1),(372,7,'EVENING',1),(370,7,'MORNING',1);
+INSERT INTO `accounts_volunteeravailability` VALUES (2,1,'DAY',2),(3,1,'EVENING',2),(1,1,'MORNING',2),(5,2,'DAY',2),(6,2,'EVENING',2),(4,2,'MORNING',2),(8,3,'DAY',2),(9,3,'EVENING',2),(7,3,'MORNING',2),(11,4,'DAY',2),(12,4,'EVENING',2),(10,4,'MORNING',2),(14,5,'DAY',2),(15,5,'EVENING',2),(13,5,'MORNING',2),(17,6,'DAY',2),(18,6,'EVENING',2),(16,6,'MORNING',2),(20,7,'DAY',2),(21,7,'EVENING',2),(19,7,'MORNING',2),(113,1,'DAY',3),(112,1,'MORNING',3),(115,2,'DAY',3),(114,2,'MORNING',3),(117,3,'DAY',3),(116,3,'MORNING',3),(119,4,'DAY',3),(118,4,'MORNING',3),(121,5,'DAY',3),(120,5,'MORNING',3),(104,2,'DAY',4),(105,2,'EVENING',4),(103,2,'MORNING',4),(107,4,'DAY',4),(108,4,'EVENING',4),(106,4,'MORNING',4),(110,6,'DAY',4),(111,6,'EVENING',4),(109,6,'MORNING',4),(123,1,'DAY',5),(124,1,'EVENING',5),(122,1,'MORNING',5),(126,2,'DAY',5),(127,2,'EVENING',5),(125,2,'MORNING',5),(129,3,'DAY',5),(130,3,'EVENING',5),(128,3,'MORNING',5),(132,4,'DAY',5),(133,4,'EVENING',5),(131,4,'MORNING',5),(135,5,'DAY',5),(136,5,'EVENING',5),(134,5,'MORNING',5),(138,6,'DAY',5),(139,6,'EVENING',5),(137,6,'MORNING',5),(141,7,'DAY',5),(142,7,'EVENING',5),(140,7,'MORNING',5),(143,1,'DAY',6),(144,1,'EVENING',6),(145,2,'DAY',6),(146,2,'EVENING',6),(147,3,'DAY',6),(148,3,'EVENING',6),(149,4,'DAY',6),(150,4,'EVENING',6),(151,5,'DAY',6),(152,5,'EVENING',6),(153,6,'DAY',6),(154,6,'EVENING',6),(155,7,'DAY',6),(156,7,'EVENING',6),(158,1,'DAY',7),(159,1,'EVENING',7),(157,1,'MORNING',7),(161,2,'DAY',7),(162,2,'EVENING',7),(160,2,'MORNING',7),(164,3,'DAY',7),(165,3,'EVENING',7),(163,3,'MORNING',7),(167,4,'DAY',7),(168,4,'EVENING',7),(166,4,'MORNING',7),(170,5,'DAY',7),(171,5,'EVENING',7),(169,5,'MORNING',7),(173,6,'DAY',7),(174,6,'EVENING',7),(172,6,'MORNING',7),(176,7,'DAY',7),(177,7,'EVENING',7),(175,7,'MORNING',7),(179,1,'DAY',8),(180,1,'EVENING',8),(178,1,'MORNING',8),(182,2,'DAY',8),(183,2,'EVENING',8),(181,2,'MORNING',8),(185,3,'DAY',8),(186,3,'EVENING',8),(184,3,'MORNING',8),(188,4,'DAY',8),(189,4,'EVENING',8),(187,4,'MORNING',8),(191,5,'DAY',8),(192,5,'EVENING',8),(190,5,'MORNING',8),(194,6,'DAY',8),(195,6,'EVENING',8),(193,6,'MORNING',8),(197,7,'DAY',8),(198,7,'EVENING',8),(196,7,'MORNING',8),(200,1,'DAY',9),(201,1,'EVENING',9),(199,1,'MORNING',9),(203,2,'DAY',9),(204,2,'EVENING',9),(202,2,'MORNING',9),(206,3,'DAY',9),(207,3,'EVENING',9),(205,3,'MORNING',9),(209,4,'DAY',9),(210,4,'EVENING',9),(208,4,'MORNING',9),(212,5,'DAY',9),(213,5,'EVENING',9),(211,5,'MORNING',9),(215,1,'DAY',10),(216,1,'EVENING',10),(214,1,'MORNING',10),(218,2,'DAY',10),(219,2,'EVENING',10),(217,2,'MORNING',10),(221,3,'DAY',10),(222,3,'EVENING',10),(220,3,'MORNING',10),(224,4,'DAY',10),(225,4,'EVENING',10),(223,4,'MORNING',10),(227,5,'DAY',10),(228,5,'EVENING',10),(226,5,'MORNING',10),(230,6,'DAY',10),(231,6,'EVENING',10),(229,6,'MORNING',10),(233,7,'DAY',10),(234,7,'EVENING',10),(232,7,'MORNING',10),(236,1,'DAY',12),(237,1,'EVENING',12),(235,1,'MORNING',12),(239,2,'DAY',12),(240,2,'EVENING',12),(238,2,'MORNING',12),(242,3,'DAY',12),(243,3,'EVENING',12),(241,3,'MORNING',12),(245,4,'DAY',12),(246,4,'EVENING',12),(244,4,'MORNING',12),(248,5,'DAY',12),(249,5,'EVENING',12),(247,5,'MORNING',12),(251,6,'DAY',12),(252,6,'EVENING',12),(250,6,'MORNING',12),(254,7,'DAY',12),(255,7,'EVENING',12),(253,7,'MORNING',12),(267,1,'DAY',13),(266,1,'MORNING',13),(269,2,'DAY',13),(268,2,'MORNING',13),(271,3,'DAY',13),(270,3,'MORNING',13),(273,4,'DAY',13),(272,4,'MORNING',13),(275,5,'DAY',13),(274,5,'MORNING',13);
 /*!40000 ALTER TABLE `accounts_volunteeravailability` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +90,7 @@ CREATE TABLE `accounts_volunteerlanguage` (
   KEY `accounts_volunteerla_language_id_63f12775_fk_core_lang` (`language_id`),
   CONSTRAINT `accounts_volunteerla_language_id_63f12775_fk_core_lang` FOREIGN KEY (`language_id`) REFERENCES `core_language` (`id`),
   CONSTRAINT `accounts_volunteerla_volunteer_profile_id_598a0c70_fk_accounts_` FOREIGN KEY (`volunteer_profile_id`) REFERENCES `accounts_volunteerprofile` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +99,7 @@ CREATE TABLE `accounts_volunteerlanguage` (
 
 LOCK TABLES `accounts_volunteerlanguage` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteerlanguage` DISABLE KEYS */;
-INSERT INTO `accounts_volunteerlanguage` VALUES (4,'CONVERSATIONAL',3,2),(5,'CONVERSATIONAL',2,2),(6,'CONVERSATIONAL',1,2),(13,'CONVERSATIONAL',1,1),(14,'CONVERSATIONAL',2,1),(15,'CONVERSATIONAL',3,1);
+INSERT INTO `accounts_volunteerlanguage` VALUES (1,'FLUENT',1,2),(2,'BASIC',2,2),(3,'CONVERSATIONAL',3,2),(25,'FLUENT',1,4),(26,'FLUENT',2,4),(27,'FLUENT',3,4),(28,'CONVERSATIONAL',1,3),(29,'BASIC',2,3),(30,'FLUENT',3,3),(31,'BASIC',1,5),(32,'FLUENT',2,5),(33,'BASIC',3,5),(34,'FLUENT',1,6),(35,'BASIC',2,6),(36,'FLUENT',3,6),(37,'BASIC',1,7),(38,'FLUENT',2,7),(39,'CONVERSATIONAL',1,8),(40,'FLUENT',2,8),(41,'FLUENT',1,9),(42,'BASIC',2,9),(43,'FLUENT',3,9),(44,'FLUENT',1,10),(45,'CONVERSATIONAL',2,12),(46,'CONVERSATIONAL',1,12),(50,'FLUENT',2,13),(51,'FLUENT',1,13),(52,'CONVERSATIONAL',3,13);
 /*!40000 ALTER TABLE `accounts_volunteerlanguage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `accounts_volunteerprofile` (
   CONSTRAINT `accounts_volunteerprofile_chk_3` CHECK ((`volunteer_hours` >= 0)),
   CONSTRAINT `accounts_volunteerprofile_chk_4` CHECK ((`response_speed_hours` >= 0)),
   CONSTRAINT `accounts_volunteerprofile_chk_5` CHECK ((`profile_completion_percent` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `accounts_volunteerprofile` (
 
 LOCK TABLES `accounts_volunteerprofile` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteerprofile` DISABLE KEYS */;
-INSERT INTO `accounts_volunteerprofile` VALUES (1,'MALE',2000,'2026-04-13','2026-04-14',1,1,1,1,1,'x',0,0,0,'RESUME','x',2,6,66.67,5.00,0,100,1,'2026-04-13 06:38:56.938874','2026-04-18 17:01:41.160824',3,6,3),(2,'',2000,NULL,NULL,0,0,0,1,1,'',0,0,0,'','',1,8,100.00,3.00,0,37,0,'2026-04-15 15:08:23.409644','2026-04-15 15:09:35.044818',NULL,NULL,4),(3,'',NULL,NULL,NULL,0,0,0,1,1,'',0,0,0,'','',2,15,100.00,4.50,0,0,0,'2026-04-15 15:11:17.929288','2026-04-15 15:11:17.929308',NULL,NULL,5);
+INSERT INTO `accounts_volunteerprofile` VALUES (1,'',NULL,NULL,NULL,0,0,0,1,1,'',0,0,0,'','',0,0,0.00,0.00,0,0,0,'2026-06-02 18:42:53.742790','2026-06-02 18:42:53.742808',3,6,3),(2,'MALE',2001,'2026-06-10','2026-06-30',1,1,1,1,1,'',0,0,0,'SOCIAL','Мне нравиться помогать людям.',0,0,0.00,0.00,0,100,1,'2026-06-02 18:49:45.281917','2026-06-02 18:53:04.666026',1,1,4),(3,'MALE',2000,'2026-06-21','2026-06-28',0,0,0,0,1,'У меня больная спина. Поэтому для меня физические нагрузки не желательны.',1,0,0,'RESUME','Я умею организовывать мероприятия для различных целей: концерты, ярмарки и многое другое.',0,0,0.00,0.00,0,100,1,'2026-06-02 18:54:14.904456','2026-06-02 19:08:53.396752',1,4,5),(4,'MALE',2000,'2026-06-08','2026-06-30',1,0,0,0,0,'Я мерзляк.',0,1,0,'SOCIAL','Я хочу стать в будущем президентом России.',0,0,0.00,0.00,0,100,1,'2026-06-02 19:01:13.408700','2026-06-02 19:07:45.385266',1,3,6),(5,'FEMALE',1994,'2026-06-10','2026-06-28',0,0,0,0,0,'Не люблю работать ночью.',1,0,0,'PRACTICE','Хочу прославиться.',0,0,0.00,0.00,0,100,1,'2026-06-02 19:10:26.698286','2026-06-02 19:12:43.561297',1,2,7),(6,'FEMALE',2004,'2026-06-18','2026-07-26',1,0,1,0,0,'Мне нужно следить за своей прекрасной кожей.',0,1,0,'CERTIFICATE','Хочу быть богатой.',0,0,0.00,0.00,0,100,1,'2026-06-02 19:28:04.115907','2026-06-02 19:30:14.355600',1,2,8),(7,'MALE',1999,'2026-06-15','2026-07-20',1,1,1,1,1,'Я социопат.',0,0,1,'RESUME','Моя машина делает врум врум.',0,0,0.00,0.00,0,100,1,'2026-06-02 19:31:17.985495','2026-06-02 19:38:53.879014',3,6,9),(8,'FEMALE',1993,'2026-06-17','2026-07-24',0,1,0,0,0,'У меня топографический кретинизм.',1,1,0,'SOCIAL','Хочу быть нянькой.',0,0,0.00,0.00,0,100,1,'2026-06-02 20:10:44.582145','2026-06-02 20:13:00.277158',2,5,10),(9,'MALE',2007,'2026-06-22','2026-07-22',1,1,1,1,1,'Ограничений нет.',0,0,0,'CERTIFICATE','Я хорошо разбираюсь в технике.',0,0,0.00,0.00,0,100,1,'2026-06-02 20:15:55.947135','2026-06-02 20:17:54.070898',1,3,11),(10,'MALE',2007,'2026-06-17','2026-07-19',1,0,1,1,1,'Ограничений нет.',0,0,0,'RESUME','Я хочу спасать людей.',0,0,0.00,0.00,0,100,1,'2026-06-02 21:42:57.923381','2026-06-02 21:44:32.207422',1,1,12),(11,'',NULL,NULL,NULL,0,0,0,1,1,'',0,0,0,'','',0,0,0.00,0.00,0,0,0,'2026-06-02 21:46:18.381916','2026-06-02 21:46:18.381942',NULL,NULL,13),(12,'MALE',1995,'2026-01-26','2026-03-12',1,1,1,1,1,'Физически сильный и выносливый.',0,0,0,'SOCIAL','Хочу помогать людям в беде.',0,0,0.00,0.00,0,100,1,'2026-06-03 07:37:18.173992','2026-06-03 07:40:11.193482',2,5,14),(13,'FEMALE',2001,'2026-09-01','2026-09-30',0,0,0,0,0,'Могу организовывать мероприятия для разных задач.',1,0,0,'PRACTICE','Хочу приобрести навыки в сфере организации мероприятий.',0,0,0.00,0.00,0,100,1,'2026-06-03 08:16:07.161661','2026-06-03 08:26:22.653374',3,6,15),(14,'',NULL,NULL,NULL,0,0,0,1,1,'',0,0,0,'','',0,0,0.00,0.00,0,0,0,'2026-06-04 19:51:11.749423','2026-06-04 19:51:11.749446',3,6,16);
 /*!40000 ALTER TABLE `accounts_volunteerprofile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +180,7 @@ CREATE TABLE `accounts_volunteerprofile_preferred_directions` (
   KEY `accounts_volunteerpr_volunteerdirection_i_a73ab7d3_fk_core_volu` (`volunteerdirection_id`),
   CONSTRAINT `accounts_volunteerpr_volunteerdirection_i_a73ab7d3_fk_core_volu` FOREIGN KEY (`volunteerdirection_id`) REFERENCES `core_volunteerdirection` (`id`),
   CONSTRAINT `accounts_volunteerpr_volunteerprofile_id_0753ef96_fk_accounts_` FOREIGN KEY (`volunteerprofile_id`) REFERENCES `accounts_volunteerprofile` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +189,7 @@ CREATE TABLE `accounts_volunteerprofile_preferred_directions` (
 
 LOCK TABLES `accounts_volunteerprofile_preferred_directions` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteerprofile_preferred_directions` DISABLE KEYS */;
-INSERT INTO `accounts_volunteerprofile_preferred_directions` VALUES (1,1,3);
+INSERT INTO `accounts_volunteerprofile_preferred_directions` VALUES (1,2,2),(2,2,3),(3,3,5),(4,4,5),(5,5,4),(6,5,5),(7,6,2),(8,6,3),(9,6,5),(10,7,4),(11,8,3),(12,8,5),(13,9,4),(14,9,5),(15,10,3),(16,10,4),(17,12,4),(18,13,5);
 /*!40000 ALTER TABLE `accounts_volunteerprofile_preferred_directions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,7 +209,7 @@ CREATE TABLE `accounts_volunteerprofile_preferred_task_types` (
   KEY `accounts_volunteerpr_tasktype_id_fa7d4814_fk_core_task` (`tasktype_id`),
   CONSTRAINT `accounts_volunteerpr_tasktype_id_fa7d4814_fk_core_task` FOREIGN KEY (`tasktype_id`) REFERENCES `core_tasktype` (`id`),
   CONSTRAINT `accounts_volunteerpr_volunteerprofile_id_daf8861b_fk_accounts_` FOREIGN KEY (`volunteerprofile_id`) REFERENCES `accounts_volunteerprofile` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +218,7 @@ CREATE TABLE `accounts_volunteerprofile_preferred_task_types` (
 
 LOCK TABLES `accounts_volunteerprofile_preferred_task_types` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteerprofile_preferred_task_types` DISABLE KEYS */;
-INSERT INTO `accounts_volunteerprofile_preferred_task_types` VALUES (1,1,5);
+INSERT INTO `accounts_volunteerprofile_preferred_task_types` VALUES (1,2,1),(2,2,2),(3,3,2),(4,4,1),(5,4,2),(6,5,2),(7,6,1),(8,6,4),(9,7,5),(10,8,1),(11,8,4),(12,9,3),(13,9,5),(14,10,1),(15,10,2),(16,10,5),(17,12,1),(18,12,4),(19,13,2);
 /*!40000 ALTER TABLE `accounts_volunteerprofile_preferred_task_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -239,7 +239,7 @@ CREATE TABLE `accounts_volunteerskill` (
   KEY `accounts_volunteerskill_skill_id_3361c0ad_fk_core_skill_id` (`skill_id`),
   CONSTRAINT `accounts_volunteersk_volunteer_profile_id_9486f227_fk_accounts_` FOREIGN KEY (`volunteer_profile_id`) REFERENCES `accounts_volunteerprofile` (`id`),
   CONSTRAINT `accounts_volunteerskill_skill_id_3361c0ad_fk_core_skill_id` FOREIGN KEY (`skill_id`) REFERENCES `core_skill` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -248,7 +248,7 @@ CREATE TABLE `accounts_volunteerskill` (
 
 LOCK TABLES `accounts_volunteerskill` WRITE;
 /*!40000 ALTER TABLE `accounts_volunteerskill` DISABLE KEYS */;
-INSERT INTO `accounts_volunteerskill` VALUES (2,'BEGINNER',3,2),(8,'BEGINNER',1,1),(9,'BEGINNER',3,1);
+INSERT INTO `accounts_volunteerskill` VALUES (1,'INTERMEDIATE',1,2),(2,'INTERMEDIATE',2,2),(3,'BEGINNER',10,2),(4,'ADVANCED',3,2),(26,'PROFESSIONAL',8,4),(27,'INTERMEDIATE',9,4),(28,'ADVANCED',6,4),(29,'ADVANCED',5,3),(30,'ADVANCED',7,3),(31,'PROFESSIONAL',6,3),(32,'INTERMEDIATE',9,5),(33,'ADVANCED',10,5),(34,'PROFESSIONAL',7,5),(35,'BEGINNER',6,5),(36,'INTERMEDIATE',5,6),(37,'INTERMEDIATE',1,6),(38,'ADVANCED',2,6),(39,'ADVANCED',9,6),(40,'PROFESSIONAL',3,6),(41,'PROFESSIONAL',4,7),(42,'INTERMEDIATE',5,8),(43,'PROFESSIONAL',2,8),(44,'ADVANCED',9,8),(45,'PROFESSIONAL',4,9),(46,'PROFESSIONAL',10,9),(47,'ADVANCED',3,10),(48,'INTERMEDIATE',5,10),(49,'ADVANCED',10,10),(50,'PROFESSIONAL',8,10),(51,'ADVANCED',2,10),(52,'INTERMEDIATE',2,12),(53,'PROFESSIONAL',10,12),(54,'BEGINNER',3,12),(60,'BEGINNER',9,13),(61,'BEGINNER',2,13),(62,'PROFESSIONAL',6,13),(63,'BEGINNER',1,13),(64,'BEGINNER',5,13);
 /*!40000 ALTER TABLE `accounts_volunteerskill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -271,7 +271,7 @@ CREATE TABLE `applications_application` (
   KEY `applications_applica_volunteer_profile_id_931a906d_fk_accounts_` (`volunteer_profile_id`),
   CONSTRAINT `applications_applica_position_id_05dbc68f_fk_events_ev` FOREIGN KEY (`position_id`) REFERENCES `events_eventposition` (`id`),
   CONSTRAINT `applications_applica_volunteer_profile_id_931a906d_fk_accounts_` FOREIGN KEY (`volunteer_profile_id`) REFERENCES `accounts_volunteerprofile` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -280,7 +280,7 @@ CREATE TABLE `applications_application` (
 
 LOCK TABLES `applications_application` WRITE;
 /*!40000 ALTER TABLE `applications_application` DISABLE KEYS */;
-INSERT INTO `applications_application` VALUES (2,'completed','','2026-04-15 14:53:39.178002',2,1),(3,'completed','','2026-04-15 15:10:03.487941',2,2),(4,'completed','','2026-04-15 15:11:43.010032',2,3),(5,'failed','','2026-04-15 17:44:57.444013',3,1),(8,'confirmed','','2026-04-18 16:31:47.535498',5,1),(9,'invited','','2026-04-18 16:31:54.341914',5,2);
+INSERT INTO `applications_application` VALUES (1,'invited','Я житель Сергеевки и хочу помочь моим соседям по несчастью.','2026-06-03 07:46:20.036711',3,12);
 /*!40000 ALTER TABLE `applications_application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,7 +311,7 @@ CREATE TABLE `applications_assignment` (
   CONSTRAINT `applications_assignment_assigned_by_id_f81dd12c_fk_auth_user_id` FOREIGN KEY (`assigned_by_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `applications_assignment_chk_1` CHECK ((`coordinator_rating` >= 0)),
   CONSTRAINT `applications_assignment_chk_2` CHECK ((`hours_worked` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,7 +320,7 @@ CREATE TABLE `applications_assignment` (
 
 LOCK TABLES `applications_assignment` WRITE;
 /*!40000 ALTER TABLE `applications_assignment` DISABLE KEYS */;
-INSERT INTO `applications_assignment` VALUES (2,'completed','2026-04-15 14:53:39.191195',2,2,1,5,3,'','2026-04-15 15:14:46.692350'),(3,'completed','2026-04-15 15:10:03.498106',2,2,2,3,8,'','2026-04-15 15:14:59.602627'),(4,'completed','2026-04-15 15:12:37.998313',2,2,3,4,10,'','2026-04-15 15:15:07.869899'),(5,'failed','2026-04-15 17:44:57.459651',2,3,1,5,123,'','2026-04-17 11:33:15.405393'),(8,'confirmed','2026-04-18 16:31:47.554821',2,5,1,NULL,0,'','2026-04-18 16:31:47.558759'),(9,'invited','2026-04-18 16:31:54.352850',2,5,2,NULL,0,'','2026-04-18 16:31:54.358153');
+INSERT INTO `applications_assignment` VALUES (1,'invited','2026-06-03 07:48:00.680553',13,3,12,NULL,0,'','2026-06-03 07:48:00.680619');
 /*!40000 ALTER TABLE `applications_assignment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -425,7 +425,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -434,7 +434,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$720000$HplSM2oPhGTOnR9v7DTDPk$7u0KqGzbMRTQgD9Nc8H9j87YmiL2XHxoMVnCVX/Bm50=','2026-04-18 17:00:18.368820',1,'admin','System','Admin','admin@example.com',1,1,'2026-04-13 06:38:55.860927'),(2,'pbkdf2_sha256$720000$kHSCuh6y98je8DoXD9of9V$6+PRlF9eUiesFLkoUBoeUUKY8Xh7D0zC9JklDt5o9zo=','2026-04-18 17:53:02.852347',0,'org_demo','Demo','Coordinator','org@example.com',0,1,'2026-04-13 06:38:56.242206'),(3,'pbkdf2_sha256$720000$WJaLIxPH4Jf1dIUeNDEw1l$aUmKc9BiDPhZrOSp6lW/gglSmFpsEyWy0lUeG82wU6Q=','2026-04-18 16:32:15.467580',0,'volunteer_demo','Demo','Volunteer','volunteer@example.com',0,1,'2026-04-13 06:38:56.587660'),(4,'pbkdf2_sha256$720000$r3QjaVpFWtQoHiklRZCfcw$RGSeL+t3y+MN1FUqlEIeX2dO6TOc1xtvKzo0wO1PlnU=','2026-04-16 05:47:38.895419',0,'vol2','Волонтер','Волонтерович','vol2@example.com',0,1,'2026-04-15 15:08:23.052801'),(5,'pbkdf2_sha256$720000$trOLAYIPxaPo31C3hUNeSb$J3RWs6Sp1q3m5OC/VMD80rSrTrw3f/XVCBf5KkrrsKA=','2026-04-15 15:11:17.940380',0,'vol3','','','',0,1,'2026-04-15 15:11:17.602034');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$720000$q8a5dM1JgDx0HnctGS5whI$pWWpH2a5gIS3NzWLwz5TqncxxadybPeceXB6x8gsah4=','2026-06-03 07:41:48.264323',1,'admin','System','Admin','admin@example.com',1,1,'2026-06-02 18:42:53.396461'),(2,'pbkdf2_sha256$720000$094Jik3H2iTvY2g94iz7j7$unkpkMWj/rvw2uDPRFcINTVvCD+KtAHDuigHqXCA5rk=',NULL,0,'org_demo','Demo','Coordinator','org@example.com',0,1,'2026-06-02 18:42:53.518929'),(3,'pbkdf2_sha256$720000$r0VjsMveClnqpONuNdg01D$ufQgYUgKO2LA87TMTAQxU6DjnBOKPZx7w12qCZJxVVI=',NULL,0,'dima','Дмитрий','Воронов','volunteer@example.com',0,1,'2026-06-02 18:42:53.000000'),(4,'pbkdf2_sha256$720000$PjZ01IN1WhifWCL35mKGvF$/OWUGkctXSghcZBHawBPnJ6mn/aJpau71F1cmxoEhKk=','2026-06-02 18:49:45.291849',0,'Ivan','Иван','Соболев','ivan.sobol@mail.ru',0,1,'2026-06-02 18:49:45.166958'),(5,'pbkdf2_sha256$720000$x35NPyskcDJvJ5o8xV3PBm$fXw8Rf31XgwjXu9PBAse8fX0mOGYw6p+TO+WmgGJKmg=','2026-06-02 19:08:47.020053',0,'Nurik','Нурлан','Сабуров','nurlan.sab@mail.ru',0,1,'2026-06-02 18:54:14.776743'),(6,'pbkdf2_sha256$720000$CRbjSlTtpMikl8UouI5RIa$eh21RZYbLw3Ii9yKiZ5sWl3G4wUgmHiwK1gGdr4a4kI=','2026-06-02 19:01:13.421834',0,'Danil','Данил','Горбаченко','danil.gorbachenko@mail.ru',0,1,'2026-06-02 19:01:13.292467'),(7,'pbkdf2_sha256$720000$v5v1ZBhuODEOmHo038gZoW$0JKWDTGL9kuCzqKgFV4lQQPaaAmmHkTQYOCX+bQS01Q=','2026-06-02 19:10:26.705753',0,'Sabina','Сабина','Канафина','sab.kan@mail.ru',0,1,'2026-06-02 19:10:26.584078'),(8,'pbkdf2_sha256$720000$1ybwBYyQyxPcHnnbnln5v2$L0CjvF3kT483Hjx7UfFS9RhbUGVHu+qDQAeZmFPF0s8=','2026-06-02 19:28:04.123744',0,'alua','Алуа','Айдаровна','alua.aidarovna@mail.ru',0,1,'2026-06-02 19:28:04.001602'),(9,'pbkdf2_sha256$720000$ekgJfAc18yY5JPANqQ9piv$f8oQDNg+5Dk4f+tfqsk1CUjOwX/9bfq7ZQt2ZSeJ8uU=','2026-06-02 19:31:17.995572',0,'kiril','Кирил','Низин','kiril.nizin@mail.ru',0,1,'2026-06-02 19:31:17.869337'),(10,'pbkdf2_sha256$720000$dEDqV7bL4U8Icl0qHDkmEH$7k3w5IDd5NUgt3rPckcOxrpn7KjXv5EX5Yc9hKmHcdY=','2026-06-02 20:10:44.592351',0,'karina','Карина','Зубарева','karina.zub@mail.ru',0,1,'2026-06-02 20:10:44.462990'),(11,'pbkdf2_sha256$720000$R41gtyTPzVoB4d0ZpwyHvd$/T09PBDRvAKHS4jbuai3zGvMqUnS1iVqE0o82nKFHFY=','2026-06-02 20:15:55.956335',0,'alex','Алексей','Зубенка','alex.zuba@mail.ru',0,1,'2026-06-02 20:15:55.824944'),(12,'pbkdf2_sha256$720000$nYU2wdFNtOJ30yKa0WLnSf$aeWUBTRrYe/5YAFkFJQmghsYpCfCCmLjtgpIbof8yuM=','2026-06-02 21:42:57.936022',0,'boris','Борис','Марьин','boris@mail.ru',0,1,'2026-06-02 21:42:57.793982'),(13,'pbkdf2_sha256$720000$GBXuir8rtD98PIidv5eTDp$qicFcgF2KmBUavi4Qn9Mbo1udroqI57srxEoeq6fWzA=','2026-06-03 08:26:50.146302',0,'max','Максим','Ферстапен','mad.max@mail.ru',0,1,'2026-06-02 21:46:18.262680'),(14,'pbkdf2_sha256$720000$76s53VKFoGiVOHUXpZILtk$gyJEgCxufjWznLSGgal8/Uzm4SM2Vz6iSdnTit51H0c=','2026-06-03 07:45:07.550310',0,'nikolai','Николай','Емельяненко','nikolai.emel@mail.ru',0,1,'2026-06-03 07:37:17.909769'),(15,'pbkdf2_sha256$720000$QZmzanG8tSTJ310QrPhAXN$CeKIfcPKmeWHNGo/4jw6q1Gim/XWfQDlAIm2qR9mjLc=','2026-06-03 08:16:07.181589',0,'aruzhan','Аружан','Мусагалиевна','aruzhan.m@mail.ru',0,1,'2026-06-03 08:16:06.945575'),(16,'pbkdf2_sha256$720000$DANHIhZQBs9S429RxvT93k$bT3Qv3g/4hjqdLj12aSVYPfznthldvCC/KiG0C2leS8=',NULL,0,'volunteer_demo','Demo','Volunteer','volunteer@example.com',0,1,'2026-06-04 19:51:11.619336');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -588,7 +588,7 @@ CREATE TABLE `core_skill` (
   UNIQUE KEY `name` (`name`),
   KEY `core_skill_category_id_e2b959f5_fk_core_skillcategory_id` (`category_id`),
   CONSTRAINT `core_skill_category_id_e2b959f5_fk_core_skillcategory_id` FOREIGN KEY (`category_id`) REFERENCES `core_skillcategory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -597,7 +597,7 @@ CREATE TABLE `core_skill` (
 
 LOCK TABLES `core_skill` WRITE;
 /*!40000 ALTER TABLE `core_skill` DISABLE KEYS */;
-INSERT INTO `core_skill` VALUES (1,'Работа с детьми',1),(2,'Работа с пожилыми',1),(3,'Психологическая поддержка',1),(4,'Логистика',2),(5,'Регистрация участников',2),(6,'Организация мероприятий',2),(7,'SMM / Фото / Видео',3),(8,'Переводы',4),(9,'Работа с документами / ПК',5),(10,'Первая помощь',6),(11,'Хирургия',3);
+INSERT INTO `core_skill` VALUES (1,'Работа с детьми',1),(2,'Работа с пожилыми',1),(3,'Психологическая поддержка',1),(4,'Логистика',2),(5,'Регистрация участников',2),(6,'Организация мероприятий',2),(7,'SMM / Фото / Видео',3),(8,'Переводы',4),(9,'Работа с документами / ПК',5),(10,'Первая помощь',6);
 /*!40000 ALTER TABLE `core_skill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -700,7 +700,7 @@ CREATE TABLE `django_admin_log` (
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -709,7 +709,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2026-04-18 17:01:09.820960','11','Хирургия',1,'[{\"added\": {}}]',12,1);
+INSERT INTO `django_admin_log` VALUES (1,'2026-06-02 21:47:18.225313','13','max (ORG)',2,'[{\"changed\": {\"fields\": [\"Role\"]}}]',14,1),(2,'2026-06-03 07:43:55.091662','3','dima',2,'[{\"changed\": {\"fields\": [\"Username\", \"First name\", \"Last name\"]}}]',4,1),(3,'2026-06-03 07:43:56.910411','3','dima (VOLUNTEER)',2,'[{\"changed\": {\"fields\": [\"Phone\"]}}]',14,1),(4,'2026-06-03 07:44:33.486026','2','org_demo (ORG)',2,'[]',14,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -761,7 +761,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'core','0001_initial','2026-04-13 06:38:47.218557'),(2,'contenttypes','0001_initial','2026-04-13 06:38:47.268577'),(3,'auth','0001_initial','2026-04-13 06:38:48.088675'),(4,'accounts','0001_initial','2026-04-13 06:38:49.688489'),(5,'admin','0001_initial','2026-04-13 06:38:49.902593'),(6,'admin','0002_logentry_remove_auto_add','2026-04-13 06:38:49.914748'),(7,'admin','0003_logentry_add_action_flag_choices','2026-04-13 06:38:49.928600'),(8,'events','0001_initial','2026-04-13 06:38:51.422361'),(9,'applications','0001_initial','2026-04-13 06:38:51.977370'),(10,'applications','0002_assignment_fields','2026-04-13 06:38:52.431627'),(11,'contenttypes','0002_remove_content_type_name','2026-04-13 06:38:52.583836'),(12,'auth','0002_alter_permission_name_max_length','2026-04-13 06:38:52.698307'),(13,'auth','0003_alter_user_email_max_length','2026-04-13 06:38:52.733722'),(14,'auth','0004_alter_user_username_opts','2026-04-13 06:38:52.746172'),(15,'auth','0005_alter_user_last_login_null','2026-04-13 06:38:52.847662'),(16,'auth','0006_require_contenttypes_0002','2026-04-13 06:38:52.853835'),(17,'auth','0007_alter_validators_add_error_messages','2026-04-13 06:38:52.870473'),(18,'auth','0008_alter_user_username_max_length','2026-04-13 06:38:52.985444'),(19,'auth','0009_alter_user_last_name_max_length','2026-04-13 06:38:53.279828'),(20,'auth','0010_alter_group_name_max_length','2026-04-13 06:38:53.335636'),(21,'auth','0011_update_proxy_permissions','2026-04-13 06:38:53.358114'),(22,'auth','0012_alter_user_first_name_max_length','2026-04-13 06:38:53.453623'),(23,'notifications','0001_initial','2026-04-13 06:38:53.587331'),(24,'sessions','0001_initial','2026-04-13 06:38:53.646048');
+INSERT INTO `django_migrations` VALUES (1,'core','0001_initial','2026-06-02 18:42:47.329978'),(2,'contenttypes','0001_initial','2026-06-02 18:42:47.370156'),(3,'auth','0001_initial','2026-06-02 18:42:47.952769'),(4,'accounts','0001_initial','2026-06-02 18:42:48.910222'),(5,'admin','0001_initial','2026-06-02 18:42:49.058332'),(6,'admin','0002_logentry_remove_auto_add','2026-06-02 18:42:49.068143'),(7,'admin','0003_logentry_add_action_flag_choices','2026-06-02 18:42:49.079800'),(8,'events','0001_initial','2026-06-02 18:42:50.016625'),(9,'applications','0001_initial','2026-06-02 18:42:50.427012'),(10,'applications','0002_assignment_fields','2026-06-02 18:42:50.727318'),(11,'contenttypes','0002_remove_content_type_name','2026-06-02 18:42:50.833464'),(12,'auth','0002_alter_permission_name_max_length','2026-06-02 18:42:50.902869'),(13,'auth','0003_alter_user_email_max_length','2026-06-02 18:42:50.931284'),(14,'auth','0004_alter_user_username_opts','2026-06-02 18:42:50.944462'),(15,'auth','0005_alter_user_last_login_null','2026-06-02 18:42:51.002320'),(16,'auth','0006_require_contenttypes_0002','2026-06-02 18:42:51.006519'),(17,'auth','0007_alter_validators_add_error_messages','2026-06-02 18:42:51.018045'),(18,'auth','0008_alter_user_username_max_length','2026-06-02 18:42:51.103956'),(19,'auth','0009_alter_user_last_name_max_length','2026-06-02 18:42:51.216093'),(20,'auth','0010_alter_group_name_max_length','2026-06-02 18:42:51.245300'),(21,'auth','0011_update_proxy_permissions','2026-06-02 18:42:51.272488'),(22,'auth','0012_alter_user_first_name_max_length','2026-06-02 18:42:51.352494'),(23,'notifications','0001_initial','2026-06-02 18:42:51.441951'),(24,'sessions','0001_initial','2026-06-02 18:42:51.483457');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -787,7 +787,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('880fvtb2dwz3hx26c0rr5i6atwl1d48p','.eJxVjDsOwyAQRO9CHSFgZT4p0-cMaHeB4CTCkrErK3ePLblIypn3ZjYRcV1qXHue45jEVRhx-e0I-ZXbAdIT22OSPLVlHkkeijxpl_cp5fftdP8OKva6rzlpYz07TGCdDWYAy0UXr7ynMKDFnDHvUREAMAQmDc4RhKRCCYrE5wviTDff:1wE9SK:21bWSWam55WXwZol_A-NKeKQnLPEw0YFJ8H1-JoTi5Q','2026-05-02 17:27:44.538144'),('nm2tts15wsua7hnhx85t9fwdb8843agm','.eJxVjDEOAiEQRe9CbQhEgcHS3jOQgZmRVQPJslsZ766bbKHtf-_9l0q4LjWtg-c0kTorqw6_W8by4LYBumO7dV16W-Yp603ROx362omfl939O6g46rd2bOQUCwYC9vHoPYIgBh8csUdmJ8RgwbgsOQCIdeAgoxgREwGKen8AA9U4xQ:1wDiJs:YVNS1MSwraE3FRTvaUAnxBUZTWUlHwNm9EphPqBJCaw','2026-05-01 12:29:12.532930'),('qmsfixe2alhuukqg7ezzffhzqg51db16','.eJxVjDsOwyAQRO9CHSFgZT4p0-cMaHeB4CTCkrErK3ePLblIypn3ZjYRcV1qXHue45jEVRhx-e0I-ZXbAdIT22OSPLVlHkkeijxpl_cp5fftdP8OKva6rzlpYz07TGCdDWYAy0UXr7ynMKDFnDHvUREAMAQmDc4RhKRCCYrE5wviTDff:1wE9qo:TzoJ7xPCevQZgCbmmUazJBnOf0WLGvxKb3iFpQ8RoXc','2026-05-02 17:53:02.856598');
+INSERT INTO `django_session` VALUES ('6za3cmt0slldchuwc125y5b1j9qwmk7u','.eJxVjDsOwjAQBe_iGlm7TtYfSnrOYK29Dg6gRIqTCnF3iJQC2jcz76Uib2uNWytLHEWdFXbq9Dsmzo8y7UTuPN1mnedpXcakd0UftOnrLOV5Ody_g8qtfmuXk0EjYnOXBuvBhoEcEZAfANgj9zY4Wwg5IIJAKsGbvidxXUYAr94f7j424A:1wUgw6:UjF7H8_qt7dEYIgC0-fbC8TAVPvVCbE0qDjWqCzsX_8','2026-06-17 08:26:50.153817'),('u985siek0tppc6kfnvoozfwgu27ivj8u','.eJxVjEEOwiAQRe_C2pACM2Xq0r1nIMBMpWpoUtqV8e7apAvd_vfef6kQt7WErckSJlZnZdTpd0sxP6TugO-x3mad57ouU9K7og_a9HVmeV4O9--gxFa-NRF7IJcQMIKlzllLnh0N0NseohFMxqMIYsZMyfM4jJItOgDCTkS9P63JNv8:1wUU9L:l8rZOcRgwoZce5RtVeZVXGo5A48aY6kTq22HzNCsrcw','2026-06-16 18:47:39.285328');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -817,7 +817,7 @@ CREATE TABLE `events_event` (
   CONSTRAINT `events_event_city_id_3c8b63c9_fk_core_city_id` FOREIGN KEY (`city_id`) REFERENCES `core_city` (`id`),
   CONSTRAINT `events_event_created_by_id_2c28ea90_fk_auth_user_id` FOREIGN KEY (`created_by_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `events_event_district_id_3fee4ae8_fk_core_district_id` FOREIGN KEY (`district_id`) REFERENCES `core_district` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -826,7 +826,7 @@ CREATE TABLE `events_event` (
 
 LOCK TABLES `events_event` WRITE;
 /*!40000 ALTER TABLE `events_event` DISABLE KEYS */;
-INSERT INTO `events_event` VALUES (1,'event1','','','2026-04-06','2026-04-13',1,'2026-04-13 06:41:53.969698',3,2,6),(2,'event 2','','','2026-04-13','2026-04-16',1,'2026-04-16 05:48:59.171883',1,2,1);
+INSERT INTO `events_event` VALUES (1,'Помощь пожилым людям','Помогать с хозяйством одиноко живущим пожилым людям.','ул. Рабочая 112 - ул. Рабочая 143','2026-06-08','2026-07-08',1,'2026-06-02 21:52:28.053101',1,13,4),(2,'Видеограф на концерте на площади','Видео съемка для новостных каналах в соц. сетях.','ул. Мира 1','2026-06-15','2026-06-17',1,'2026-06-02 21:59:16.096463',1,13,2),(3,'Помощь в устранении паводков','При сильных паводков оказывать помощь в соответствующих областях.','','2026-02-01','2026-02-28',1,'2026-06-03 07:24:17.632310',2,13,5),(4,'Организация фестиваля','Фестиваль по случаю дня сбора урожая','','2026-09-01','2026-09-30',1,'2026-06-03 08:00:46.580257',3,13,6);
 /*!40000 ALTER TABLE `events_event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -859,7 +859,7 @@ CREATE TABLE `events_eventposition` (
   CONSTRAINT `events_eventposition_event_id_1757e488_fk_events_event_id` FOREIGN KEY (`event_id`) REFERENCES `events_event` (`id`),
   CONSTRAINT `events_eventposition_task_type_id_8ab3552d_fk_core_tasktype_id` FOREIGN KEY (`task_type_id`) REFERENCES `core_tasktype` (`id`),
   CONSTRAINT `events_eventposition_chk_1` CHECK ((`slots_total` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -868,7 +868,7 @@ CREATE TABLE `events_eventposition` (
 
 LOCK TABLES `events_eventposition` WRITE;
 /*!40000 ALTER TABLE `events_eventposition` DISABLE KEYS */;
-INSERT INTO `events_eventposition` VALUES (2,'Роль1','',1,0,1,0,0,0,'2026-04-15 14:53:28.000383',NULL,1,NULL),(3,'Помощник в школе','',1,0,0,0,0,0,'2026-04-15 17:38:08.540320',NULL,1,NULL),(5,'Роль 1','это описание роли',2,0,0,0,0,0,'2026-04-17 12:39:14.501584',4,2,4);
+INSERT INTO `events_eventposition` VALUES (1,'Волонтер','Помощь в облагораживании огорода и колка дров.',5,1,0,1,1,0,'2026-06-02 21:54:41.289333',3,1,1),(2,'Видеограф','Требуется отснять концерт от начала до конца.',1,0,0,0,0,1,'2026-06-02 22:01:55.308645',5,2,3),(3,'Помощник','Помогать воздвигать плотины из мешков с песком, помогать пострадавшим от сильных паводков.',10,0,1,1,1,0,'2026-06-03 07:29:15.539137',4,3,4),(4,'Помощник организатора мероприятия','Нужно помочь организатору организовать мероприятие, составить расписание всех выступлений и помощь обустроить места для посетителей.',1,0,0,0,0,1,'2026-06-03 08:04:53.921121',5,4,2);
 /*!40000 ALTER TABLE `events_eventposition` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -888,7 +888,7 @@ CREATE TABLE `events_eventpositionavailabilityrequirement` (
   UNIQUE KEY `events_eventpositionavai_position_id_weekday_time_0cb5ca34_uniq` (`position_id`,`weekday`,`time_of_day`),
   CONSTRAINT `events_eventposition_position_id_faf981dd_fk_events_ev` FOREIGN KEY (`position_id`) REFERENCES `events_eventposition` (`id`),
   CONSTRAINT `events_eventpositionavailabilityrequirement_chk_1` CHECK ((`weekday` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -897,7 +897,7 @@ CREATE TABLE `events_eventpositionavailabilityrequirement` (
 
 LOCK TABLES `events_eventpositionavailabilityrequirement` WRITE;
 /*!40000 ALTER TABLE `events_eventpositionavailabilityrequirement` DISABLE KEYS */;
-INSERT INTO `events_eventpositionavailabilityrequirement` VALUES (6,1,'MORNING',2),(7,2,'MORNING',2),(8,3,'MORNING',2),(9,4,'MORNING',2),(10,5,'MORNING',2),(207,1,'DAY',5),(208,1,'EVENING',5),(206,1,'MORNING',5),(210,2,'DAY',5),(211,2,'EVENING',5),(209,2,'MORNING',5),(213,3,'DAY',5),(214,3,'EVENING',5),(212,3,'MORNING',5),(216,4,'DAY',5),(217,4,'EVENING',5),(215,4,'MORNING',5),(219,5,'DAY',5),(220,5,'EVENING',5),(218,5,'MORNING',5),(222,6,'DAY',5),(223,6,'EVENING',5),(221,6,'MORNING',5),(225,7,'DAY',5),(226,7,'EVENING',5),(224,7,'MORNING',5);
+INSERT INTO `events_eventpositionavailabilityrequirement` VALUES (22,1,'DAY',1),(21,1,'MORNING',1),(24,2,'DAY',1),(23,2,'MORNING',1),(26,3,'DAY',1),(25,3,'MORNING',1),(28,4,'DAY',1),(27,4,'MORNING',1),(30,5,'DAY',1),(29,5,'MORNING',1),(32,1,'DAY',2),(31,1,'MORNING',2),(34,2,'DAY',2),(33,2,'MORNING',2),(36,3,'DAY',2),(35,3,'MORNING',2),(38,4,'DAY',2),(37,4,'MORNING',2),(40,5,'DAY',2),(39,5,'MORNING',2),(42,1,'DAY',3),(43,1,'EVENING',3),(41,1,'MORNING',3),(45,2,'DAY',3),(46,2,'EVENING',3),(44,2,'MORNING',3),(48,3,'DAY',3),(49,3,'EVENING',3),(47,3,'MORNING',3),(51,4,'DAY',3),(52,4,'EVENING',3),(50,4,'MORNING',3),(54,5,'DAY',3),(55,5,'EVENING',3),(53,5,'MORNING',3),(57,6,'DAY',3),(58,6,'EVENING',3),(56,6,'MORNING',3),(60,7,'DAY',3),(61,7,'EVENING',3),(59,7,'MORNING',3),(63,1,'DAY',4),(62,1,'MORNING',4),(65,2,'DAY',4),(64,2,'MORNING',4),(67,3,'DAY',4),(66,3,'MORNING',4),(69,4,'DAY',4),(68,4,'MORNING',4),(71,5,'DAY',4),(70,5,'MORNING',4);
 /*!40000 ALTER TABLE `events_eventpositionavailabilityrequirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -918,7 +918,7 @@ CREATE TABLE `events_eventpositionlanguagerequirement` (
   KEY `events_eventposition_language_id_2fb0e37d_fk_core_lang` (`language_id`),
   CONSTRAINT `events_eventposition_language_id_2fb0e37d_fk_core_lang` FOREIGN KEY (`language_id`) REFERENCES `core_language` (`id`),
   CONSTRAINT `events_eventposition_position_id_daabbb4b_fk_events_ev` FOREIGN KEY (`position_id`) REFERENCES `events_eventposition` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -927,7 +927,7 @@ CREATE TABLE `events_eventpositionlanguagerequirement` (
 
 LOCK TABLES `events_eventpositionlanguagerequirement` WRITE;
 /*!40000 ALTER TABLE `events_eventpositionlanguagerequirement` DISABLE KEYS */;
-INSERT INTO `events_eventpositionlanguagerequirement` VALUES (1,'BASIC',2,2),(2,'BASIC',3,2),(3,'CONVERSATIONAL',1,2),(4,'CONVERSATIONAL',3,5),(5,'CONVERSATIONAL',2,5),(6,'CONVERSATIONAL',1,5);
+INSERT INTO `events_eventpositionlanguagerequirement` VALUES (5,'CONVERSATIONAL',1,1),(6,'CONVERSATIONAL',2,1),(7,'CONVERSATIONAL',1,2),(8,'CONVERSATIONAL',2,2),(9,'CONVERSATIONAL',2,3),(10,'CONVERSATIONAL',1,3),(11,'FLUENT',2,4),(12,'FLUENT',1,4),(13,'CONVERSATIONAL',3,4);
 /*!40000 ALTER TABLE `events_eventpositionlanguagerequirement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -948,7 +948,7 @@ CREATE TABLE `events_eventpositionoptionalskill` (
   KEY `events_eventposition_skill_id_f162e928_fk_core_skil` (`skill_id`),
   CONSTRAINT `events_eventposition_position_id_d79d7617_fk_events_ev` FOREIGN KEY (`position_id`) REFERENCES `events_eventposition` (`id`),
   CONSTRAINT `events_eventposition_skill_id_f162e928_fk_core_skil` FOREIGN KEY (`skill_id`) REFERENCES `core_skill` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -957,7 +957,7 @@ CREATE TABLE `events_eventpositionoptionalskill` (
 
 LOCK TABLES `events_eventpositionoptionalskill` WRITE;
 /*!40000 ALTER TABLE `events_eventpositionoptionalskill` DISABLE KEYS */;
-INSERT INTO `events_eventpositionoptionalskill` VALUES (1,'BEGINNER',2,3),(2,'BEGINNER',5,3),(3,'BEGINNER',5,1),(4,'BEGINNER',5,2);
+INSERT INTO `events_eventpositionoptionalskill` VALUES (5,'BEGINNER',1,3),(6,'ADVANCED',1,2),(7,'PROFESSIONAL',2,7),(8,'INTERMEDIATE',3,2),(9,'INTERMEDIATE',3,3),(10,'ADVANCED',3,10),(11,'BEGINNER',4,9),(12,'BEGINNER',4,2),(13,'BEGINNER',4,1),(14,'PROFESSIONAL',4,6),(15,'BEGINNER',4,5);
 /*!40000 ALTER TABLE `events_eventpositionoptionalskill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -978,7 +978,7 @@ CREATE TABLE `events_eventpositionrequiredskill` (
   KEY `events_eventposition_skill_id_3770ae13_fk_core_skil` (`skill_id`),
   CONSTRAINT `events_eventposition_position_id_40262bc0_fk_events_ev` FOREIGN KEY (`position_id`) REFERENCES `events_eventposition` (`id`),
   CONSTRAINT `events_eventposition_skill_id_3770ae13_fk_core_skil` FOREIGN KEY (`skill_id`) REFERENCES `core_skill` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -987,7 +987,7 @@ CREATE TABLE `events_eventpositionrequiredskill` (
 
 LOCK TABLES `events_eventpositionrequiredskill` WRITE;
 /*!40000 ALTER TABLE `events_eventpositionrequiredskill` DISABLE KEYS */;
-INSERT INTO `events_eventpositionrequiredskill` VALUES (1,'BEGINNER',2,3),(2,'BEGINNER',3,1),(4,'BEGINNER',5,3),(5,'BEGINNER',5,1);
+INSERT INTO `events_eventpositionrequiredskill` VALUES (3,'ADVANCED',1,2),(4,'PROFESSIONAL',2,7),(5,'ADVANCED',3,10),(6,'PROFESSIONAL',4,6),(7,'BEGINNER',4,5);
 /*!40000 ALTER TABLE `events_eventpositionrequiredskill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1008,7 +1008,7 @@ CREATE TABLE `notifications_notification` (
   PRIMARY KEY (`id`),
   KEY `notifications_notification_user_id_b5e8c0ff_fk_auth_user_id` (`user_id`),
   CONSTRAINT `notifications_notification_user_id_b5e8c0ff_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1017,7 +1017,7 @@ CREATE TABLE `notifications_notification` (
 
 LOCK TABLES `notifications_notification` WRITE;
 /*!40000 ALTER TABLE `notifications_notification` DISABLE KEYS */;
-INSERT INTO `notifications_notification` VALUES (11,'Новое назначение','Вас назначили на роль «Роль1» в мероприятии «event1».',0,'2026-04-15 15:12:38.017776',5),(13,'Новое назначение','Вас назначили на роль: Роль1',0,'2026-04-15 15:13:40.235699',4),(16,'Участие завершено','Ваше участие в роли «Роль1» отмечено как выполненное. Часов: 8. Оценка: 3/5.',0,'2026-04-15 15:14:59.636750',4),(17,'Участие завершено','Ваше участие в роли «Роль1» отмечено как выполненное. Часов: 10. Оценка: 4/5.',0,'2026-04-15 15:15:07.889863',5),(22,'Новое назначение','Вас назначили на роль: Уборщик',0,'2026-04-17 10:58:51.866593',5),(23,'Участие завершено','Ваше участие в роли «Уборщик» отмечено как выполненное. Часов: 5. Оценка: 5/5.',0,'2026-04-17 10:59:08.524559',5),(29,'Приглашение на роль','Организатор приглашает вас на роль: Роль 1. Подтвердите участие в личном кабинете.',0,'2026-04-18 16:31:54.365350',4);
+INSERT INTO `notifications_notification` VALUES (1,'Новый отклик','На роль «Помощник» откликнулся Николай Емельяненко.',1,'2026-06-03 07:46:20.055128',13),(2,'Приглашение на роль','Организатор приглашает вас на роль «Помощник» в мероприятии «Помощь в устранении паводков». Подтвердите или отклоните участие в личном кабинете.',0,'2026-06-03 07:48:00.719532',14);
 /*!40000 ALTER TABLE `notifications_notification` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1030,4 +1030,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-18 17:58:55
+-- Dump completed on 2026-06-04 19:59:39

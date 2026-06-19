@@ -1,37 +1,36 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block title %}{{ event.title }}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <a href="{% url 'events:org_dashboard' %}">{% trans "Кабинет организации" %}</a>
     <span class="bc-sep">›</span>
     <span class="bc-current">{{ event.title }}</span>
   </nav>
 </div>
 {% endblock %}
 
-
-
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">Мероприятие</span>
+      <span class="eyebrow">{% trans "Мероприятие" %}</span>
       <h1 class="page-title">{{ event.title }}</h1>
       <p class="page-subtitle">
         {% if event.start_date %}{{ event.start_date }}{% if event.end_date %} — {{ event.end_date }}{% endif %}{% endif %}
         {% if event.city %} · {{ event.city }}{% endif %}
         {% if event.district %} · {{ event.district.name }}{% endif %}
-        {% if not event.is_public %} · <span style="color:var(--warning);font-weight:700;">Скрыто</span>{% endif %}
+        {% if not event.is_public %} · <span style="color:var(--warning);font-weight:700;">{% trans "Скрыто" %}</span>{% endif %}
       </p>
     </div>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
-      <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:org_dashboard' %}">← Назад</a>
-      <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:event_update' event.id %}">Редактировать</a>
-      <a class="btn btn-outline-danger btn-sm" href="{% url 'events:event_delete' event.id %}">Удалить</a>
-      <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">+ Добавить роль</a>
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:org_dashboard' %}">{% trans "← Назад" %}</a>
+      <a class="btn btn-outline-secondary btn-sm" href="{% url 'events:event_update' event.id %}">{% trans "Редактировать" %}</a>
+      <a class="btn btn-outline-danger btn-sm" href="{% url 'events:event_delete' event.id %}">{% trans "Удалить" %}</a>
+      <a class="btn btn-primary btn-sm" href="{% url 'events:position_create' event.id %}">{% trans "+ Добавить роль" %}</a>
     </div>
   </div>
 </section>
@@ -45,17 +44,17 @@
 <section class="panel-card mb-4" style="background:var(--surface-2);">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
     <div>
-      <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:.95rem;">Данные мероприятия</div>
-      <div style="font-size:.84rem;color:var(--muted);">Экспорт и импорт участников</div>
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:.95rem;">{% trans "Данные мероприятия" %}</div>
+      <div style="font-size:.84rem;color:var(--muted);">{% trans "Экспорт и импорт участников" %}</div>
     </div>
     <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
       <a class="btn btn-outline-secondary btn-sm"
          href="{% url 'applications:export_assignments_csv' event.id %}">
-        ⬇ Экспорт CSV
+        ⬇ {% trans "Экспорт CSV" %}
       </a>
       <a class="btn btn-outline-secondary btn-sm"
          href="{% url 'applications:import_volunteers_csv' event.id %}">
-        ⬆ Импорт CSV
+        ⬆ {% trans "Импорт CSV" %}
       </a>
     </div>
   </div>
@@ -64,11 +63,11 @@
 <section class="panel-card">
   <div class="section-head section-head--split">
     <div>
-      <span class="eyebrow">Роли</span>
-      <h2 class="section-title">Позиции мероприятия</h2>
+      <span class="eyebrow">{% trans "Роли" %}</span>
+      <h2 class="section-title">{% trans "Позиции мероприятия" %}</h2>
     </div>
     <span style="font-size:.86rem;color:var(--muted);">
-      {{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}
+      {{ event.positions.count }} {% trans "рол" %}{{ event.positions.count|pluralize:"ь,и,ей" }}
     </span>
   </div>
 
@@ -80,13 +79,13 @@
           <div style="font-size:.84rem;color:var(--muted);margin-top:.2rem;display:flex;gap:.75rem;flex-wrap:wrap;">
             {% if position.direction %}<span>{{ position.direction }}</span>{% endif %}
             {% if position.task_type %}<span>{{ position.task_type }}</span>{% endif %}
-            <span>👥 Нужно: {{ position.slots_total }}</span>
+            <span>👥 {% trans "Нужно" %}: {{ position.slots_total }}</span>
           </div>
         </div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-          <a class="btn btn-sm btn-primary" href="{% url 'matching:position_matching' position.id %}">Подбор</a>
-          <a class="btn btn-sm btn-outline-secondary" href="{% url 'events:position_update' position.id %}">Редактировать</a>
-          <a class="btn btn-sm btn-outline-danger" href="{% url 'events:position_delete' position.id %}">Удалить</a>
+          <a class="btn btn-sm btn-primary" href="{% url 'matching:position_matching' position.id %}">{% trans "Подбор" %}</a>
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'events:position_update' position.id %}">{% trans "Редактировать" %}</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'events:position_delete' position.id %}">{% trans "Удалить" %}</a>
         </div>
       </div>
 
@@ -108,7 +107,7 @@
 
       <div class="applications-box">
         <div class="applications-box__head">
-          Отклики: {{ position.applications.count }}
+          {% trans "Отклики" %}: {{ position.applications.count }}
         </div>
 
         <div class="scroll-panel scroll-panel--md">
@@ -130,13 +129,13 @@
               {% if app.status == 'new' or app.status == 'reviewed' %}
                 <form method="post" action="{% url 'applications:assign_application' app.id %}">
                   {% csrf_token %}
-                  <button class="btn btn-sm btn-primary">Отправить приглашение</button>
+                  <button class="btn btn-sm btn-primary">{% trans "Отправить приглашение" %}</button>
                 </form>
               {% endif %}
             </div>
           </div>
         {% empty %}
-          <div style="font-size:.86rem;color:var(--muted);">Откликов пока нет.</div>
+          <div style="font-size:.86rem;color:var(--muted);">{% trans "Откликов пока нет." %}</div>
         {% endfor %}
         </div>
       </div>
@@ -145,7 +144,7 @@
         {% if assignments %}
           <div class="applications-box mt-1">
             <div class="applications-box__head">
-              Назначения: {{ assignments.count }}
+              {% trans "Назначения" %}: {{ assignments.count }}
             </div>
             <div class="scroll-panel scroll-panel--md">
             {% for asgn in assignments %}
@@ -156,7 +155,7 @@
                   </a>
                   <div style="font-size:.8rem;color:var(--muted);">
                     {{ asgn.volunteer_profile.user.email }}
-                    {% if asgn.hours_worked %} · {{ asgn.hours_worked }} ч{% endif %}
+                    {% if asgn.hours_worked %} · {{ asgn.hours_worked }} {% trans "ч" %}{% endif %}
                     {% if asgn.coordinator_rating %} · ★ {{ asgn.coordinator_rating }}/5{% endif %}
                   </div>
                   {% if asgn.coordinator_note %}
@@ -169,12 +168,12 @@
                   {% if asgn.status == 'confirmed' %}
                     <button class="btn btn-sm btn-success"
                             onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='flex'">
-                      ✓ Выполнено
+                      ✓ {% trans "Выполнено" %}
                     </button>
                     <form method="post" action="{% url 'applications:mark_failed' asgn.id %}"
-                          onsubmit="return confirm('Зафиксировать неявку? Это снизит attendance_rate волонтёра.');">
+                          onsubmit="return confirm('{% trans "Зафиксировать неявку?" %}');">
                       {% csrf_token %}
-                      <button class="btn btn-sm btn-outline-danger">✗ Зафиксировать неявку</button>
+                      <button class="btn btn-sm btn-outline-danger">✗ {% trans "Зафиксировать неявку" %}</button>
                     </form>
                   {% endif %}
                 </div>
@@ -185,7 +184,7 @@
                      style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;">
                   <div style="background:var(--surface);border-radius:var(--radius-xl);padding:2rem;width:100%;max-width:420px;box-shadow:var(--shadow-lg);">
                     <h3 style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:1rem;">
-                      Завершить участие
+                      {% trans "Завершить участие" %}
                     </h3>
                     <p style="font-size:.9rem;color:var(--muted);margin-bottom:1.25rem;">
                       {{ asgn.volunteer_profile.user.get_full_name|default:asgn.volunteer_profile.user.username }}
@@ -194,23 +193,23 @@
                     <form method="post" action="{% url 'applications:mark_completed' asgn.id %}" class="vstack gap-3">
                       {% csrf_token %}
                       <div class="field-block">
-                        <label class="field-label">Часов отработано</label>
+                        <label class="field-label">{% trans "Часов отработано" %}</label>
                         <input type="number" name="hours_worked" min="0" step="1" class="form-control" required>
                       </div>
                       <div class="field-block">
-                        <label class="field-label">Оценка координатора (1–5)</label>
+                        <label class="field-label">{% trans "Оценка координатора (1–5)" %}</label>
                         <input type="number" name="coordinator_rating" min="1" max="5" step="1" class="form-control" required>
                       </div>
                       <div class="field-block">
-                        <label class="field-label">Комментарий</label>
-                        <textarea name="coordinator_note" rows="3" class="form-control" placeholder="Пришёл вовремя, хорошо справился..."></textarea>
+                        <label class="field-label">{% trans "Комментарий" %}</label>
+                        <textarea name="coordinator_note" rows="3" class="form-control" placeholder="{% trans "Пришёл вовремя, хорошо справился..." %}"></textarea>
                       </div>
                       <div style="display:flex;justify-content:flex-end;gap:.6rem;">
                         <button type="button" class="btn btn-outline-secondary"
                                 onclick="document.getElementById('modal-complete-{{ asgn.id }}').style.display='none'">
-                          Отмена
+                          {% trans "Отмена" %}
                         </button>
-                        <button type="submit" class="btn btn-success">Сохранить</button>
+                        <button type="submit" class="btn btn-success">{% trans "Сохранить" %}</button>
                       </div>
                     </form>
                   </div>
@@ -224,7 +223,7 @@
     </div>
   {% empty %}
     <div style="text-align:center;padding:2rem 1rem;color:var(--muted);">
-      Пока не добавлено ни одной роли.
+      {% trans "Пока не добавлено ни одной роли." %}
     </div>
   {% endfor %}
 </section>

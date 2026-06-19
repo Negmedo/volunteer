@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <a href="{% url 'events:org_dashboard' %}">{% trans "Кабинет организации" %}</a>
     <span class="bc-sep">›</span>
     <a href="{% url 'events:event_detail' event.id %}">{{ event.title }}</a>
     <span class="bc-sep">›</span>
@@ -14,19 +15,18 @@
 </div>
 {% endblock %}
 
-
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
-    <div><span class="eyebrow">Роль / позиция</span><h1 class="page-title">{{ page_title }}</h1><p class="page-subtitle">Мероприятие: {{ event.title }}</p></div>
-    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' event.id %}">Назад к мероприятию</a>
+    <div><span class="eyebrow">{% trans "Роль / позиция" %}</span><h1 class="page-title">{{ page_title }}</h1><p class="page-subtitle">{% trans "Мероприятие" %}: {{ event.title }}</p></div>
+    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' event.id %}">{% trans "Назад к мероприятию" %}</a>
   </div>
 </section>
 <form method="post" class="vstack gap-4">{% csrf_token %}
-  {% if form.errors or form.non_field_errors %}<div class="alert alert-danger form-error-summary" id="position-errors"><strong>Проверьте форму роли.</strong><ul class="mb-0 mt-2">{% for field, errors in form.errors.items %}{% for err in errors %}<li>{{ field }}: {{ err }}</li>{% endfor %}{% endfor %}{% for err in form.non_field_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if form.errors or form.non_field_errors %}<div class="alert alert-danger form-error-summary" id="position-errors"><strong>{% trans "Проверьте форму роли." %}</strong><ul class="mb-0 mt-2">{% for field, errors in form.errors.items %}{% for err in errors %}<li>{{ field }}: {{ err }}</li>{% endfor %}{% endfor %}{% for err in form.non_field_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
 
   <section class="panel-card">
-    <div class="section-head"><div><h2 class="section-title">Основные данные роли</h2></div></div>
+    <div class="section-head"><div><h2 class="section-title">{% trans "Основные данные роли" %}</h2></div></div>
     <div class="form-grid">
       <div class="field-block"><label class="field-label">{{ form.title.label }}</label>{{ form.title }}</div>
       <div class="field-block"><label class="field-label">{{ form.description.label }}</label>{{ form.description }}</div>
@@ -44,7 +44,7 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><h2 class="section-title">Обязательные и желательные навыки</h2><p class="page-subtitle mb-0">Если навык отмечен как обязательный, он автоматически учитывается и как желательный.</p></div></div>
+    <div class="section-head"><div><h2 class="section-title">{% trans "Обязательные" %} {% trans "и" %} {% trans "Желательные" %} {% trans "навыки" %}</h2><p class="page-subtitle mb-0">{% trans "Если навык отмечен как обязательный, он автоматически учитывается и как желательный." %}</p></div></div>
     <div class="option-grid option-grid--skills">
       {% for item in skill_catalog %}
         <div class="option-card option-card--double">
@@ -55,7 +55,7 @@
           <label class="option-card__row">
             <span class="option-card__main">
               <input type="checkbox" name="required_skills" value="{{ item.id }}" {% if item.required_checked %}checked{% endif %} class="js-skill-required" data-skill-id="{{ item.id }}">
-              <span>Обязательный</span>
+              <span>{% trans "Обязательный" %}</span>
             </span>
             <select name="req_skill_level_{{ item.id }}" id="req-skill-level-{{ item.id }}" class="form-select option-card__select" {% if not item.required_checked %}disabled{% endif %}>
               {% for value, label in skill_level_choices %}
@@ -66,7 +66,7 @@
           <label class="option-card__row">
             <span class="option-card__main">
               <input type="checkbox" name="optional_skills" value="{{ item.id }}" {% if item.optional_checked %}checked{% endif %} class="js-skill-optional" data-skill-id="{{ item.id }}">
-              <span>Желательный</span>
+              <span>{% trans "Желательный" %}</span>
             </span>
             <select name="opt_skill_level_{{ item.id }}" id="opt-skill-level-{{ item.id }}" class="form-select option-card__select" {% if not item.optional_checked %}disabled{% endif %}>
               {% for value, label in skill_level_choices %}
@@ -80,7 +80,7 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><h2 class="section-title">Языковые требования</h2></div></div>
+    <div class="section-head"><div><h2 class="section-title">{% trans "Языковые требования" %}</h2></div></div>
     <div class="option-grid option-grid--languages">
       {% for item in language_catalog %}
         <label class="option-card option-card--selective">
@@ -99,7 +99,7 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><h2 class="section-title">Доступность роли</h2></div></div>
+    <div class="section-head"><div><h2 class="section-title">{% trans "Доступность роли" %}</h2></div></div>
     <div class="availability-grid">
       {% for value, label in form.availability_matrix.field.choices %}
         <label class="availability-cell">
@@ -111,8 +111,8 @@
   </section>
 
   <div class="action-row">
-    <button class="btn btn-primary btn-lg" type="submit">Сохранить роль</button>
-    <a class="btn btn-outline-secondary btn-lg" href="{% url 'events:event_detail' event.id %}">Назад</a>
+    <button class="btn btn-primary btn-lg" type="submit">{% trans "Сохранить роль" %}</button>
+    <a class="btn btn-outline-secondary btn-lg" href="{% url 'events:event_detail' event.id %}">{% trans "Назад" %}</a>
   </div>
 </form>
 {% endblock %}

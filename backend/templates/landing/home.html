@@ -1,140 +1,132 @@
 {% extends "base.html" %}
-{% load static %}
-{% block title %}Главная — VolunteerSKO{% endblock %}
+{% load static i18n %}
+{% block title %}{% trans "Главная" %} — VolunteerSKO{% endblock %}
 
 {% block main_class %}{% endblock %}
 
 {% block extra_head %}
-
 {% endblock %}
 
 {% block content %}
 
-{# ═══════════════════ HERO ═══════════════════ #}
 <div class="container">
   <div class="home-hero-wrap mb-4 mt-3 reveal">
-    {# Левая карточка — текст #}
     <div class="hero-card hero-card--main">
-      <span class="eyebrow">СППР для подбора волонтёров</span>
-      <h1 class="hero-title">Стань волонтёром и помоги там, где это действительно нужно</h1>
-      <p class="hero-subtitle">VolunteerSKO помогает организациям быстрее находить надёжных волонтёров, а людям — мероприятия, где их помощь будет по-настоящему полезной.</p>
+      <span class="eyebrow">{% trans "СППР для подбора волонтёров" %}</span>
+      <h1 class="hero-title">{% trans "Стань волонтёром и помоги там, где это действительно нужно" %}</h1>
+      <p class="hero-subtitle">{% trans "VolunteerSKO помогает организациям быстрее находить надёжных волонтёров, а людям — мероприятия, где их помощь будет по-настоящему полезной." %}</p>
       <div class="hero-actions">
         {% if user.is_authenticated %}
-          <a class="btn btn-light btn-lg" href="{% url 'accounts:dashboard' %}">Открыть кабинет</a>
+          <a class="btn btn-light btn-lg" href="{% url 'accounts:dashboard' %}">{% trans "Открыть кабинет" %}</a>
         {% else %}
-          <a class="btn btn-light btn-lg" href="{% url 'accounts:signup' %}">Начать</a>
-          <a class="btn btn-outline-light btn-lg" href="{% url 'accounts:login' %}">Войти</a>
+          <a class="btn btn-light btn-lg" href="{% url 'accounts:signup' %}">{% trans "Начать" %}</a>
+          <a class="btn btn-outline-light btn-lg" href="{% url 'accounts:login' %}">{% trans "Войти" %}</a>
         {% endif %}
       </div>
     </div>
 
-    {# Правая колонка — статистика (не трогаем) #}
     <div class="hero-card hero-card--stats">
       <div class="stat-tile">
-        <div class="stat-label">Пользователей</div>
+        <div class="stat-label">{% trans "Пользователей" %}</div>
         <div class="stat-value">{{ stats.users_count }}</div>
       </div>
       <div class="stat-tile">
-        <div class="stat-label">Мероприятий</div>
+        <div class="stat-label">{% trans "Мероприятий" %}</div>
         <div class="stat-value">{{ stats.events_count }}</div>
       </div>
       <div class="stat-tile">
-        <div class="stat-label">Часов волонтёрства</div>
+        <div class="stat-label">{% trans "Часов волонтёрства" %}</div>
         <div class="stat-value">{{ stats.hours_count }}</div>
       </div>
     </div>
   </div>
 </div>
 
-{# ═══════════════════ КАТЕГОРИИ ═══════════════════ #}
 <section class="home-section home-section--white">
   <div class="container">
     <div class="reveal">
-      <span class="section-eyebrow">Кому ты поможешь</span>
-      <h2 class="section-big-title">Реальные сценарии, где важна каждая пара рук</h2>
+      <span class="section-eyebrow">{% trans "Кому ты поможешь" %}</span>
+      <h2 class="section-big-title">{% trans "Реальные сценарии, где важна каждая пара рук" %}</h2>
     </div>
     <div class="feat-grid">
       <div class="feat-card reveal d1">
         <div class="feat-icon">🛡️</div>
-        <div class="feat-title">Поддержка при ЧС</div>
-        <p class="feat-desc">Выдача гуманитарной помощи, маршрутизация людей, помощь на пунктах временного размещения и логистика.</p>
+        <div class="feat-title">{% trans "Поддержка при ЧС" %}</div>
+        <p class="feat-desc">{% trans "Выдача гуманитарной помощи, маршрутизация людей, помощь на пунктах временного размещения и логистика." %}</p>
       </div>
       <div class="feat-card reveal d2">
         <div class="feat-icon">🤝</div>
-        <div class="feat-title">Социальная помощь</div>
-        <p class="feat-desc">Поддержка пожилых людей, помощь семьям в трудной ситуации, участие в благотворительных инициативах.</p>
+        <div class="feat-title">{% trans "Социальная помощь" %}</div>
+        <p class="feat-desc">{% trans "Поддержка пожилых людей, помощь семьям в трудной ситуации, участие в благотворительных инициативах." %}</p>
       </div>
       <div class="feat-card reveal d3">
         <div class="feat-icon">🎓</div>
-        <div class="feat-title">Образовательные и городские события</div>
-        <p class="feat-desc">Регистрация участников, сопровождение площадок, координация потоков гостей и помощь организаторам.</p>
+        <div class="feat-title">{% trans "Образовательные и городские события" %}</div>
+        <p class="feat-desc">{% trans "Регистрация участников, сопровождение площадок, координация потоков гостей и помощь организаторам." %}</p>
       </div>
     </div>
   </div>
 </section>
 
-{# ═══════════════════ О НАС ═══════════════════ #}
 <section class="home-section home-section--sand">
   <div class="container">
     <div class="about-grid">
       <div class="reveal-left">
-        <span class="section-eyebrow">О нас</span>
-        <h2 class="about-title">Волонтёрское движение в Северо-Казахстанской области</h2>
-        <p class="about-text">Волонтёрское движение в СКО — это мощная сила неравнодушных людей, готовых прийти на помощь в любой ситуации. Весной 2024 года, когда регион столкнулся с масштабными паводками, именно волонтёры стали надёжной опорой для спасателей и пострадавших жителей.</p>
-        <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Присоединиться к движению</a>
+        <span class="section-eyebrow">{% trans "О нас" %}</span>
+        <h2 class="about-title">{% trans "Волонтёрское движение в Северо-Казахстанской области" %}</h2>
+        <p class="about-text">{% trans "Волонтёрское движение в СКО — это мощная сила неравнодушных людей, готовых прийти на помощь в любой ситуации. Весной 2024 года, когда регион столкнулся с масштабными паводками, именно волонтёры стали надёжной опорой для спасателей и пострадавших жителей." %}</p>
+        <a href="{% url 'accounts:signup' %}" class="btn btn-primary">{% trans "Присоединиться к движению" %}</a>
       </div>
       <div class="reveal-right">
         <div class="about-img">
-          <img src="{% static 'css/img/23601409a7a75676_cover.jpg' %}" alt="Волонтёры СКО">
+          <img src="{% static 'css/img/23601409a7a75676_cover.jpg' %}" alt="{% trans "Волонтёры СКО" %}">
         </div>
       </div>
     </div>
   </div>
 </section>
 
-{# ═══════════════════ ИТОГИ 2025 ═══════════════════ #}
 <section class="home-section home-section--white">
   <div class="container">
     <div class="reveal text-center mb-5">
-      <span class="section-eyebrow">Итоги 2025 года</span>
-      <h2 class="section-big-title" style="margin-bottom:0;">Что мы сделали</h2>
+      <span class="section-eyebrow">{% trans "Итоги 2025 года" %}</span>
+      <h2 class="section-big-title" style="margin-bottom:0;">{% trans "Что мы сделали" %}</h2>
     </div>
     <div class="results-grid">
       <div class="result-card reveal d1">
-        <div class="result-title">Помощь в чрезвычайных ситуациях</div>
-        <p class="result-desc">В рамках проекта Birgemiz Umit более 3450 добровольцев были задействованы в противопаводковых мероприятиях, профилактике пожаров и рейдах по пожарной безопасности.</p>
+        <div class="result-title">{% trans "Помощь в чрезвычайных ситуациях" %}</div>
+        <p class="result-desc">{% trans "В рамках проекта Birgemiz Umit более 3450 добровольцев были задействованы в противопаводковых мероприятиях, профилактике пожаров и рейдах по пожарной безопасности." %}</p>
       </div>
       <div class="result-card reveal d2">
-        <div class="result-title">Социальное направление</div>
-        <p class="result-desc">Более 700 волонтёров помогали одиноким пенсионерам и людям с инвалидностью. Доставка продуктов, лекарств, уборка. Помощь получили более 1000 человек.</p>
+        <div class="result-title">{% trans "Социальное направление" %}</div>
+        <p class="result-desc">{% trans "Более 700 волонтёров помогали одиноким пенсионерам и людям с инвалидностью. Доставка продуктов, лекарств, уборка. Помощь получили более 1000 человек." %}</p>
       </div>
       <div class="result-card reveal d3">
-        <div class="result-title">Экологическое волонтёрство</div>
-        <p class="result-desc">В рамках Birgemiz Taza Alem и Таза Казахстан организовано более 450 экологических мероприятий: субботники, очистка парков, посадка деревьев.</p>
+        <div class="result-title">{% trans "Экологическое волонтёрство" %}</div>
+        <p class="result-desc">{% trans "В рамках Birgemiz Taza Alem и Таза Казахстан организовано более 450 экологических мероприятий: субботники, очистка парков, посадка деревьев." %}</p>
       </div>
       <div class="result-card reveal d1">
-        <div class="result-title">Историко-культурное наследие</div>
-        <p class="result-desc">Около 60 мероприятий и 14 экскурсий по благоустройству памятников и мемориалов. Патриотические акции и проекты по сохранению исторической памяти.</p>
+        <div class="result-title">{% trans "Историко-культурное наследие" %}</div>
+        <p class="result-desc">{% trans "Около 60 мероприятий и 14 экскурсий по благоустройству памятников и мемориалов. Патриотические акции и проекты по сохранению исторической памяти." %}</p>
       </div>
       <div class="result-card reveal d2">
-        <div class="result-title">Юридическая и психологическая помощь</div>
-        <p class="result-desc">52 юридические консультации, 19 психологических тренингов и 17 индивидуальных консультаций. Работа с молодёжью, пенсионерами и уязвимыми группами.</p>
+        <div class="result-title">{% trans "Юридическая и психологическая помощь" %}</div>
+        <p class="result-desc">{% trans "52 юридические консультации, 19 психологических тренингов и 17 индивидуальных консультаций. Работа с молодёжью, пенсионерами и уязвимыми группами." %}</p>
       </div>
       <div class="result-card reveal d3">
-        <div class="result-title">Итоговое событие года</div>
-        <p class="result-desc">Областной слёт «Волонтёр жолы 2025» объединил активистов со всего региона. Подведены итоги года и награждены самые активные добровольцы.</p>
+        <div class="result-title">{% trans "Итоговое событие года" %}</div>
+        <p class="result-desc">{% trans "Областной слёт «Волонтёр жолы 2025» объединил активистов со всего региона. Подведены итоги года и награждены самые активные добровольцы." %}</p>
       </div>
     </div>
   </div>
 </section>
 
-{# ═══════════════════ СЛАЙДЕР МЕРОПРИЯТИЙ ═══════════════════ #}
 <section class="home-section home-section--sand">
   <div class="container">
     <div class="d-flex align-items-end justify-content-between mb-4 reveal" style="flex-wrap:wrap;gap:1rem;">
       <div>
-        <span class="section-eyebrow">Истории и атмосфера</span>
-        <h2 class="section-big-title" style="margin-bottom:0;">Примеры мероприятий и ролей волонтёров</h2>
+        <span class="section-eyebrow">{% trans "Истории и атмосфера" %}</span>
+        <h2 class="section-big-title" style="margin-bottom:0;">{% trans "Примеры мероприятий и ролей волонтёров" %}</h2>
       </div>
     </div>
     <div class="slider-outer reveal">
@@ -143,45 +135,45 @@
           <img src="{% static 'css/img/photo-1593113598332-cd288d649433.jpeg' %}" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-body">
-            <div class="slide-title">Выездная гуманитарная миссия</div>
-            <p class="slide-desc">Доставка вещей первой необходимости пожилым людям в отдалённых районах.</p>
-            <span class="slide-tag">Логистика · помощь на выезде</span>
+            <div class="slide-title">{% trans "Выездная гуманитарная миссия" %}</div>
+            <p class="slide-desc">{% trans "Доставка вещей первой необходимости пожилым людям в отдалённых районах." %}</p>
+            <span class="slide-tag">{% trans "Логистика · помощь на выезде" %}</span>
           </div>
         </div>
         <div class="slide-item">
           <img src="{% static 'css/img/photo-1540575467063-178a50c2df87.jpeg' %}" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-body">
-            <div class="slide-title">IT-конференция СКО</div>
-            <p class="slide-desc">Волонтёры на регистрации, навигации гостей и техподдержке площадок.</p>
-            <span class="slide-tag">Регистрация · техподдержка</span>
+            <div class="slide-title">{% trans "IT-конференция СКО" %}</div>
+            <p class="slide-desc">{% trans "Волонтёры на регистрации, навигации гостей и техподдержке площадок." %}</p>
+            <span class="slide-tag">{% trans "Регистрация · техподдержка" %}</span>
           </div>
         </div>
         <div class="slide-item">
           <img src="{% static 'css/img/photo-1533174072545-7a4b6ad7a6c3.jpeg' %}" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-body">
-            <div class="slide-title">Фестиваль восточной культуры</div>
-            <p class="slide-desc">Кураторы площадок, переводчики и SMM-помощники для работы с аудиторией.</p>
-            <span class="slide-tag">Координация · медиа</span>
+            <div class="slide-title">{% trans "Фестиваль восточной культуры" %}</div>
+            <p class="slide-desc">{% trans "Кураторы площадок, переводчики и SMM-помощники для работы с аудиторией." %}</p>
+            <span class="slide-tag">{% trans "Координация · медиа" %}</span>
           </div>
         </div>
         <div class="slide-item">
           <img src="{% static 'css/img/photo-1511632765486-a01980e01a18.jpeg' %}" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-body">
-            <div class="slide-title">Благотворительная ярмарка</div>
-            <p class="slide-desc">Помощь на стойках, работа с гостями и координация зон в течение всего дня.</p>
-            <span class="slide-tag">Гости · организация</span>
+            <div class="slide-title">{% trans "Благотворительная ярмарка" %}</div>
+            <p class="slide-desc">{% trans "Помощь на стойках, работа с гостями и координация зон в течение всего дня." %}</p>
+            <span class="slide-tag">{% trans "Гости · организация" %}</span>
           </div>
         </div>
         <div class="slide-item">
           <img src="{% static 'css/img/photo-1559027615-cd4628902d4a.jpeg' %}" alt="">
           <div class="slide-overlay"></div>
           <div class="slide-body">
-            <div class="slide-title">Городской субботник</div>
-            <p class="slide-desc">Очистка парков и набережных, посадка деревьев. Навыки не нужны.</p>
-            <span class="slide-tag">Экология · город</span>
+            <div class="slide-title">{% trans "Городской субботник" %}</div>
+            <p class="slide-desc">{% trans "Очистка парков и набережных, посадка деревьев. Навыки не нужны." %}</p>
+            <span class="slide-tag">{% trans "Экология · город" %}</span>
           </div>
         </div>
       </div>
@@ -189,44 +181,33 @@
   </div>
 </section>
 
-
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  // ── Scroll reveal ──
   const revEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
   revEls.forEach(el => obs.observe(el));
 
-  // ── Auto-loop slider ──
   (function () {
     const track = document.getElementById('sliderTrack');
     if (!track) return;
-
-    // Клонируем все карточки и добавляем в конец — для бесшовной петли
     const origCards = Array.from(track.children);
     origCards.forEach(card => track.appendChild(card.cloneNode(true)));
-
-    const SPEED = 0.6;      // px за кадр — скорость прокрутки
-    const PAUSE_MS = 0;     // пауза на hover (мс), 0 = без паузы
+    const SPEED = 0.6;
     let offset = 0;
     let paused = false;
-    let raf;
 
     function getHalfWidth() {
-      // Ширина одного «полного круга» (оригинальные карточки)
       const allCards = Array.from(track.children);
       const count = origCards.length;
-      // Берём сумму ширин первых N карточек + gap между ними
       let total = 0;
       for (let i = 0; i < count; i++) {
         const rect = allCards[i].getBoundingClientRect();
         total += rect.width;
       }
-      // gap считаем из стиля родителя
       const gap = parseFloat(getComputedStyle(track).gap) || 16;
       total += gap * (count - 1);
       return total;
@@ -236,18 +217,16 @@
       if (!paused) {
         offset += SPEED;
         const half = getHalfWidth();
-        if (offset >= half) offset -= half;   // бесшовный сброс
+        if (offset >= half) offset -= half;
         track.style.transform = `translateX(-${offset}px)`;
-        track.style.transition = 'none';       // двигаем напрямую, без CSS transition
+        track.style.transition = 'none';
       }
-      raf = requestAnimationFrame(step);
+      requestAnimationFrame(step);
     }
 
-    // Пауза при наведении
     track.parentElement.addEventListener('mouseenter', () => { paused = true; });
     track.parentElement.addEventListener('mouseleave', () => { paused = false; });
-
-    raf = requestAnimationFrame(step);
+    requestAnimationFrame(step);
   })();
 </script>
 {% endblock %}

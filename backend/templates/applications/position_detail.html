@@ -1,18 +1,17 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block title %}{{ position.title }} — {{ position.event.title }}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'accounts:volunteer_dashboard' %}">Кабинет волонтёра</a>
+    <a href="{% url 'accounts:volunteer_dashboard' %}">{% trans "Кабинет волонтёра" %}</a>
     <span class="bc-sep">›</span>
     <span class="bc-current">{{ position.title }}</span>
   </nav>
 </div>
 {% endblock %}
-
-
 
 {% block content %}
 <section class="page-shell mb-4">
@@ -26,7 +25,7 @@
         {% if position.event.district %} · {{ position.event.district.name }}{% endif %}
       </p>
     </div>
-    <a class="btn btn-outline-secondary" href="{% url 'accounts:volunteer_dashboard' %}">← Назад</a>
+    <a class="btn btn-outline-secondary" href="{% url 'accounts:volunteer_dashboard' %}">{% trans "← Назад" %}</a>
   </div>
 </section>
 
@@ -35,16 +34,16 @@
 
     {% if position.description %}
       <section class="panel-card mb-4">
-        <div class="section-head"><span class="eyebrow">О роли</span><h2 class="section-title">Описание</h2></div>
+        <div class="section-head"><span class="eyebrow">{% trans "О роли" %}</span><h2 class="section-title">{% trans "Описание" %}</h2></div>
         <p style="color:var(--text-2);line-height:1.75;margin:0;">{{ position.description }}</p>
       </section>
     {% endif %}
 
     <section class="panel-card mb-4">
-      <div class="section-head"><span class="eyebrow">Навыки</span><h2 class="section-title">Требования к навыкам</h2></div>
+      <div class="section-head"><span class="eyebrow">{% trans "Навыки" %}</span><h2 class="section-title">{% trans "Требования к навыкам" %}</h2></div>
 
       {% if position.required_skill_items.exists %}
-        <div class="field-label mb-2">Обязательные</div>
+        <div class="field-label mb-2">{% trans "Обязательные" %}</div>
         <div class="tags-row mb-3">
           {% for item in position.required_skill_items.all %}
             <span class="tag tag--required">✅ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
@@ -53,7 +52,7 @@
       {% endif %}
 
       {% if position.optional_skill_items.exists %}
-        <div class="field-label mb-2">Желательные</div>
+        <div class="field-label mb-2">{% trans "Желательные" %}</div>
         <div class="tags-row">
           {% for item in position.optional_skill_items.all %}
             <span class="tag tag--optional">⭐ {{ item.skill.name }} · {{ item.get_min_level_display }}</span>
@@ -62,13 +61,13 @@
       {% endif %}
 
       {% if not position.required_skill_items.exists and not position.optional_skill_items.exists %}
-        <p style="color:var(--muted);font-size:.9rem;margin:0;">Особых требований к навыкам нет.</p>
+        <p style="color:var(--muted);font-size:.9rem;margin:0;">{% trans "Особых требований к навыкам нет." %}</p>
       {% endif %}
     </section>
 
     {% if position.language_requirements.exists %}
       <section class="panel-card mb-4">
-        <div class="section-head"><span class="eyebrow">Языки</span><h2 class="section-title">Языковые требования</h2></div>
+        <div class="section-head"><span class="eyebrow">{% trans "Языки" %}</span><h2 class="section-title">{% trans "Языковые требования" %}</h2></div>
         <div class="tags-row">
           {% for item in position.language_requirements.all %}
             <span class="tag tag--language">🌐 {{ item.language.name }} · {{ item.get_min_level_display }}</span>
@@ -82,40 +81,40 @@
   <div class="col-lg-5">
 
     <section class="panel-card mb-4">
-      <div class="section-head"><span class="eyebrow">Условия</span><h2 class="section-title">Ограничения и условия</h2></div>
+      <div class="section-head"><span class="eyebrow">{% trans "Условия" %}</span><h2 class="section-title">{% trans "Ограничения и условия" %}</h2></div>
       <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.9rem;">
         <div style="display:flex;align-items:center;gap:.5rem;">
           <span style="font-size:1.1rem;">🚗</span>
-          <span>Нужен автомобиль: <strong>{% if position.requires_car %}Да{% else %}Нет{% endif %}</strong></span>
+          <span>{% trans "Нужен автомобиль" %}: <strong>{% if position.requires_car %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}</strong></span>
         </div>
         <div style="display:flex;align-items:center;gap:.5rem;">
           <span style="font-size:1.1rem;">🌙</span>
-          <span>Ночные смены: <strong>{% if position.requires_night_shift %}Да{% else %}Нет{% endif %}</strong></span>
+          <span>{% trans "Ночные смены" %}: <strong>{% if position.requires_night_shift %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}</strong></span>
         </div>
         <div style="display:flex;align-items:center;gap:.5rem;">
           <span style="font-size:1.1rem;">💪</span>
-          <span>Физическая нагрузка: <strong>{% if position.requires_physical_work %}Да{% else %}Нет{% endif %}</strong></span>
+          <span>{% trans "Физическая нагрузка" %}: <strong>{% if position.requires_physical_work %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}</strong></span>
         </div>
         <div style="display:flex;align-items:center;gap:.5rem;">
           <span style="font-size:1.1rem;">📦</span>
-          <span>Переноска тяжестей: <strong>{% if position.requires_heavy_lifting %}Да{% else %}Нет{% endif %}</strong></span>
+          <span>{% trans "Переноска тяжестей" %}: <strong>{% if position.requires_heavy_lifting %}{% trans "Да" %}{% else %}{% trans "Нет" %}{% endif %}</strong></span>
         </div>
         {% if position.slots_total %}
           <div style="display:flex;align-items:center;gap:.5rem;">
             <span style="font-size:1.1rem;">👥</span>
-            <span>Мест: <strong>{{ position.slots_total }}</strong></span>
+            <span>{% trans "Мест:" %} <strong>{{ position.slots_total }}</strong></span>
           </div>
         {% endif %}
         {% if position.direction %}
           <div style="display:flex;align-items:center;gap:.5rem;">
             <span style="font-size:1.1rem;">🎯</span>
-            <span>Направление: <strong>{{ position.direction }}</strong></span>
+            <span>{% trans "Направление" %}: <strong>{{ position.direction }}</strong></span>
           </div>
         {% endif %}
         {% if position.task_type %}
           <div style="display:flex;align-items:center;gap:.5rem;">
             <span style="font-size:1.1rem;">🔧</span>
-            <span>Тип задачи: <strong>{{ position.task_type }}</strong></span>
+            <span>{% trans "Тип задачи" %}: <strong>{{ position.task_type }}</strong></span>
           </div>
         {% endif %}
       </div>
@@ -123,7 +122,7 @@
 
     {% if position.availability_requirements.exists %}
       <section class="panel-card mb-4">
-        <div class="section-head"><span class="eyebrow">Расписание</span><h2 class="section-title">Требования к доступности</h2></div>
+        <div class="section-head"><span class="eyebrow">{% trans "Расписание" %}</span><h2 class="section-title">{% trans "Доступность роли" %}</h2></div>
         <div class="tags-row">
           {% for item in position.availability_requirements.all %}
             <span class="tag">{{ item.get_weekday_display }} · {{ item.get_time_of_day_display }}</span>
@@ -132,22 +131,21 @@
       </section>
     {% endif %}
 
-    {# Блок отклика #}
     <section class="panel-card">
       {% if already_assigned %}
-        <div class="alert alert-success mb-0">Вы уже назначены на эту роль.</div>
+        <div class="alert alert-success mb-0">{% trans "Вы уже назначены на эту роль." %}</div>
       {% elif already_applied %}
-        <div class="alert alert-info mb-0">Вы уже откликнулись на эту роль. Ожидайте ответа.</div>
+        <div class="alert alert-info mb-0">{% trans "Вы уже откликнулись на эту роль. Ожидайте ответа." %}</div>
       {% elif not request.user.is_authenticated %}
-        <p style="color:var(--muted);margin-bottom:1rem;">Войдите, чтобы откликнуться.</p>
-        <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">Войти</a>
+        <p style="color:var(--muted);margin-bottom:1rem;">{% trans "Войдите, чтобы откликнуться." %}</p>
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary w-100">{% trans "Войти" %}</a>
       {% else %}
         <div class="section-head">
-          <h2 class="section-title">Откликнуться</h2>
-          <p class="page-subtitle mb-0">Ваш отклик будет рассмотрен организатором.</p>
+          <h2 class="section-title">{% trans "Откликнуться" %}</h2>
+          <p class="page-subtitle mb-0">{% trans "Ваш отклик будет рассмотрен организатором." %}</p>
         </div>
         <a href="{% url 'applications:apply_to_position' position.id %}" class="btn btn-primary w-100">
-          Перейти к форме отклика →
+          {% trans "Перейти к форме отклика" %} →
         </a>
       {% endif %}
     </section>

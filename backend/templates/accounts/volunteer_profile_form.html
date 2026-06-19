@@ -1,53 +1,53 @@
 {% extends "base.html" %}
-{% block title %}Анкета волонтёра{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Анкета волонтёра" %}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'accounts:volunteer_dashboard' %}">Кабинет волонтёра</a>
+    <a href="{% url 'accounts:volunteer_dashboard' %}">{% trans "Кабинет волонтёра" %}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Анкета</span>
+    <span class="bc-current">{% trans "Анкета" %}</span>
   </nav>
 </div>
 {% endblock %}
-
 
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">Анкета волонтёра</span>
-      <h1 class="page-title">Профиль и параметры участия</h1>
-      <p class="page-subtitle">Анкета синхронизирована с формулами подбора: навыки, языки, доступность, мотивация и ограничения реально участвуют в расчёте.</p>
+      <span class="eyebrow">{% trans "Анкета волонтёра" %}</span>
+      <h1 class="page-title">{% trans "Профиль и параметры участия" %}</h1>
+      <p class="page-subtitle">{% trans "Анкета синхронизирована с формулами подбора: навыки, языки, доступность, мотивация и ограничения реально участвуют в расчёте." %}</p>
     </div>
-    <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:volunteer_dashboard' %}">← Назад</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:volunteer_dashboard' %}">{% trans "← Назад" %}</a>
     <div class="completion-card">
-      <div class="completion-label">Заполненность</div>
+      <div class="completion-label">{% trans "Заполненность" %}</div>
       <div class="completion-value">{{ volunteer_profile.profile_completion_percent }}%</div>
     </div>
   </div>
 </section>
 
 <form method="post" class="vstack gap-4">{% csrf_token %}
-  {% if form_errors %}<div class="alert alert-danger form-error-summary" id="form-errors"><strong>Проверьте форму.</strong><ul class="mb-0 mt-2">{% for err in form_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if form_errors %}<div class="alert alert-danger form-error-summary" id="form-errors"><strong>{% trans "Проверьте форму." %}</strong><ul class="mb-0 mt-2">{% for err in form_errors %}<li>{{ err }}</li>{% endfor %}</ul></div>{% endif %}
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 1</span><h2 class="section-title">Базовая информация и контакты</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 1" %}</span><h2 class="section-title">{% trans "Базовая информация и контакты" %}</h2></div></div>
     <div class="form-grid form-grid--2">
-      <div class="field-block"><label class="field-label">Имя</label>{{ user_form.first_name }}</div>
-      <div class="field-block"><label class="field-label">Фамилия</label>{{ user_form.last_name }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Имя" %}</label>{{ user_form.first_name }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Фамилия" %}</label>{{ user_form.last_name }}</div>
       <div class="field-block"><label class="field-label">Email</label>{{ user_form.email }}</div>
-      <div class="field-block"><label class="field-label">Телефон</label>{{ profile_form.phone }}</div>
-      <div class="field-block"><label class="field-label">Пол</label>{{ volunteer_form.gender }}</div>
-      <div class="field-block"><label class="field-label">Год рождения</label>{{ volunteer_form.birth_year }}</div>
-      <div class="field-block"><label class="field-label">Город</label>{{ volunteer_form.city }}</div>
-      <div class="field-block"><label class="field-label">Район</label>{{ volunteer_form.district }}</div>
-    </div> 
+      <div class="field-block"><label class="field-label">{% trans "Телефон" %}</label>{{ profile_form.phone }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Пол" %}</label>{{ volunteer_form.gender }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Год рождения" %}</label>{{ volunteer_form.birth_year }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Город" %}</label>{{ volunteer_form.city }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Район" %}</label>{{ volunteer_form.district }}</div>
+    </div>
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 2</span><h2 class="section-title">Языки и уровень владения</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 2" %}</span><h2 class="section-title">{% trans "Языки и уровень владения" %}</h2></div></div>
     <div class="option-grid option-grid--languages">
       {% for item in language_catalog %}
         <label class="option-card option-card--selective">
@@ -66,7 +66,7 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 3</span><h2 class="section-title">Навыки и компетенции</h2><p class="page-subtitle mb-0">Отметьте все навыки, которыми реально владеете. Этот единый список используется и для обязательных, и для желательных требований роли.</p></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 3" %}</span><h2 class="section-title">{% trans "Навыки и компетенции" %}</h2><p class="page-subtitle mb-0">{% trans "Отметьте все навыки, которыми реально владеете." %}</p></div></div>
     <div class="option-grid option-grid--skills">
       {% for item in skill_catalog %}
         <label class="option-card option-card--selective">
@@ -88,14 +88,14 @@
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 4</span><h2 class="section-title">Доступность и логистика</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 4" %}</span><h2 class="section-title">{% trans "Доступность и логистика" %}</h2></div></div>
     <div class="form-grid form-grid--2 mb-3">
-      <div class="field-block"><label class="field-label">Доступен с</label>{{ volunteer_form.availability_start_date }}</div>
-      <div class="field-block"><label class="field-label">Доступен до</label>{{ volunteer_form.availability_end_date }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Доступен с" %}</label>{{ volunteer_form.availability_start_date }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Доступен до" %}</label>{{ volunteer_form.availability_end_date }}</div>
     </div>
     <div class="availability-header">
-      <div class="field-label">Выбери удобные слоты по дням недели</div>
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="toggle-all-availability">Выбрать / снять все</button>
+      <div class="field-label">{% trans "Выбери удобные слоты по дням недели" %}</div>
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="toggle-all-availability">{% trans "Выбрать / снять все" %}</button>
     </div>
     <div class="availability-grid">
       {% for value, label in volunteer_form.availability_matrix.field.choices %}
@@ -106,36 +106,36 @@
       {% endfor %}
     </div>
     <div class="toggle-grid mt-4">
-      <label class="toggle-card">{{ volunteer_form.can_travel }}<span>Готов выезжать в другие районы</span></label>
-      <label class="toggle-card">{{ volunteer_form.has_car }}<span>Есть автомобиль</span></label>
+      <label class="toggle-card">{{ volunteer_form.can_travel }}<span>{% trans "Готов выезжать в другие районы" %}</span></label>
+      <label class="toggle-card">{{ volunteer_form.has_car }}<span>{% trans "Есть автомобиль" %}</span></label>
     </div>
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 5</span><h2 class="section-title">Предпочтения и мотивация</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 5" %}</span><h2 class="section-title">{% trans "Предпочтения и мотивация" %}</h2></div></div>
     <div class="form-grid form-grid--2">
-      <div class="field-block"><label class="field-label">Цель участия</label>{{ volunteer_form.participation_goal }}</div>
-      <div class="field-block field-block--full"><label class="field-label">Предпочтительные направления</label><div class="choice-cloud">{{ volunteer_form.preferred_directions }}</div></div>
-      <div class="field-block field-block--full"><label class="field-label">Предпочтительные типы задач</label><div class="choice-cloud">{{ volunteer_form.preferred_task_types }}</div></div>
-      <div class="field-block field-block--full"><label class="field-label">Мотивация</label>{{ volunteer_form.motivation_text }}</div>
+      <div class="field-block"><label class="field-label">{% trans "Цель участия" %}</label>{{ volunteer_form.participation_goal }}</div>
+      <div class="field-block field-block--full"><label class="field-label">{% trans "Предпочтительные направления" %}</label><div class="choice-cloud">{{ volunteer_form.preferred_directions }}</div></div>
+      <div class="field-block field-block--full"><label class="field-label">{% trans "Предпочтительные типы задач" %}</label><div class="choice-cloud">{{ volunteer_form.preferred_task_types }}</div></div>
+      <div class="field-block field-block--full"><label class="field-label">{% trans "Мотивация" %}</label>{{ volunteer_form.motivation_text }}</div>
     </div>
   </section>
 
   <section class="panel-card">
-    <div class="section-head"><div><span class="eyebrow">Блок 6</span><h2 class="section-title">Ограничения и условия</h2></div></div>
+    <div class="section-head"><div><span class="eyebrow">{% trans "Блок 6" %}</span><h2 class="section-title">{% trans "Ограничения и условия" %}</h2></div></div>
     <div class="toggle-grid">
-      <label class="toggle-card">{{ volunteer_form.physical_work_ok }}<span>Физическая нагрузка допустима</span></label>
-      <label class="toggle-card">{{ volunteer_form.carry_heavy_ok }}<span>Могу переносить тяжести</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_night_shifts }}<span>Нежелательны ночные смены</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_outdoor_winter_work }}<span>Нежелательна работа на улице зимой</span></label>
-      <label class="toggle-card">{{ volunteer_form.avoid_large_crowds }}<span>Нежелательна работа с большим потоком людей</span></label>
+      <label class="toggle-card">{{ volunteer_form.physical_work_ok }}<span>{% trans "Физическая нагрузка допустима" %}</span></label>
+      <label class="toggle-card">{{ volunteer_form.carry_heavy_ok }}<span>{% trans "Могу переносить тяжести" %}</span></label>
+      <label class="toggle-card">{{ volunteer_form.avoid_night_shifts }}<span>{% trans "Нежелательны ночные смены" %}</span></label>
+      <label class="toggle-card">{{ volunteer_form.avoid_outdoor_winter_work }}<span>{% trans "Нежелательна работа на улице зимой" %}</span></label>
+      <label class="toggle-card">{{ volunteer_form.avoid_large_crowds }}<span>{% trans "Нежелательна работа с большим потоком людей" %}</span></label>
     </div>
-    <div class="field-block mt-3"><label class="field-label">Ограничения и противопоказания</label>{{ volunteer_form.restrictions_note }}</div>
+    <div class="field-block mt-3"><label class="field-label">{% trans "Ограничения / комментарий" %}</label>{{ volunteer_form.restrictions_note }}</div>
   </section>
 
   <div class="action-row">
-    <button class="btn btn-primary btn-lg" type="submit">Сохранить анкету</button>
-    <a class="btn btn-outline-secondary btn-lg" href="{% url 'accounts:volunteer_dashboard' %}">Назад</a>
+    <button class="btn btn-primary btn-lg" type="submit">{% trans "Сохранить анкету" %}</button>
+    <a class="btn btn-outline-secondary btn-lg" href="{% url 'accounts:volunteer_dashboard' %}">{% trans "Назад" %}</a>
   </div>
 </form>
 {% endblock %}

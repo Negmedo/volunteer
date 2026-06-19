@@ -1,27 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Кабинет организации{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Кабинет организации" %}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Кабинет организации</span>
+    <span class="bc-current">{% trans "Кабинет организации" %}</span>
   </nav>
 </div>
 {% endblock %}
-
-
 
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">Координатор</span>
-      <h1 class="page-title">Кабинет организации</h1>
-      <p class="page-subtitle">Управляйте мероприятиями, ролями и подбором волонтёров</p>
+      <span class="eyebrow">{% trans "Координатор" %}</span>
+      <h1 class="page-title">{% trans "Кабинет организации" %}</h1>
+      <p class="page-subtitle">{% trans "Управляйте мероприятиями, ролями и подбором волонтёров" %}</p>
     </div>
     <a class="btn btn-primary" href="{% url 'events:event_create' %}">
-      + Создать мероприятие
+      {% trans "+ Создать мероприятие" %}
     </a>
   </div>
 </section>
@@ -42,24 +41,24 @@
               {% if event.city %}
                 <span>📍 {{ event.city }}{% if event.district %}, {{ event.district.name }}{% endif %}</span>
               {% endif %}
-              <span>👥 {{ event.positions.count }} рол{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
+              <span>👥 {{ event.positions.count }} {% trans "рол" %}{{ event.positions.count|pluralize:"ь,и,ей" }}</span>
               {% if not event.is_public %}
-                <span style="color:var(--warning);font-weight:700;">🔒 Скрыто</span>
+                <span style="color:var(--warning);font-weight:700;">🔒 {% trans "Скрыто" %}</span>
               {% endif %}
             </div>
           </div>
           <a class="btn btn-outline-primary btn-sm" href="{% url 'events:event_detail' event.id %}">
-            Открыть →
+            {% trans "Открыть" %} →
           </a>
         </div>
 
         {% if event.positions.exists %}
           <div class="tags-row mt-3">
             {% for pos in event.positions.all|slice:":5" %}
-              <span class="tag">{{ pos.title }} · {{ pos.slots_total }} мест</span>
+              <span class="tag">{{ pos.title }} · {{ pos.slots_total }} {% trans "мест" %}</span>
             {% endfor %}
             {% if event.positions.count > 5 %}
-              <span class="tag tag--soft">+{{ event.positions.count|add:"-5" }} ещё</span>
+              <span class="tag tag--soft">+{{ event.positions.count|add:"-5" }} {% trans "ещё" %}</span>
             {% endif %}
           </div>
         {% endif %}
@@ -70,9 +69,9 @@
   <section class="panel-card">
     <div style="text-align:center;padding:3rem 1rem;color:var(--muted);">
       <div style="font-size:2.5rem;margin-bottom:.75rem;">📋</div>
-      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">Мероприятий пока нет</div>
-      <div style="font-size:.88rem;margin:.5rem 0 1.25rem;">Создайте первое мероприятие и добавьте роли для волонтёров</div>
-      <a class="btn btn-primary" href="{% url 'events:event_create' %}">Создать мероприятие</a>
+      <div style="font-family:'Manrope',sans-serif;font-weight:700;font-size:1.05rem;">{% trans "Мероприятий пока нет" %}</div>
+      <div style="font-size:.88rem;margin:.5rem 0 1.25rem;">{% trans "Создайте первое мероприятие и добавьте роли для волонтёров" %}</div>
+      <a class="btn btn-primary" href="{% url 'events:event_create' %}">{% trans "+ Создать мероприятие" %}</a>
     </div>
   </section>
 {% endif %}

@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Импорт CSV — {{ event.title }}{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Импорт CSV" %} — {{ event.title }}{% endblock %}
 
 {% block content %}
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">Импорт данных</span>
-      <h1 class="page-title">Импорт волонтёров из CSV</h1>
-      <p class="page-subtitle">Мероприятие: {{ event.title }}</p>
+      <span class="eyebrow">{% trans "Импорт данных" %}</span>
+      <h1 class="page-title">{% trans "Импорт волонтёров из CSV" %}</h1>
+      <p class="page-subtitle">{% trans "Мероприятие" %}: {{ event.title }}</p>
     </div>
-    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' event.id %}">← Назад</a>
+    <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' event.id %}">{% trans "← Назад" %}</a>
   </div>
 </section>
 
@@ -17,30 +18,30 @@
   <div class="col-lg-6">
     <section class="panel-card">
       <div class="section-head">
-        <h2 class="section-title">Загрузить файл</h2>
-        <p class="page-subtitle mb-0">Файл CSV, подготовленный вручную или экспортированный из Excel.</p>
+        <h2 class="section-title">{% trans "Загрузить файл" %}</h2>
+        <p class="page-subtitle mb-0">{% trans "Файл CSV, подготовленный вручную или экспортированный из Excel." %}</p>
       </div>
 
       <form method="post" enctype="multipart/form-data" class="vstack gap-3">
         {% csrf_token %}
 
         <div class="field-block">
-          <label class="field-label">Роль для отклика (необязательно)</label>
+          <label class="field-label">{% trans "Роль для отклика (необязательно)" %}</label>
           <select name="position_id" class="form-select">
-            <option value="">— только проверить, без создания откликов —</option>
+            <option value="">— {% trans "только проверить, без создания откликов" %} —</option>
             {% for pos in positions %}
               <option value="{{ pos.id }}">{{ pos.title }}</option>
             {% endfor %}
           </select>
-          <div class="form-text">Если выбрана роль — для каждого найденного в системе пользователя будет создан отклик.</div>
+          <div class="form-text">{% trans "Если выбрана роль — для каждого найденного в системе пользователя будет создан отклик." %}</div>
         </div>
 
         <div class="field-block">
-          <label class="field-label">CSV-файл</label>
+          <label class="field-label">{% trans "CSV-файл" %}</label>
           <input type="file" name="csv_file" accept=".csv" class="form-control">
         </div>
 
-        <button type="submit" class="btn btn-primary">Импортировать</button>
+        <button type="submit" class="btn btn-primary">{% trans "Импортировать" %}</button>
       </form>
     </section>
   </div>
@@ -48,11 +49,11 @@
   <div class="col-lg-6">
     <section class="panel-card">
       <div class="section-head">
-        <h2 class="section-title">Формат файла</h2>
+        <h2 class="section-title">{% trans "Формат файла" %}</h2>
       </div>
       <p style="font-size:.9rem;color:var(--text-2);">
-        Первая строка — заголовок. Обязательная колонка: <code>email</code>.
-        Остальные колонки игнорируются.
+        {% trans "Первая строка — заголовок. Обязательная колонка:" %} <code>email</code>.
+        {% trans "Остальные колонки игнорируются." %}
       </p>
       <div style="background:var(--surface-2);border:1px solid var(--stroke);border-radius:var(--radius);padding:1rem;font-family:monospace;font-size:.84rem;">
         email,first_name,last_name<br>
@@ -60,12 +61,10 @@
         aibek@example.com,Айбек,Нуров
       </div>
       <p style="font-size:.84rem;color:var(--muted);margin-top:.75rem;">
-        💡 CSV можно подготовить в Excel: Файл → Сохранить как → CSV UTF-8.
-        При импорте используется кодировка UTF-8 с BOM.
+        💡 {% trans "CSV можно подготовить в Excel: Файл → Сохранить как → CSV UTF-8. При импорте используется кодировка UTF-8 с BOM." %}
       </p>
       <p style="font-size:.84rem;color:var(--muted);">
-        Пользователи, которых нет в системе, будут пропущены.
-        Уже существующие отклики не дублируются.
+        {% trans "Пользователи, которых нет в системе, будут пропущены. Уже существующие отклики не дублируются." %}
       </p>
     </section>
   </div>

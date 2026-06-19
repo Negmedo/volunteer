@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Подбор: {{ position.title }}{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Подбор" %}: {{ position.title }}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <a href="{% url 'events:org_dashboard' %}">{% trans "Кабинет организации" %}</a>
     <span class="bc-sep">›</span>
     <a href="{% url 'events:event_detail' position.event_id %}">{{ position.event.title }}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Подбор: {{ position.title }}</span>
+    <span class="bc-current">{% trans "Подбор" %}: {{ position.title }}</span>
   </nav>
 </div>
 {% endblock %}
@@ -19,55 +20,55 @@
 <section class="page-shell mb-4">
   <div class="page-head">
     <div>
-      <span class="eyebrow">СППР · интеллектуальный подбор</span>
+      <span class="eyebrow">{% trans "СППР · интеллектуальный подбор" %}</span>
       <h1 class="page-title">{{ position.title }}</h1>
       <p class="page-subtitle">
-        Мероприятие: {{ position.event.title }}
+        {% trans "Мероприятие" %}: {{ position.event.title }}
         {% if ml_available %}
-          &nbsp;·&nbsp;<span style="color:var(--success);font-weight:700;">🤖 ML-модуль активен</span>
+          &nbsp;·&nbsp;<span style="color:var(--success);font-weight:700;">🤖 ML-{% trans "модуль активен" %}</span>
         {% else %}
-          &nbsp;·&nbsp;<span style="color:var(--warning);font-weight:700;">⚠ Локальный скоринг</span>
+          &nbsp;·&nbsp;<span style="color:var(--warning);font-weight:700;">⚠ {% trans "Локальный скоринг" %}</span>
         {% endif %}
       </p>
     </div>
     <a class="btn btn-outline-secondary" href="{% url 'events:event_detail' position.event_id %}">
-      ← Назад к мероприятию
+      {% trans "← Назад к мероприятию" %}
     </a>
   </div>
 </section>
 
 <section class="panel-card mb-4">
   <div class="section-head">
-    <span class="eyebrow">Требования позиции</span>
-    <h2 class="section-title">Что ищем</h2>
+    <span class="eyebrow">{% trans "Требования позиции" %}</span>
+    <h2 class="section-title">{% trans "Что ищем" %}</h2>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
     <div>
-      <div class="field-label">Обязательные навыки</div>
+      <div class="field-label">{% trans "Обязательные" %} {% trans "навыки" %}</div>
       {% for item in position.required_skill_items.all %}
         <span class="tag tag--required">{{ item.skill.name }} · {{ item.get_min_level_display }}</span>
-      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">{% trans "не указаны" %}</span>{% endfor %}
     </div>
     <div>
-      <div class="field-label">Желательные навыки</div>
+      <div class="field-label">{% trans "Желательные" %} {% trans "навыки" %}</div>
       {% for item in position.optional_skill_items.all %}
         <span class="tag tag--optional">{{ item.skill.name }} · {{ item.get_min_level_display }}</span>
-      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">{% trans "не указаны" %}</span>{% endfor %}
     </div>
     <div>
-      <div class="field-label">Языки</div>
+      <div class="field-label">{% trans "Языки" %}</div>
       {% for item in position.language_requirements.all %}
         <span class="tag tag--language">{{ item.language.name }} · {{ item.get_min_level_display }}</span>
-      {% empty %}<span style="color:var(--muted);font-size:.86rem;">не указаны</span>{% endfor %}
+      {% empty %}<span style="color:var(--muted);font-size:.86rem;">{% trans "не указаны" %}</span>{% endfor %}
     </div>
     <div>
-      <div class="field-label">Условия</div>
+      <div class="field-label">{% trans "Условия" %}</div>
       <div style="font-size:.86rem;color:var(--text-2);display:flex;flex-direction:column;gap:.2rem;">
-        {% if position.requires_car %}<span>🚗 Нужен автомобиль</span>{% endif %}
-        {% if position.requires_night_shift %}<span>🌙 Ночные смены</span>{% endif %}
-        {% if position.requires_physical_work %}<span>💪 Физическая нагрузка</span>{% endif %}
+        {% if position.requires_car %}<span>🚗 {% trans "Нужен автомобиль" %}</span>{% endif %}
+        {% if position.requires_night_shift %}<span>🌙 {% trans "Ночные смены" %}</span>{% endif %}
+        {% if position.requires_physical_work %}<span>💪 {% trans "Физическая нагрузка" %}</span>{% endif %}
         {% if not position.requires_car and not position.requires_night_shift and not position.requires_physical_work %}
-          <span style="color:var(--muted);">особых требований нет</span>
+          <span style="color:var(--muted);">{% trans "особых требований нет" %}</span>
         {% endif %}
       </div>
     </div>
@@ -77,8 +78,8 @@
 {% if recommendations %}
   <section class="panel-card mb-4">
     <div class="section-head">
-      <span class="eyebrow">Рекомендации</span>
-      <h2 class="section-title">Советы координатору</h2>
+      <span class="eyebrow">{% trans "Рекомендации" %}</span>
+      <h2 class="section-title">{% trans "Советы координатору" %}</h2>
     </div>
     <ul style="margin:0;padding-left:1.25rem;display:grid;gap:.4rem;">
       {% for item in recommendations %}
@@ -88,16 +89,15 @@
   </section>
 {% endif %}
 
-{# ═══ СТРОГИЙ РЕЖИМ ═══ #}
 <section class="panel-card mb-4">
   <div class="section-head section-head--split">
     <div>
-      <span class="eyebrow">Строгий режим · все критерии пройдены</span>
-      <h2 class="section-title">Точное соответствие</h2>
-      <p class="page-subtitle mb-0">Жёсткий фильтр + все обязательные требования</p>
+      <span class="eyebrow">{% trans "Строгий режим · все критерии пройдены" %}</span>
+      <h2 class="section-title">{% trans "Точное соответствие" %}</h2>
+      <p class="page-subtitle mb-0">{% trans "Жёсткий фильтр + все обязательные требования" %}</p>
     </div>
     {% if strict_results %}
-      <span class="status-badge status-badge--assigned">{{ strict_results|length }} кандидат{{ strict_results|length|pluralize:",,ов" }}</span>
+      <span class="status-badge status-badge--assigned">{{ strict_results|length }} {% trans "кандидат" %}{{ strict_results|length|pluralize:",,ов" }}</span>
     {% endif %}
   </div>
 
@@ -107,10 +107,10 @@
         <thead>
           <tr>
             <th class="pm-col-n">№</th>
-            <th class="pm-col-name">Волонтёр</th>
-            <th class="pm-col-mail">Почта</th>
-            <th class="pm-col-det">Подробнее</th>
-            <th class="pm-col-act">Действие</th>
+            <th class="pm-col-name">{% trans "Волонтёр" %}</th>
+            <th class="pm-col-mail">{% trans "Почта" %}</th>
+            <th class="pm-col-det">{% trans "Подробнее" %}</th>
+            <th class="pm-col-act">{% trans "Действие" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -137,13 +137,13 @@
                 data-pos="{{ position.id }}"
                 data-vol="{{ item.volunteer.id }}"
                 onclick="pmOpenModal(this)">
-                Детали
+                {% trans "Детали" %}
               </button>
             </td>
             <td>
               <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
                 {% csrf_token %}
-                <button class="pm-btn-invite">Отправить приглашение</button>
+                <button class="pm-btn-invite">{% trans "Отправить приглашение" %}</button>
               </form>
             </td>
           </tr>
@@ -154,21 +154,20 @@
   {% else %}
     <div class="pm-empty">
       <span style="font-size:1.4rem;">😕</span>
-      Строгий подбор не нашёл кандидатов.
+      {% trans "Строгий подбор не нашёл кандидатов." %}
     </div>
   {% endif %}
 </section>
 
-{# ═══ ОСЛАБЛЕННЫЙ РЕЖИМ ═══ #}
 <section class="panel-card mb-4">
   <div class="section-head section-head--split">
     <div>
-      <span class="eyebrow">Ослабленный режим</span>
-      <h2 class="section-title">Частичное соответствие</h2>
-      <p class="page-subtitle mb-0">После смягчения части критериев</p>
+      <span class="eyebrow">{% trans "Ослабленный режим" %}</span>
+      <h2 class="section-title">{% trans "Частичное соответствие" %}</h2>
+      <p class="page-subtitle mb-0">{% trans "После смягчения части критериев" %}</p>
     </div>
     {% if relaxed_results %}
-      <span class="status-badge status-badge--reviewed">{{ relaxed_results|length }} кандидат{{ relaxed_results|length|pluralize:",,ов" }}</span>
+      <span class="status-badge status-badge--reviewed">{{ relaxed_results|length }} {% trans "кандидат" %}{{ relaxed_results|length|pluralize:",,ов" }}</span>
     {% endif %}
   </div>
 
@@ -178,10 +177,10 @@
         <thead>
           <tr>
             <th class="pm-col-n">№</th>
-            <th class="pm-col-name">Волонтёр</th>
-            <th class="pm-col-mail">Почта</th>
-            <th class="pm-col-det">Подробнее</th>
-            <th class="pm-col-act">Действие</th>
+            <th class="pm-col-name">{% trans "Волонтёр" %}</th>
+            <th class="pm-col-mail">{% trans "Почта" %}</th>
+            <th class="pm-col-det">{% trans "Подробнее" %}</th>
+            <th class="pm-col-act">{% trans "Действие" %}</th>
           </tr>
         </thead>
         <tbody>
@@ -208,13 +207,13 @@
                 data-pos="{{ position.id }}"
                 data-vol="{{ item.volunteer.id }}"
                 onclick="pmOpenModal(this)">
-                Детали
+                {% trans "Детали" %}
               </button>
             </td>
             <td>
               <form method="post" action="{% url 'matching:assign_candidate' position.id item.volunteer.id %}">
                 {% csrf_token %}
-                <button class="pm-btn-invite">Пригласить вручную</button>
+                <button class="pm-btn-invite">{% trans "Пригласить вручную" %}</button>
               </form>
             </td>
           </tr>
@@ -225,42 +224,40 @@
   {% else %}
     <div class="pm-empty">
       <span style="font-size:1.4rem;">😔</span>
-      Даже после ослабления критериев кандидаты не найдены.
+      {% trans "Даже после ослабления критериев кандидаты не найдены." %}
     </div>
   {% endif %}
 </section>
 
-{# ═══ МЕТОДОЛОГИЯ ═══ #}
 <section class="panel-card" style="background:var(--surface-2);">
   <div class="section-head">
-    <span class="eyebrow">Методология СППР</span>
-    <h2 class="section-title">Как работает интеллектуальный подбор</h2>
+    <span class="eyebrow">{% trans "Методология СППР" %}</span>
+    <h2 class="section-title">{% trans "Как работает интеллектуальный подбор" %}</h2>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;font-size:.87rem;color:var(--text-2);">
     <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
-      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">① Жёсткий фильтр</div>
-      Исключение по ограничениям: транспорт, ночные смены, физнагрузка, локация. Кандидат не проходит — до модели не доходит.
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">① {% trans "Жёсткий фильтр" %}</div>
+      {% trans "Исключение по ограничениям: транспорт, ночные смены, физнагрузка, локация." %}
     </div>
     <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
-      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">② Вектор признаков</div>
-      7 нормированных признаков [0–1]: навыки, язык, доступность, локация, надёжность, опыт, мотивация.
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">② {% trans "Вектор признаков" %}</div>
+      {% trans "7 нормированных признаков [0–1]: навыки, язык, доступность, локация, надёжность, опыт, мотивация." %}
     </div>
     <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
-      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">③ ML-модуль</div>
-      Признаки подаются в модель, которая возвращает ML-метрику и текстовые объяснения. При недоступности — локальный скоринг.
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">③ ML-{% trans "модуль" %}</div>
+      {% trans "Признаки подаются в модель, которая возвращает ML-метрику и текстовые объяснения." %}
     </div>
     <div style="padding:.85rem;background:var(--surface);border:1px solid var(--stroke);border-radius:var(--radius);">
-      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">④ Итоговый балл</div>
-      <code style="font-size:.84rem;background:#f1f5f9;padding:.2rem .4rem;border-radius:.4rem;">50% × ML + 30% × Навыки + 20% × Надёжность</code>
-      <br>Список отсортирован по убыванию итогового балла.
+      <div style="font-family:'Manrope',sans-serif;font-weight:800;margin-bottom:.35rem;color:var(--text);">④ {% trans "Итог" %}</div>
+      <code style="font-size:.84rem;background:#f1f5f9;padding:.2rem .4rem;border-radius:.4rem;">50% × ML + 30% × {% trans "Навыки" %} + 20% × {% trans "Надёжность" %}</code><br>
+      {% trans "Список отсортирован по убыванию итогового балла." %}
     </div>
   </div>
 </section>
 
-{# ═══ МОДАЛЬНОЕ ОКНО ═══ #}
 <div class="pm-overlay" id="pmOverlay" role="dialog" aria-modal="true" aria-labelledby="pmModalName">
   <div class="pm-modal">
-    <button class="pm-modal-close" id="pmClose" aria-label="Закрыть">✕</button>
+    <button class="pm-modal-close" id="pmClose" aria-label="{% trans "Закрыть" %}">✕</button>
 
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
       <div class="pm-avatar" id="pmAvatar"></div>
@@ -272,45 +269,38 @@
 
     <div class="pm-scores">
       <div class="pm-score-card">
-        <div class="pm-score-label">Итоговый балл</div>
+        <div class="pm-score-label">{% trans "Итог" %}</div>
         <div class="pm-score-val pm-score-val--main" id="pmScore"></div>
       </div>
       <div class="pm-score-card">
-        <div class="pm-score-label">ML-метрика</div>
+        <div class="pm-score-label">ML-{% trans "метрика" %}</div>
         <div class="pm-score-val pm-score-val--ml" id="pmMl"></div>
       </div>
       <div class="pm-score-card">
-        <div class="pm-score-label">Навыки</div>
+        <div class="pm-score-label">{% trans "Навыки" %}</div>
         <div class="pm-score-val" id="pmSkill"></div>
       </div>
       <div class="pm-score-card">
-        <div class="pm-score-label">Надёжность</div>
+        <div class="pm-score-label">{% trans "Надёжность" %}</div>
         <div class="pm-score-val" id="pmRel"></div>
       </div>
     </div>
 
     <div class="pm-formula">
-      <div class="pm-formula-title">Формула расчёта итогового балла</div>
-      Итог&nbsp;=&nbsp;50%&nbsp;×&nbsp;<em>ML-метрика</em>&nbsp;+&nbsp;30%&nbsp;×&nbsp;<em>Навыки</em>&nbsp;+&nbsp;20%&nbsp;×&nbsp;<em>Надёжность</em><br><br>
-      <span style="color:var(--muted);font-size:.82rem;">
-        <b>ML-метрика</b> — оценка модели по признакам волонтёра.<br>
-        <b>Навыки</b> — степень соответствия умений требованиям позиции.<br>
-        <b>Надёжность</b> — история выполненных мероприятий и рейтинг.
-      </span>
+      <div class="pm-formula-title">{% trans "Формула расчёта итогового балла" %}</div>
+      {% trans "Итог" %}&nbsp;=&nbsp;50%&nbsp;×&nbsp;<em>ML</em>&nbsp;+&nbsp;30%&nbsp;×&nbsp;<em>{% trans "Навыки" %}</em>&nbsp;+&nbsp;20%&nbsp;×&nbsp;<em>{% trans "Надёжность" %}</em>
     </div>
 
     <div id="pmFeaturesBlock" style="display:none;margin-bottom:.85rem;">
-      <div class="pm-reasons-label">Признаки модели</div>
+      <div class="pm-reasons-label">{% trans "Признаки модели" %}</div>
       <div class="pm-features-grid" id="pmFeatures"></div>
     </div>
 
-    <div class="pm-reasons-label">Почему выбран этот кандидат</div>
+    <div class="pm-reasons-label">{% trans "Объяснение" %}</div>
     <div class="pm-reasons-text" id="pmReasons"></div>
 
     <form method="post" id="pmInviteForm" style="margin-top:1rem;">
       {% csrf_token %}
-      <!-- кнопку не трогать, ее настройки тоже закоментированы -->
-      <!-- <button type="submit" class="pm-modal-invite" id="pmInviteBtn"></button> -->
     </form>
   </div>
 </div>
@@ -328,13 +318,11 @@
 .pm-name{color:var(--text);font-weight:600;text-decoration:none;font-size:.88rem}
 .pm-name:hover{text-decoration:underline}
 .pm-email{color:var(--muted);font-size:.8rem}
-.pm-row--relaxed td .pm-name{opacity:.9}
 .pm-btn-detail{background:transparent;border:1px solid var(--stroke);border-radius:var(--radius);padding:4px 10px;font-size:.78rem;cursor:pointer;color:var(--text-2);transition:background .1s}
 .pm-btn-detail:hover{background:var(--surface-2)}
 .pm-btn-invite{background:transparent;border:1px solid var(--stroke);border-radius:var(--radius);padding:4px 10px;font-size:.78rem;cursor:pointer;color:var(--text);transition:background .1s;white-space:nowrap}
 .pm-btn-invite:hover{background:var(--surface-2)}
 .pm-empty{padding:1.5rem 0;text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:.4rem;font-size:.9rem}
-
 .pm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;padding:1rem}
 .pm-overlay.pm-open{display:flex}
 .pm-modal{background:var(--surface,#fff);border:1px solid var(--stroke);border-radius:calc(var(--radius)*1.5);width:100%;max-width:420px;padding:1.25rem 1.35rem;position:relative;box-shadow:0 8px 32px rgba(0,0,0,.12);animation:pmSlideIn .18s ease}
@@ -358,8 +346,6 @@
 .pm-feature-val{font-weight:700;color:var(--text)}
 .pm-reasons-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem}
 .pm-reasons-text{font-size:.85rem;color:var(--text-2);line-height:1.55}
-.pm-modal-invite{width:100%;background:transparent;border:1px solid var(--stroke);border-radius:var(--radius);padding:8px;font-size:.85rem;cursor:pointer;color:var(--text);font-family:inherit;transition:background .1s}
-.pm-modal-invite:hover{background:var(--surface-2)}
 </style>
 
 <script>
@@ -396,12 +382,6 @@
     } else {
       featBlock.style.display='none';
     }
-
-    // не трогать найтройки кнопки она переносит на несуществующую страницу и взывает ошибку
-    // var mode=d.mode;
-    // document.getElementById('pmInviteBtn').textContent=(mode==='strict')?'Отправить приглашение':'Пригласить вручную';
-    // var url='{% url "matching:assign_candidate" 0 0 %}'.replace('/0/0/','/'+d.pos+'/'+d.vol+'/');
-    // document.getElementById('pmInviteForm').action=url;
 
     overlay.classList.add('pm-open');
   };

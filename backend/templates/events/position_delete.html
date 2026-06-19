@@ -1,36 +1,35 @@
 {% extends "base.html" %}
-{% block title %}Удалить роль{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Удалить роль" %}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'events:org_dashboard' %}">Кабинет организации</a>
+    <a href="{% url 'events:org_dashboard' %}">{% trans "Кабинет организации" %}</a>
     <span class="bc-sep">›</span>
     <a href="{% url 'events:event_detail' position.event_id %}">{{ position.event.title }}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Удалить роль</span>
+    <span class="bc-current">{% trans "Удалить роль" %}</span>
   </nav>
 </div>
 {% endblock %}
-
-
 
 {% block content %}
 <div class="delete-shell">
   <div class="delete-card">
     <div class="delete-card__icon">🗑️</div>
-    <h1 class="delete-card__title">Удалить роль?</h1>
+    <h1 class="delete-card__title">{% trans "Удалить роль?" %}</h1>
     <p class="delete-card__subject">«{{ position.title }}»</p>
     <p class="delete-card__warn">
-      Это действие необратимо. Вместе с ролью будут удалены все отклики и назначения волонтёров на неё.
+      {% trans "Это действие необратимо. Вместе с ролью будут удалены все отклики и назначения волонтёров на неё." %}
     </p>
     <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
       <form method="post">
         {% csrf_token %}
-        <button class="btn btn-danger" type="submit">Да, удалить</button>
+        <button class="btn btn-danger" type="submit">{% trans "Да, удалить" %}</button>
       </form>
-      <a href="{% url 'events:event_detail' position.event_id %}" class="btn btn-outline-secondary">Отмена</a>
+      <a href="{% url 'events:event_detail' position.event_id %}" class="btn btn-outline-secondary">{% trans "Отмена" %}</a>
     </div>
   </div>
 </div>

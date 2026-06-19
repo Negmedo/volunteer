@@ -294,9 +294,24 @@ def import_volunteers_csv(request, event_id):
         return redirect('accounts:dashboard')
 
     event = get_object_or_404(Event, id=event_id, created_by=request.user)
+    positions = event.positions.order_by('id')
 
-    if request.method == 'POST' and request.FILES.get('file'):
-        uploaded_file = request.FILES['file']
+    if request.method == 'POST':
+        uploaded_file = request.FILES.get('csv_file')
+        if not uploaded_file:
+            messages.error(request, 'Выберите CSV-файл для загрузки.')
+            return render(request, 'applications/import_csv.html', {'event': event, 'positions': positions})
+
+        # Determine target position
+        position_id = request.POST.get('position_id')
+        if position_id:
+            position = positions.filter(id=position_id).first()
+            if not position:
+                messages.error(request, 'Выбранная роль не найдена.')
+                return render(request, 'applications/import_csv.html', {'event': event, 'positions': positions})
+        else:
+            position = None  # check-only mode, no applications created
+
         raw = uploaded_file.read()
         try:
             text = raw.decode('utf-8-sig')
@@ -305,31 +320,46 @@ def import_volunteers_csv(request, event_id):
 
         csv_file = io.StringIO(text)
         reader = csv.DictReader(csv_file)
-        first_position = event.positions.order_by('id').first()
-        if not first_position:
-            messages.error(request, 'Сначала создайте хотя бы одну роль в мероприятии.')
-            return redirect('applications:import_volunteers_csv', event_id=event.id)
 
+        found_count = 0
         created_count = 0
+        skipped_count = 0
+        not_found_emails = []
+
         for row in reader:
             email = (row.get('email') or '').strip().lower()
             if not email:
                 continue
             vp = VolunteerProfile.objects.filter(user__email__iexact=email).select_related('user').first()
             if not vp:
+                not_found_emails.append(email)
                 continue
-            _, created = Application.objects.get_or_create(
-                position=first_position,
-                volunteer_profile=vp,
-                defaults={'status': ApplicationStatus.NEW},
-            )
-            if created:
-                created_count += 1
+            found_count += 1
+            if position:
+                _, created = Application.objects.get_or_create(
+                    position=position,
+                    volunteer_profile=vp,
+                    defaults={'status': ApplicationStatus.NEW},
+                )
+                if created:
+                    created_count += 1
+                else:
+                    skipped_count += 1
 
-        if created_count:
-            messages.success(request, f'Импорт завершён. Добавлено откликов: {created_count}.')
+        # Build result message
+        if position:
+            if created_count:
+                messages.success(request, f'Импорт завершён. Найдено: {found_count}, добавлено откликов: {created_count}, уже существовало: {skipped_count}.')
+            else:
+                messages.info(request, f'Импорт завершён. Найдено в системе: {found_count}, новых откликов нет (все уже существуют).')
         else:
-            messages.info(request, 'Импорт завершён, новых откликов не добавлено.')
+            messages.info(request, f'Проверка завершена. Найдено в системе: {found_count} из {found_count + len(not_found_emails)}. Роль не выбрана — отклики не создавались.')
+
+        if not_found_emails:
+            preview = ', '.join(not_found_emails[:5])
+            tail = f' и ещё {len(not_found_emails) - 5}' if len(not_found_emails) > 5 else ''
+            messages.warning(request, f'Не найдены в системе ({len(not_found_emails)}): {preview}{tail}')
+
         return redirect('events:event_detail', event_id=event.id)
 
-    return render(request, 'applications/import_csv.html', {'event': event})
+    return render(request, 'applications/import_csv.html', {'event': event, 'positions': positions})

@@ -1,20 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Отклик на роль — {{ position.title }}{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Отклик на роль" %} — {{ position.title }}{% endblock %}
 {% block breadcrumb %}
 <div class="navbar-breadcrumb-row w-100">
   <nav class="app-breadcrumb" aria-label="breadcrumb">
-    <a href="{% url 'landing:home' %}">Главная</a>
+    <a href="{% url 'landing:home' %}">{% trans "Главная" %}</a>
     <span class="bc-sep">›</span>
-    <a href="{% url 'accounts:volunteer_dashboard' %}">Кабинет волонтёра</a>
+    <a href="{% url 'accounts:volunteer_dashboard' %}">{% trans "Кабинет волонтёра" %}</a>
     <span class="bc-sep">›</span>
     <a href="{% url 'applications:position_detail' position.id %}">{{ position.title }}</a>
     <span class="bc-sep">›</span>
-    <span class="bc-current">Отклик</span>
+    <span class="bc-current">{% trans "Отклик" %}</span>
   </nav>
 </div>
 {% endblock %}
-
-
 
 {% block content %}
 <div style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - var(--nav-h) - 80px);">
@@ -22,8 +21,8 @@
 
     <div class="panel-card">
       <div style="margin-bottom:1.5rem;">
-        <a href="{% url 'applications:position_detail' position.id %}" class="btn btn-outline-secondary btn-sm mb-3" style="display:inline-flex;align-items:center;gap:.3rem;">← Назад к роли</a>
-        <span class="eyebrow">Отклик на роль</span>
+        <a href="{% url 'applications:position_detail' position.id %}" class="btn btn-outline-secondary btn-sm mb-3" style="display:inline-flex;align-items:center;gap:.3rem;">{% trans "← Назад к роли" %}</a>
+        <span class="eyebrow">{% trans "Отклик на роль" %}</span>
         <h1 class="page-title" style="font-size:1.5rem;margin-bottom:.3rem;">{{ position.title }}</h1>
         <p style="color:var(--muted);font-size:.9rem;margin:0;">
           {{ position.event.title }}
@@ -32,16 +31,15 @@
         </p>
       </div>
 
-      {# Краткие требования — напоминание перед откликом #}
       {% if position.required_skill_items.exists or position.requires_car or position.requires_night_shift %}
         <div style="padding:.85rem 1rem;border:1px solid var(--stroke);border-radius:var(--radius);background:var(--surface-2);margin-bottom:1.25rem;">
-          <div style="font-size:.82rem;font-weight:700;color:var(--text-2);margin-bottom:.5rem;">Требования к роли:</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text-2);margin-bottom:.5rem;">{% trans "Требования к роли:" %}</div>
           <div class="tags-row" style="margin-top:0;">
             {% for item in position.required_skill_items.all %}
               <span class="tag tag--required" style="font-size:.75rem;">{{ item.skill.name }}</span>
             {% endfor %}
-            {% if position.requires_car %}<span class="tag" style="font-size:.75rem;">🚗 Авто</span>{% endif %}
-            {% if position.requires_night_shift %}<span class="tag" style="font-size:.75rem;">🌙 Ночные смены</span>{% endif %}
+            {% if position.requires_car %}<span class="tag" style="font-size:.75rem;">🚗 {% trans "Авто" %}</span>{% endif %}
+            {% if position.requires_night_shift %}<span class="tag" style="font-size:.75rem;">🌙 {% trans "Ночные смены" %}</span>{% endif %}
           </div>
         </div>
       {% endif %}
@@ -51,29 +49,28 @@
 
         <div class="field-block">
           <label class="field-label" for="id_motivation_text">
-            Комментарий к отклику
-            <span style="font-weight:400;color:var(--muted);"> — необязательно</span>
+            {% trans "Комментарий к отклику" %}
+            <span style="font-weight:400;color:var(--muted);"> — {% trans "необязательно" %}</span>
           </label>
           <textarea
             id="id_motivation_text"
             name="motivation_text"
             class="form-control"
             rows="4"
-            placeholder="Расскажите, почему хотите участвовать в этой роли. Это поможет организатору принять решение."
+            placeholder="{% trans "Расскажите, почему хотите участвовать в этой роли. Это поможет организатору принять решение." %}"
           ></textarea>
         </div>
 
         <div style="padding:.85rem 1rem;border:1px solid #fde68a;background:#fffbeb;border-radius:var(--radius);font-size:.88rem;color:#92400e;">
-          ⚠ После отправки отклика организатор получит уведомление и рассмотрит вашу кандидатуру.
-          Вы не сможете удалить отклик самостоятельно.
+          ⚠ {% trans "После отправки отклика организатор получит уведомление и рассмотрит вашу кандидатуру. Вы не сможете удалить отклик самостоятельно." %}
         </div>
 
         <div style="display:flex;gap:.75rem;">
           <button type="submit" class="btn btn-primary" style="flex:1;">
-            Отправить отклик
+            {% trans "Откликнуться" %}
           </button>
           <a href="{% url 'applications:position_detail' position.id %}" class="btn btn-outline-secondary">
-            Назад
+            {% trans "Назад" %}
           </a>
         </div>
       </form>
